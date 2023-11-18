@@ -1,0 +1,7 @@
+<pre>
+    <code #codeContainer contenteditable="true" [ngClass]="{ hidden: animation.hasStart }" [highlight]="code"
+        [languages]="['xml']" [lineNumbers]="true" (input)="codeModify()"></code>
+    <p [ngClass]="{hidden: !animation.hasStart}"> SPINNER </p>
+</pre>
+<button (click)="addFrameToAnimation()"> Add frame </button>
+<button (click)="saveCodeAnimation()"> Save </button>

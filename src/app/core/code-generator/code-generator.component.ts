@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import {
   HighlightLoader,
   HighlightModule,
@@ -13,7 +13,7 @@ import { from } from 'rxjs';
   selector: 'app-code-generator',
   standalone: true,
   templateUrl: './code-generator.component.html',
-  styleUrls: ['./code-generator.component.css'],
+  styleUrls: ['./code-generator.component.scss'],
   imports: [HighlightModule],
 })
 export class CodeGeneratorComponent {
@@ -21,11 +21,12 @@ export class CodeGeneratorComponent {
 
   @Input({ required: true }) set code(code: string) {
     this._code = code;
+    // console.log(code)
     const a = HtmlAnimator.parse(code);
     a.codeToDisplay$.subscribe(code => {
       this._code = code;
     })
-    a.start();
+    // a.start();
   }
 
   @Input() set theme(themeName: string) {
@@ -34,7 +35,7 @@ export class CodeGeneratorComponent {
 
   _code!: string;
 
-  constructor(private hljsLoader: HighlightLoader) { }
+  constructor(private hljsLoader: HighlightLoader) { this.theme = 'androidstudio'; }
 
   protected saveCodeAnimation(): void {
     const subscription = from(html2canvas(this.codeContainer.nativeElement)).subscribe((canvas) => {
