@@ -4,6 +4,7 @@ import html2canvas from 'html2canvas';
 import { HighlightModule } from 'ngx-highlightjs';
 import { from } from 'rxjs';
 import { GifWriter } from 'omggif';
+import { Gif } from '../gif';
 
 type Animation = {
   hasStart: boolean,
@@ -33,11 +34,10 @@ export class CodeEditorComponent implements AfterViewChecked {
   private caretPosition: number = 0;
 
   protected animation: Animation = { hasStart: false, frameNumber: 0, frameIsSaving: false, frameSaved: false };
-  private animationList: string[] = [];
+  private animationList: { code: string, caretPosition: number }[] = [];
 
   private scaleFactor = 2;
-  private gifBuffer!: Uint8Array;
-  private gifWriter!: GifWriter;
+  private gif!: Gif;
 
   private get numberOfFrames(): number {
     return this.animationList.length;
@@ -60,20 +60,18 @@ export class CodeEditorComponent implements AfterViewChecked {
       this.saveFrame();
       this.animation.frameIsSaving = true;
     }
-
-    this.moveCaretToPosition(this.caretPosition);
   }
 
-  protected codeModify(): void {
-    const newCodeText = this.codeTag.nativeElement.innerText;
-    console.log(newCodeText, newCodeText.split('\n'))
-    const difference = findDifferenceIndex(this.code, newCodeText);
-    this.caretPosition = difference + (this.code.length < newCodeText.length ? 1 : 0);
-    this.code = newCodeText;
+  protected codeModify(textArea: HTMLTextAreaElement): void {
+    this.caretPosition = textArea.selectionEnd;
+    this.code = textArea.value;
   }
 
   protected addFrameToAnimation(): void {
-    this.animationList.push(this.code);
+    this.animationList.push({
+      code: this.code,
+      caretPosition: this.caretPosition
+    });
   }
 
   protected saveCodeAnimation(): void {
@@ -85,21 +83,9 @@ export class CodeEditorComponent implements AfterViewChecked {
       frameIsSaving: false,
       frameSaved: false
     };
-    this.code = this.animationList[0];
+    this.code = this.animationList[0].code;
 
-    this.gifBuffer = new Uint8Array(this.codeContainerWidth * this.codeContainerHeight * this.numberOfFrames);
-    this.gifWriter = new GifWriter(this.gifBuffer, this.codeContainerWidth, this.codeContainerHeight, { loop: undefined });
-  }
-
-  private moveCaretToPosition(caretPosition: number): void {
-    const selection = window.getSelection();
-
-    if (!selection) return;
-
-    selection.collapse(this.codeTag.nativeElement, 0);
-    Array.from({ length: caretPosition }).forEach(() =>
-      selection.modify('move', 'forward', 'character')
-    );
+    this.gif = new Gif({ width: this.codeContainerWidth, height: this.codeContainerHeight, numberOfFrames: this.numberOfFrames });
   }
 
   private loadNextFrame(): void {
@@ -110,7 +96,7 @@ export class CodeEditorComponent implements AfterViewChecked {
       return;
     }
     this.animation.frameNumber = nextFrameNumber;
-    this.code = this.animationList.at(nextFrameNumber) as string;
+    this.code = this.animationList.at(nextFrameNumber)?.code as string;
     this.changeDetectorReference.detectChanges();
   }
 
@@ -119,42 +105,35 @@ export class CodeEditorComponent implements AfterViewChecked {
       document.body.appendChild(canvas);
 
       const context = canvas.getContext('2d');
-      const imageData = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
+      const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
 
-      if (!imageData) return;
+      if (!pixelList) return;
 
-      const pixels: number[] = [];
-      const palette: number[] = [];
+      this.gif.addFrame(pixelList);
 
-      const rgbToColor = (r: number, g: number, b: number) => r << 16 | g << 8 | b << 0;
+      // for (var j = 0; j < pixelList.length; j += 4) {
+      //   const r = Math.floor(pixelList[j + 0] * 0.1) * 10;
+      //   const g = Math.floor(pixelList[j + 1] * 0.1) * 10;
+      //   const b = Math.floor(pixelList[j + 2] * 0.1) * 10;
+      //   const color = rgbToColor(r, g, b);
 
-      for (var j = 0; j < imageData.length; j += 4) {
-        const r = Math.floor(imageData[j + 0] * 0.1) * 10;
-        const g = Math.floor(imageData[j + 1] * 0.1) * 10;
-        const b = Math.floor(imageData[j + 2] * 0.1) * 10;
-        const color = rgbToColor(r, g, b);
+      //   const index = palette.indexOf(color);
 
-        const index = palette.indexOf(color);
+      //   if (index === -1) {
+      //     pixels.push(palette.length);
+      //     palette.push(color);
 
-        if (index === -1) {
-          pixels.push(palette.length);
-          palette.push(color);
+      //   } else {
+      //     pixels.push(index);
+      //   }
 
-        } else {
-          pixels.push(index);
-        }
+      // }
 
-      }
-
-      // Force palette to be power of 2
-      let powof2 = 1;
-      while (powof2 < palette.length) powof2 <<= 1;
-      palette.length = powof2;
-      if (palette.length > 255) console.log('Gif can\'t have more than 256 colors in palette')
-
-      const delay = 100; // // Delay in hundredths of a sec (100 = 1s, 10 = 0.1s)
-      const options = { palette, delay };
-      this.gifWriter.addFrame(0, 0, canvas.width, canvas.height, pixels, options);
+      // // Force palette to be power of 2
+      // let powof2 = 1;
+      // while (powof2 < palette.length) powof2 <<= 1;
+      // palette.length = powof2;
+      // if (palette.length > 255) console.log('Gif can\'t have more than 256 colors in palette')
 
       this.animation.frameIsSaving = false;
       this.animation.frameSaved = true;
@@ -165,9 +144,7 @@ export class CodeEditorComponent implements AfterViewChecked {
   }
 
   private generateGif(): void {
-    const imageBuffer = this.gifBuffer.subarray(0, this.gifWriter.end());
-
-    downloadBlob(new Blob([imageBuffer], { type: 'image/gif' }))
+    downloadBlob(this.gif.asBlob)
 
     this.animation.hasStart = false;
   }
@@ -179,14 +156,4 @@ function downloadBlob(blob: Blob): void {
   link.download = 'animation.gif';
   link.click();
   // link.dispatchEvent(new MouseEvent('click'));
-}
-
-function findDifferenceIndex(firstString: string, secondString: string): number {
-  const [shortestString, longestString] = firstString.length < secondString.length ? [firstString, secondString] : [secondString, firstString];
-
-  const difference = [...shortestString].findIndex((character, index) => character !== longestString[index]);
-  const notSameLength = shortestString.length !== longestString.length;
-  const foundDifferenceInString = difference !== -1;
-
-  return notSameLength && !foundDifferenceInString ? shortestString.length : difference;
 }

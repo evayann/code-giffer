@@ -1,10 +1,11 @@
 <div class="code-block">
-    <div #codeContainer>
-        <code #codeTag contenteditable="true" [highlight]="code" [languages]="['xml']" [lineNumbers]="true"
-            (input)="codeModify()">
-        </code>
+    <div #codeContainer class="code-block">
+        <code #codeTag class="code p-1" [highlight]="code" [languages]="['xml']" [lineNumbers]="true"></code>
 
-        <span class="caret"></span>
+        <textarea #textArea class="code textarea-invisible textarea-code textarea-fixed p-1"
+            (input)="codeModify(textArea)">{{code}}</textarea>
+
+        <!-- <span class="caret"></span> -->
     </div>
 
     @if (animation.hasStart) {
