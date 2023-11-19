@@ -1,7 +1,16 @@
-<pre>
-    <code #codeContainer contenteditable="true" [ngClass]="{ hidden: animation.hasStart }" [highlight]="code"
-        [languages]="['xml']" [lineNumbers]="true" (input)="codeModify()"></code>
-    <p [ngClass]="{hidden: !animation.hasStart}"> SPINNER </p>
-</pre>
+<div class="code-block">
+    <div #codeContainer>
+        <code #codeTag contenteditable="true" [highlight]="code" [languages]="['xml']" [lineNumbers]="true"
+            (input)="codeModify()">
+        </code>
+
+        <span class="caret"></span>
+    </div>
+
+    @if (animation.hasStart) {
+    <p class="spinner"> SPINNER </p>
+    }
+</div>
+
 <button (click)="addFrameToAnimation()"> Add frame </button>
 <button (click)="saveCodeAnimation()"> Save </button>

@@ -32,10 +32,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/gif.js.optimized/dist/gif.js",
-              "node_modules/gif.js.optimized/dist/gif.worker.js"
-            ]
+            "scripts": []
           },
           "configurations": {
             "production": {

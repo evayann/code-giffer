@@ -1,3 +1,38 @@
-.hidden {
-    display: none;
+.code-block {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+
+    &>* {
+        grid-row: 1;
+        grid-column: 1;
+    }
+
+    div {
+        position: relative;
+        display: flex;
+
+        code {
+            padding: 1em;
+            // caret-color: transparent;
+        }
+
+        .caret {
+            position: absolute;
+
+            top: calc(1em - 0.5ch);
+            left: calc(1em - 0.5ch + 1ch);
+
+            width: 1ch;
+            height: 1em;
+
+            background-color: rgba(255, 0, 0, 0.6);
+        }
+    }
+
+
+    .spinner {
+        margin: 0;
+        background-color: var(--background);
+    }
 }
