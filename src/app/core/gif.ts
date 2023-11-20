@@ -45,11 +45,11 @@ export class Gif {
                 pixelPaletteIndexList.push(paletteList.length);
                 paletteList.push(uint8Color);
             } else {
-                pixelPaletteIndexList.push(index);
+                pixelPaletteIndexList.push(indexOfColorInPaletteList);
             }
         }
 
-        this.correctPaletteSize(paletteList);
+        paletteList.length = this.paletteSize(paletteList);
 
         const options = { palette: paletteList, delay: Math.round((frameOptions?.delayInSecondes ?? 1) * 100) };
         this.writer.addFrame(0, 0, this.width, this.height, pixelPaletteIndexList, options);
@@ -59,10 +59,12 @@ export class Gif {
         return new Color(pixelList.slice(pixelIndex, pixelIndex + 3) as [number, number, number]);
     }
 
-    private correctPaletteSize(paletteList: number[]): void {
-        let powof2 = 1;
-        while (powof2 < paletteList.length) powof2 <<= 1;
-        paletteList.length = powof2;
-        if (paletteList.length > 255) console.log('Gif can\'t have more than 256 colors in palette')
+    private paletteSize(paletteList: number[]): number {
+        let powOf2 = 1;
+
+        while (powOf2 < paletteList.length) powOf2 <<= 1;
+        if (paletteList.length > 255) console.log('Gif can\'t have more than 256 colors in palette');
+
+        return powOf2;
     }
 }

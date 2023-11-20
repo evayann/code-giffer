@@ -1,9 +1,8 @@
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { HighlightModule } from 'ngx-highlightjs';
 import { from } from 'rxjs';
-import { GifWriter } from 'omggif';
 import { Gif } from '../gif';
 
 type Animation = {
@@ -21,7 +20,7 @@ type Frame = {
 @Component({
   selector: 'app-code-editor',
   standalone: true,
-  imports: [HighlightModule, NgClass],
+  imports: [HighlightModule, NgClass, NgStyle],
   templateUrl: './code-editor.component.html',
   styleUrl: './code-editor.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +30,7 @@ export class CodeEditorComponent implements AfterViewChecked {
   @ViewChild('codeTag') codeTag!: ElementRef<HTMLElement>;
 
   protected code: string = '<p> Test </p>';
+  protected nbCharacterOnOneRaw = 64;
   private caretPosition: number = 0;
 
   protected animation: Animation = { hasStart: false, frameNumber: 0, frameIsSaving: false, frameSaved: false };
@@ -38,6 +38,14 @@ export class CodeEditorComponent implements AfterViewChecked {
 
   private scaleFactor = 2;
   private gif!: Gif;
+
+  protected get nbRow(): number {
+    return Math.ceil(this.code.length / this.nbCharacterOnOneRaw);
+  }
+
+  protected get codeWidth(): string {
+    return `${this.nbCharacterOnOneRaw}ch`;
+  }
 
   private get numberOfFrames(): number {
     return this.animationList.length;
@@ -68,6 +76,7 @@ export class CodeEditorComponent implements AfterViewChecked {
   }
 
   protected addFrameToAnimation(): void {
+    console.log(this.code)
     this.animationList.push({
       code: this.code,
       caretPosition: this.caretPosition
@@ -90,11 +99,13 @@ export class CodeEditorComponent implements AfterViewChecked {
 
   private loadNextFrame(): void {
     const nextFrameNumber = this.animation.frameNumber + 1;
+
     if (nextFrameNumber >= this.animationList.length) {
       this.generateGif();
       this.changeDetectorReference.detectChanges();
       return;
     }
+
     this.animation.frameNumber = nextFrameNumber;
     this.code = this.animationList.at(nextFrameNumber)?.code as string;
     this.changeDetectorReference.detectChanges();
@@ -111,30 +122,6 @@ export class CodeEditorComponent implements AfterViewChecked {
 
       this.gif.addFrame(pixelList);
 
-      // for (var j = 0; j < pixelList.length; j += 4) {
-      //   const r = Math.floor(pixelList[j + 0] * 0.1) * 10;
-      //   const g = Math.floor(pixelList[j + 1] * 0.1) * 10;
-      //   const b = Math.floor(pixelList[j + 2] * 0.1) * 10;
-      //   const color = rgbToColor(r, g, b);
-
-      //   const index = palette.indexOf(color);
-
-      //   if (index === -1) {
-      //     pixels.push(palette.length);
-      //     palette.push(color);
-
-      //   } else {
-      //     pixels.push(index);
-      //   }
-
-      // }
-
-      // // Force palette to be power of 2
-      // let powof2 = 1;
-      // while (powof2 < palette.length) powof2 <<= 1;
-      // palette.length = powof2;
-      // if (palette.length > 255) console.log('Gif can\'t have more than 256 colors in palette')
-
       this.animation.frameIsSaving = false;
       this.animation.frameSaved = true;
       this.loadNextFrame();
@@ -144,7 +131,7 @@ export class CodeEditorComponent implements AfterViewChecked {
   }
 
   private generateGif(): void {
-    downloadBlob(this.gif.asBlob)
+    downloadBlob(this.gif.asBlob);
 
     this.animation.hasStart = false;
   }
