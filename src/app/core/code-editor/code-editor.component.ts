@@ -40,7 +40,24 @@ export class CodeEditorComponent implements AfterViewChecked {
   private gif!: Gif;
 
   protected get nbRow(): number {
-    return Math.ceil(this.code.length / this.nbCharacterOnOneRaw);
+    let rowCounter = 1;
+    let characterOnCurrentLine = 0;
+
+    this.code.split('').forEach(character => {
+      if (character === '\n') {
+        rowCounter++;
+        characterOnCurrentLine = 0;
+      }
+
+      characterOnCurrentLine++;
+
+      if (characterOnCurrentLine > 64) {
+        rowCounter++;
+        characterOnCurrentLine = 0;
+      }
+    });
+
+    return rowCounter;
   }
 
   protected get codeWidth(): string {

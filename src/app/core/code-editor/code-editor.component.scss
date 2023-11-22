@@ -1,4 +1,30 @@
-.code-block {
+.code-container {
+    position: relative;
+    --padding: 16px;
+    --font-size: 16px;
+
+    .caret {
+        position: absolute;
+
+        font-size: var(--font-size); // Apply font-size to have correct ch unit
+
+        top: calc(var(--padding));
+        left: calc(var(--padding) + 2ch);
+
+        width: 1ch;
+        height: calc(var(--font-size) * 1.2);
+
+        background-color: rgba(255, 0, 0, 0.6);
+    }
+}
+
+
+.spinner {
+    margin: 0;
+    background-color: var(--background);
+}
+
+.stack-child {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
@@ -6,30 +32,6 @@
     &>* {
         grid-row: 1;
         grid-column: 1;
-    }
-
-    div {
-        position: relative;
-        --padding: 1em;
-        --font-size: 16px;
-
-        .caret {
-            position: absolute;
-
-            top: calc(var(--padding));
-            left: calc(var(--padding) + 1ch);
-
-            width: 1ch;
-            height: calc(var(--font-size) * 1.2);
-
-            background-color: rgba(255, 0, 0, 0.6);
-        }
-    }
-
-
-    .spinner {
-        margin: 0;
-        background-color: var(--background);
     }
 }
 
@@ -40,6 +42,7 @@
 .code {
     font-size: var(--font-size, 16px);
     font-family: monospace;
+    white-space: pre;
 }
 
 .textarea {
