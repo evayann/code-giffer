@@ -1,3 +1,7 @@
+@use 'sass:list';
+
+$padding-size-list: 2px, 4px, 8px, 16px, 32px;
+
 :root {
     --primary: blue;
     --secondary: cyan;
@@ -8,4 +12,8 @@
 
     --text: white;
     --background: black;
+
+    @for $index from 1 through length($padding-size-list) {
+        --padding-#{$index}: #{list.nth($padding-size-list, $index)};
+    }
 }

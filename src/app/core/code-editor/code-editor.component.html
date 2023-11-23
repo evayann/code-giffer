@@ -1,13 +1,27 @@
 <div class="stack-child">
-    <div #codeContainer class="stack-child code-container" [ngStyle]="{ width: codeWidth }">
-        <code #codeTag class="code p-1" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
+    <div #codeContainer class="window" [ngStyle]="{ width: codeWidth }">
+        <div class="bar">
+            <div class="window-state">
+                <div class="window-action window-close"> </div>
+                <div class="window-action window-minimize"> </div>
+                <div class="window-action window-maximize"> </div>
+            </div>
 
-        @if (!animation.hasStart) {
-        <textarea #textArea class="code textarea-invisible textarea-code textarea-fixed p-1" [rows]="nbRow"
-            [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
-        }
+            <h2 contenteditable="true" class="window-title"> Snippet title </h2>
 
-        <span class="caret"></span>
+            <p class="credits"> Powered by <span>Code Giffer</span></p>
+        </div>
+
+        <div class="stack-child code-container">
+            <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
+
+            @if (!animation.hasStart) {
+            <textarea #textArea class="code textarea-invisible textarea-code textarea-fixed p-1" [rows]="nbRow"
+                [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
+            }
+
+            <!-- <span class="caret"></span> -->
+        </div>
     </div>
 
     @if (animation.hasStart) {
