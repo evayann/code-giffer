@@ -4,160 +4,149 @@ import html2canvas from 'html2canvas';
 import { HighlightModule } from 'ngx-highlightjs';
 import { from } from 'rxjs';
 import { Gif } from '../gif';
+import { CodeAnimation } from './code-animation';
 
-type Animation = {
-  hasStart: boolean,
-  frameNumber: number,
-  frameIsSaving: boolean,
-  frameSaved: boolean,
+type AnimationState = {
+    hasStart: boolean,
+    frameNumber: number,
+    frameSaved: boolean,
 };
 
 type Frame = {
-  code: string;
-  caretPosition: number;
+    code: string;
+    caretPosition: number;
 }
 
 @Component({
-  selector: 'app-code-editor',
-  standalone: true,
-  imports: [HighlightModule, NgClass, NgStyle],
-  templateUrl: './code-editor.component.html',
-  styleUrl: './code-editor.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-code-editor',
+    standalone: true,
+    imports: [HighlightModule, NgClass, NgStyle],
+    templateUrl: './code-editor.component.html',
+    styleUrl: './code-editor.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeEditorComponent implements AfterViewChecked {
-  @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
-  @ViewChild('codeTag') codeTag!: ElementRef<HTMLElement>;
+    @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
+    @ViewChild('codeTag') codeTag!: ElementRef<HTMLElement>;
 
-  protected code: string = '<p> Test </p>';
-  protected nbCharacterOnOneRaw = 64;
-  private caretPosition: number = 0;
+    protected code: string = '<p> Test </p>';
+    protected nbCharacterOnOneRaw = 64;
+    private caretPosition: number = 0;
 
-  protected animation: Animation = { hasStart: false, frameNumber: 0, frameIsSaving: false, frameSaved: false };
-  private animationList: { code: string, caretPosition: number }[] = [];
+    protected animationState!: AnimationState;
+    private codeAnimation = new CodeAnimation();
 
-  private scaleFactor = 2;
-  private gif!: Gif;
+    private scaleFactor = 2;
+    private gif!: Gif;
 
-  protected get nbRow(): number {
-    let rowCounter = 1;
-    let characterOnCurrentLine = 0;
-
-    this.code.split('').forEach(character => {
-      if (character === '\n') {
-        rowCounter++;
-        characterOnCurrentLine = 0;
-      }
-
-      characterOnCurrentLine++;
-
-      if (characterOnCurrentLine > 64) {
-        rowCounter++;
-        characterOnCurrentLine = 0;
-      }
-    });
-
-    return rowCounter;
-  }
-
-  protected get codeWidth(): string {
-    return `${this.nbCharacterOnOneRaw}ch`;
-  }
-
-  private get numberOfFrames(): number {
-    return this.animationList.length;
-  }
-
-  private get codeContainerWidth(): number {
-    return this.codeContainer.nativeElement.clientWidth * this.scaleFactor;
-  }
-
-  private get codeContainerHeight(): number {
-    return this.codeContainer.nativeElement.clientHeight * this.scaleFactor;
-  }
-
-  constructor(private changeDetectorReference: ChangeDetectorRef) { }
-
-  ngAfterViewChecked(): void {
-    if (this.animation.hasStart) {
-      if (this.animation.frameIsSaving) return;
-
-      this.saveFrame();
-      this.animation.frameIsSaving = true;
-    }
-  }
-
-  protected codeModify(textArea: HTMLTextAreaElement): void {
-    this.caretPosition = textArea.selectionEnd;
-    this.code = textArea.value;
-  }
-
-  protected addFrameToAnimation(): void {
-    console.log(this.code)
-    this.animationList.push({
-      code: this.code,
-      caretPosition: this.caretPosition
-    });
-  }
-
-  protected saveCodeAnimation(): void {
-    if (this.animationList.length <= 0) return;
-
-    this.animation = {
-      hasStart: true,
-      frameNumber: 0,
-      frameIsSaving: false,
-      frameSaved: false
-    };
-    this.code = this.animationList[0].code;
-
-    this.gif = new Gif({ width: this.codeContainerWidth, height: this.codeContainerHeight, numberOfFrames: this.numberOfFrames });
-  }
-
-  private loadNextFrame(): void {
-    const nextFrameNumber = this.animation.frameNumber + 1;
-
-    if (nextFrameNumber >= this.animationList.length) {
-      this.generateGif();
-      this.changeDetectorReference.detectChanges();
-      return;
+    protected get nbRow(): number {
+        return this.codeAnimation.nbRow;
     }
 
-    this.animation.frameNumber = nextFrameNumber;
-    this.code = this.animationList.at(nextFrameNumber)?.code as string;
-    this.changeDetectorReference.detectChanges();
-  }
+    protected get codeWidth(): string {
+        return `${this.nbCharacterOnOneRaw}ch`;
+    }
 
-  private saveFrame(): void {
-    const frameSubscription = from(html2canvas(this.codeContainer.nativeElement, { scale: this.scaleFactor })).subscribe((canvas) => {
-      document.body.appendChild(canvas);
+    private get codeContainerWidth(): number {
+        return this.codeContainer.nativeElement.clientWidth * this.scaleFactor;
+    }
 
-      const context = canvas.getContext('2d');
-      const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
+    private get codeContainerHeight(): number {
+        return this.codeContainer.nativeElement.clientHeight * this.scaleFactor;
+    }
 
-      if (!pixelList) return;
+    constructor(private changeDetectorReference: ChangeDetectorRef) {
+        this.resetAnimation();
+    }
 
-      this.gif.addFrame(pixelList);
+    ngAfterViewChecked(): void {
+        if (!this.codeAnimation.hasStart) return;
 
-      this.animation.frameIsSaving = false;
-      this.animation.frameSaved = true;
-      this.loadNextFrame();
+        // if (this.animation.frameNumber === 0) {
+        //   this.changeDetectorReference.detectChanges();
+        //   this.animation.frameNumber++;
+        //   return;
+        // }
+        console.log(this.animationState.frameSaved)
+        if (this.animationState.frameSaved) return;
 
-      frameSubscription.unsubscribe();
-    });
-  }
+        this.saveFrame();
+    }
 
-  private generateGif(): void {
-    downloadBlob(this.gif.asBlob);
+    protected codeModify(textArea: HTMLTextAreaElement): void {
+        this.caretPosition = textArea.selectionEnd;
+        this.code = textArea.value;
+    }
 
-    this.animation.hasStart = false;
-  }
+    protected addFrameToAnimation(): void {
+        this.codeAnimation.push({
+            code: this.code,
+            caretPosition: this.caretPosition
+        });
+    }
+
+    protected saveCodeAnimation(): void {
+        if (this.codeAnimation.isEmpty) return;
+
+        this.animationState = {
+            hasStart: true,
+            frameNumber: -1,
+            frameSaved: true
+        };
+
+        this.codeAnimation.start();
+        this.gif = new Gif({ width: this.codeContainerWidth, height: this.codeContainerHeight, numberOfFrames: this.codeAnimation.length });
+        this.loadNextFrame();
+    }
+
+    private loadNextFrame(): void {
+        const nextFrame = this.codeAnimation.nextFrame()
+
+        if (!nextFrame) {
+            this.generateGif();
+            this.resetAnimation();
+            this.changeDetectorReference.detectChanges();
+            return;
+        }
+
+        this.animationState.frameSaved = false;
+        this.code = nextFrame.code;
+        this.changeDetectorReference.detectChanges();
+    }
+
+    private saveFrame(): void {
+        const frameSubscription = from(html2canvas(this.codeContainer.nativeElement, { scale: this.scaleFactor })).subscribe((canvas) => {
+            document.body.appendChild(canvas);
+
+            const context = canvas.getContext('2d');
+            const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
+
+            if (!pixelList) return;
+
+            this.gif.addFrame(pixelList);
+
+            this.animationState.frameSaved = true;
+            this.loadNextFrame();
+
+            frameSubscription.unsubscribe();
+        });
+    }
+
+    private generateGif(): void {
+        downloadBlob(this.gif.asBlob);
+
+        this.resetAnimation();
+    }
+
+    private resetAnimation(): void {
+        this.animationState = { hasStart: false, frameNumber: 0, frameSaved: false };
+    }
 }
 
 function downloadBlob(blob: Blob): void {
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'animation.gif';
-  link.click();
-  // link.dispatchEvent(new MouseEvent('click'));
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'animation.gif';
+    link.click();
+    // link.dispatchEvent(new MouseEvent('click'));
 }

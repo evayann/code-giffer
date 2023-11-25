@@ -1,31 +1,30 @@
 <div class="stack-child">
-    <div #codeContainer class="window" [ngStyle]="{ width: codeWidth }">
-        <div class="bar">
-            <div class="window-state">
-                <div class="window-action window-close"> </div>
-                <div class="window-action window-minimize"> </div>
-                <div class="window-action window-maximize"> </div>
+    <div #codeContainer class="screen" [ngStyle]="{ width: codeWidth }">
+        <div class="window">
+            <div class="bar hljs">
+                <div class="window-state">
+                    <div class="window-action window-close"> </div>
+                    <div class="window-action window-minimize"> </div>
+                    <div class="window-action window-maximize"> </div>
+                </div>
+
+                <h2 contenteditable="true" class="window-title"> Snippet title </h2>
             </div>
 
-            <h2 contenteditable="true" class="window-title"> Snippet title </h2>
+            <div class="stack-child code-container">
+                <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
 
-            <p class="credits"> Powered by <span>Code Giffer</span></p>
-        </div>
+                <textarea #textArea class="code textarea-code textarea-fixed p-1"
+                    [ngClass]="{ 'textarea-invisible': animationState.hasStart }" [rows]="nbRow"
+                    [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
 
-        <div class="stack-child code-container">
-            <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
-
-            @if (!animation.hasStart) {
-            <textarea #textArea class="code textarea-invisible textarea-code textarea-fixed p-1" [rows]="nbRow"
-                [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
-            }
-
-            <!-- <span class="caret"></span> -->
+                <!-- <span class="caret"></span> -->
+            </div>
         </div>
     </div>
 
-    @if (animation.hasStart) {
-    <p class="spinner"> SPINNER </p>
+    @if (animationState.hasStart) {
+    <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
     }
 </div>
 
