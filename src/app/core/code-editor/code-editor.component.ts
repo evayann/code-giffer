@@ -1,5 +1,5 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterRenderPhase, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, afterRender } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { HighlightModule } from 'ngx-highlightjs';
 import { from } from 'rxjs';
@@ -28,13 +28,13 @@ type Frame = {
 export class CodeEditorComponent implements AfterViewChecked {
     @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
     @ViewChild('codeTag') codeTag!: ElementRef<HTMLElement>;
+    @ViewChild('textArea') codeTextArea!: ElementRef<HTMLTextAreaElement>;
 
     protected code: string = '<p> Test </p>';
     protected nbCharacterOnOneRaw = 64;
+    protected codeAnimation = new CodeAnimation();
     private caretPosition: number = 0;
 
-    protected animationState!: AnimationState;
-    private codeAnimation = new CodeAnimation();
 
     private scaleFactor = 2;
     private gif!: Gif;
@@ -55,9 +55,7 @@ export class CodeEditorComponent implements AfterViewChecked {
         return this.codeContainer.nativeElement.clientHeight * this.scaleFactor;
     }
 
-    constructor(private changeDetectorReference: ChangeDetectorRef) {
-        this.resetAnimation();
-    }
+    constructor(private changeDetectorReference: ChangeDetectorRef) { }
 
     ngAfterViewChecked(): void {
         if (!this.codeAnimation.hasStart) return;
@@ -67,8 +65,11 @@ export class CodeEditorComponent implements AfterViewChecked {
         //   this.animation.frameNumber++;
         //   return;
         // }
-        console.log(this.animationState.frameSaved)
-        if (this.animationState.frameSaved) return;
+        // console.log(this.codeAnimation.frameSaved)
+        if (this.codeAnimation.currentFrame?.isSaved) return;
+
+        const isDifferentFrame = this.codeTextArea.nativeElement.textContent === this.codeAnimation.currentFrame?.code;
+        if (!isDifferentFrame) return;
 
         this.saveFrame();
     }
@@ -79,7 +80,7 @@ export class CodeEditorComponent implements AfterViewChecked {
     }
 
     protected addFrameToAnimation(): void {
-        this.codeAnimation.push({
+        this.codeAnimation.addFrame({
             code: this.code,
             caretPosition: this.caretPosition
         });
@@ -88,28 +89,24 @@ export class CodeEditorComponent implements AfterViewChecked {
     protected saveCodeAnimation(): void {
         if (this.codeAnimation.isEmpty) return;
 
-        this.animationState = {
-            hasStart: true,
-            frameNumber: -1,
-            frameSaved: true
-        };
-
         this.codeAnimation.start();
-        this.gif = new Gif({ width: this.codeContainerWidth, height: this.codeContainerHeight, numberOfFrames: this.codeAnimation.length });
+        this.gif = new Gif({
+            width: this.codeContainerWidth,
+            height: this.codeContainerHeight,
+            numberOfFrames: this.codeAnimation.length
+        });
         this.loadNextFrame();
     }
 
     private loadNextFrame(): void {
-        const nextFrame = this.codeAnimation.nextFrame()
+        const nextFrame = this.codeAnimation.nextFrame();
 
         if (!nextFrame) {
             this.generateGif();
-            this.resetAnimation();
             this.changeDetectorReference.detectChanges();
             return;
         }
 
-        this.animationState.frameSaved = false;
         this.code = nextFrame.code;
         this.changeDetectorReference.detectChanges();
     }
@@ -125,7 +122,7 @@ export class CodeEditorComponent implements AfterViewChecked {
 
             this.gif.addFrame(pixelList);
 
-            this.animationState.frameSaved = true;
+            this.codeAnimation.markCurrentFrameAsAsSave();
             this.loadNextFrame();
 
             frameSubscription.unsubscribe();
@@ -134,12 +131,6 @@ export class CodeEditorComponent implements AfterViewChecked {
 
     private generateGif(): void {
         downloadBlob(this.gif.asBlob);
-
-        this.resetAnimation();
-    }
-
-    private resetAnimation(): void {
-        this.animationState = { hasStart: false, frameNumber: 0, frameSaved: false };
     }
 }
 

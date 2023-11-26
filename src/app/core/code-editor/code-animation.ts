@@ -3,58 +3,84 @@ export type Frame = {
     caretPosition: number;
 };
 
-export class CodeAnimation extends Array<Frame> {
-    hasStart = false;
-    private currentFrameNumber: number = -1;
+export type StateFrame = Frame & { isSaved: boolean };
+
+export type StateCodeAnimation = {
+    frameList: StateFrame[];
+    currentFrame: number;
+}
+
+export class CodeAnimation {
+    private frameList: Frame[] = [];
+    private stateCodeAnimation?: StateCodeAnimation;
 
     get isEmpty(): boolean {
-        return this.length <= 0;
+        return this.frameList.length <= 0;
+    }
+
+    get length(): number {
+        return this.frameList.length;
     }
 
     get nbRow(): number {
-        return this.hasStart ? this.nbMaxRow : this.nbRowForCurrentLine;
+        return this.stateCodeAnimation?.currentFrame ? this.nbMaxRow : this.nbRowForCurrentLine;
     }
 
-    get currentFrame(): Frame | undefined {
-        return this.at(this.currentFrameNumber);
+    get hasStart(): boolean {
+        return this.stateCodeAnimation ? !!this.stateCodeAnimation.currentFrame : false;
+    }
+
+    get currentFrame(): StateFrame | undefined {
+        if (!this.stateCodeAnimation) return undefined;
+
+        const currentFrame = this.stateCodeAnimation.currentFrame;
+        return this.stateCodeAnimation.frameList.at(currentFrame);
     }
 
     private get nbMaxRow(): number {
-        return Math.max(...this.map(animation => this.nbRowForCode(animation.code)));
+        return Math.max(...this.frameList.map(animation => this.nbRowForCode(animation.code)));
     }
 
     private get nbRowForCurrentLine(): number {
         return this.nbRowForCode(this.currentFrame?.code ?? '');
     }
 
-    override push(...frameList: Frame[]): number {
-        super.push(...frameList);
-        this.currentFrameNumber += frameList.length;
-        return this.length;
+    addFrame(...frameList: Frame[]): void {
+        this.frameList.push(...frameList);
+    }
+
+    markCurrentFrameAsAsSave(): void {
+        if (!this.currentFrame) return;
+
+        this.currentFrame.isSaved = true;
     }
 
     start(): void {
-        if (this.length < 0) throw new Error('[Animation]: Need to have one frame before start');
+        if (this.frameList.length < 0) throw new Error('[Animation]: Need to have one frame before start');
 
-        this.hasStart = true;
-        this.currentFrameNumber = 0;
+        this.stateCodeAnimation = {
+            frameList: this.frameList.map(frame => ({ ...frame, isSaved: false })),
+            currentFrame: 0
+        }
     }
 
-    nextFrame(): Frame | undefined {
-        const newFrameNumber = this.currentFrameNumber + 1;
+    nextFrame(): StateFrame | undefined {
+        if (!this.stateCodeAnimation) throw new Error('Can\'t get next frame');
 
-        if (newFrameNumber > this.length) {
+        const newFrameNumber = this.stateCodeAnimation.currentFrame + 1;
+
+        if (newFrameNumber > this.stateCodeAnimation?.frameList.length) {
             this.stop();
             return undefined;
         }
 
-        this.currentFrameNumber = newFrameNumber;
+        this.stateCodeAnimation.currentFrame = newFrameNumber;
 
         return this.currentFrame;
     }
 
     stop(): void {
-        this.hasStart = false;
+        this.stateCodeAnimation = undefined;
     }
 
     private nbRowForCode(code: string): number {

@@ -15,7 +15,7 @@
                 <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
 
                 <textarea #textArea class="code textarea-code textarea-fixed p-1"
-                    [ngClass]="{ 'textarea-invisible': animationState.hasStart }" [rows]="nbRow"
+                    [ngClass]="{ 'textarea-invisible': codeAnimation.hasStart }" [rows]="nbRow"
                     [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
 
                 <!-- <span class="caret"></span> -->
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    @if (animationState.hasStart) {
+    @if (codeAnimation.hasStart) {
     <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
     }
 </div>
