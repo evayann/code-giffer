@@ -1,10 +1,11 @@
 import { NgClass, NgStyle } from '@angular/common';
-import { AfterRenderPhase, AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, afterRender } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, ViewChild, afterRender } from '@angular/core';
 import html2canvas from 'html2canvas';
 import { HighlightModule } from 'ngx-highlightjs';
 import { from } from 'rxjs';
 import { Gif } from '../gif';
 import { CodeAnimation } from './code-animation';
+import { HasChangeDirective } from '../directives/has-change.directive';
 
 type AnimationState = {
     hasStart: boolean,
@@ -20,12 +21,12 @@ type Frame = {
 @Component({
     selector: 'app-code-editor',
     standalone: true,
-    imports: [HighlightModule, NgClass, NgStyle],
+    imports: [HasChangeDirective, HighlightModule, NgClass, NgStyle],
     templateUrl: './code-editor.component.html',
     styleUrl: './code-editor.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CodeEditorComponent implements AfterViewChecked {
+export class CodeEditorComponent {
     @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
     @ViewChild('codeTag') codeTag!: ElementRef<HTMLElement>;
     @ViewChild('textArea') codeTextArea!: ElementRef<HTMLTextAreaElement>;
@@ -57,20 +58,9 @@ export class CodeEditorComponent implements AfterViewChecked {
 
     constructor(private changeDetectorReference: ChangeDetectorRef) { }
 
-    ngAfterViewChecked(): void {
+    protected codeHasChange(): void {
         if (!this.codeAnimation.hasStart) return;
-
-        // if (this.animation.frameNumber === 0) {
-        //   this.changeDetectorReference.detectChanges();
-        //   this.animation.frameNumber++;
-        //   return;
-        // }
-        // console.log(this.codeAnimation.frameSaved)
-        if (this.codeAnimation.currentFrame?.isSaved) return;
-
-        const isDifferentFrame = this.codeTextArea.nativeElement.textContent === this.codeAnimation.currentFrame?.code;
-        if (!isDifferentFrame) return;
-
+        console.log(this.codeAnimation.currentFrame)
         this.saveFrame();
     }
 
@@ -122,7 +112,6 @@ export class CodeEditorComponent implements AfterViewChecked {
 
             this.gif.addFrame(pixelList);
 
-            this.codeAnimation.markCurrentFrameAsAsSave();
             this.loadNextFrame();
 
             frameSubscription.unsubscribe();

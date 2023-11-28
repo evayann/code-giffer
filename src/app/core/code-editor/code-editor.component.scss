@@ -70,7 +70,7 @@
 
     filter: contrast(200%);
 
-    padding: var(--padding-2);
+    padding: var(--padding-2) var(--padding-4);
 }
 
 .screen {
@@ -124,7 +124,6 @@
         outline: 0px solid transparent;
 
         margin: 0;
-        padding-right: var(--padding-4);
     }
 }
 

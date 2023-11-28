@@ -16,7 +16,8 @@
 
                 <textarea #textArea class="code textarea-code textarea-fixed p-1"
                     [ngClass]="{ 'textarea-invisible': codeAnimation.hasStart }" [rows]="nbRow"
-                    [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">{{code}}</textarea>
+                    [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)"
+                    (appHasChange)="codeHasChange()">{{code}}</textarea>
 
                 <!-- <span class="caret"></span> -->
             </div>
