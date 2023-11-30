@@ -36,12 +36,11 @@ export class CodeEditorComponent {
     protected codeAnimation = new CodeAnimation();
     private caretPosition: number = 0;
 
-
     private scaleFactor = 2;
     private gif!: Gif;
 
     protected get nbRow(): number {
-        return this.codeAnimation.nbRow;
+        return this.codeAnimation.hasStart ? this.codeAnimation.nbMaxRow : this.codeAnimation.nbRowForCode(this.code);
     }
 
     protected get codeWidth(): string {
@@ -60,7 +59,7 @@ export class CodeEditorComponent {
 
     protected codeHasChange(): void {
         if (!this.codeAnimation.hasStart) return;
-        console.log(this.codeAnimation.currentFrame)
+
         this.saveFrame();
     }
 
@@ -99,6 +98,7 @@ export class CodeEditorComponent {
 
         this.code = nextFrame.code;
         this.changeDetectorReference.detectChanges();
+        console.log(this.code)
     }
 
     private saveFrame(): void {

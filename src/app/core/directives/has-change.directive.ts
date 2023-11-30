@@ -12,11 +12,8 @@ export class HasChangeDirective implements AfterViewInit, OnDestroy {
   constructor(private elRef: ElementRef) { }
 
   ngAfterViewInit(): void {
-    this.observer = new MutationObserver(mutations =>
-      mutations.forEach(() => this.appHasChange.emit())
-    );
-    const configuration: MutationObserverInit = { attributes: true, childList: true, characterData: true };
-
+    this.observer = new MutationObserver(() => this.appHasChange.emit());
+    const configuration: MutationObserverInit = { childList: true, subtree: true };
     this.observer.observe(this.elRef.nativeElement, configuration);
   }
 

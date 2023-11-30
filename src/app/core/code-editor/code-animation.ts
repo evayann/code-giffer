@@ -20,10 +20,6 @@ export class CodeAnimation {
         return this.frameList.length;
     }
 
-    get nbRow(): number {
-        return this.stateCodeAnimation?.currentFrame ? this.nbMaxRow : this.nbRowForCurrentLine;
-    }
-
     get hasStart(): boolean {
         return this.stateCodeAnimation ? this.stateCodeAnimation.currentFrame >= 0 : false;
     }
@@ -35,12 +31,8 @@ export class CodeAnimation {
         return this.stateCodeAnimation.frameList.at(currentFrame);
     }
 
-    private get nbMaxRow(): number {
+    get nbMaxRow(): number {
         return Math.max(...this.frameList.map(animation => this.nbRowForCode(animation.code)));
-    }
-
-    private get nbRowForCurrentLine(): number {
-        return this.nbRowForCode(this.currentFrame?.code ?? '');
     }
 
     addFrame(...frameList: Frame[]): void {
@@ -75,7 +67,7 @@ export class CodeAnimation {
         this.stateCodeAnimation = undefined;
     }
 
-    private nbRowForCode(code: string): number {
+    nbRowForCode(code: string): number {
         let rowCounter = 1;
         let characterOnCurrentLine = 0;
 

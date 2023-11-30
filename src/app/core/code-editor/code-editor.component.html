@@ -12,12 +12,14 @@
             </div>
 
             <div class="stack-child code-container">
-                <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
+                <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
+                    (appHasChange)="codeHasChange()"></code>
 
                 <textarea #textArea class="code textarea-code textarea-fixed p-1"
                     [ngClass]="{ 'textarea-invisible': codeAnimation.hasStart }" [rows]="nbRow"
-                    [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)"
-                    (appHasChange)="codeHasChange()">{{code}}</textarea>
+                    [cols]="nbCharacterOnOneRaw" (input)="codeModify(textArea)">
+                    {{code}}
+                </textarea>
 
                 <!-- <span class="caret"></span> -->
             </div>
