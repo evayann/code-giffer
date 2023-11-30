@@ -17,3 +17,14 @@ $padding-size-list: 2px, 4px, 8px, 16px, 32px;
         --padding-#{$index}: #{list.nth($padding-size-list, $index)};
     }
 }
+
+.stack-child {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+
+    &>* {
+        grid-row: 1;
+        grid-column: 1;
+    }
+}

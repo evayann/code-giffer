@@ -13,7 +13,7 @@
 
             <div class="stack-child code-container">
                 <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
-                    (appHasChange)="codeHasChange()"></code>
+                    (hasChange)="codeHasChange()"></code>
 
                 <textarea #textArea class="code textarea-code textarea-fixed p-1"
                     [ngClass]="{ 'textarea-invisible': codeAnimation.hasStart }" [rows]="nbRow"

@@ -1,7 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
 
 @Directive({
-  selector: '[appHasChange]',
+  selector: '[hasChange]',
   standalone: true,
 })
 export class HasChangeDirective implements AfterViewInit, OnDestroy {

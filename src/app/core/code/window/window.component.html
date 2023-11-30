@@ -1,0 +1,16 @@
+<div class="window">
+    <div title-bar></div>
+
+    <div class="stack-child code-container">
+        <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
+            (hasChange)="codeHasChange()"></code>
+
+        <textarea #textArea class="textarea-code textarea-fixed p-1"
+            [ngClass]="{ 'textarea-invisible': hideTextSelected }" [rows]="nbRow" [cols]="nbColumn"
+            (input)="codeModify(textArea)">
+            {{code}}
+        </textarea>
+
+        <!-- <span class="caret"></span> -->
+    </div>
+</div>

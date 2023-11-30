@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { CodeGeneratorComponent } from './core/code-generator/code-generator.component';
 import { CodeEditorComponent } from './core/code-editor/code-editor.component';
+import { CodeComponent } from './core/code/code.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, CodeGeneratorComponent, CodeEditorComponent],
+  imports: [CommonModule, RouterOutlet, CodeGeneratorComponent, CodeEditorComponent, CodeComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
