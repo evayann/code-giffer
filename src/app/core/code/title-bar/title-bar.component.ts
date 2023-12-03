@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-  selector: 'div[title-bar]',
+  selector: 'app-title-bar',
   standalone: true,
   templateUrl: './title-bar.component.html',
   styleUrls: ['./title-bar.component.scss'],

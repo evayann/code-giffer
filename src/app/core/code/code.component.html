@@ -1,6 +1,6 @@
 <div class="stack-child">
     <div #codeContainer class="screen" [ngStyle]="{ width: codeWidth }">
-        <app-window [code]="code" (hasChange)="codeHasChange($event)" />
+        <app-window [code]="code" [codeConfiguration]="codeConfiguration" (hasChange)="codeHasChange($event)" />
     </div>
 
     <!-- @if (codeAnimation.hasStart) {
@@ -8,5 +8,7 @@
     } -->
 </div>
 
-<!-- <button (click)="addFrameToAnimation()"> Add frame </button>
-<button (click)="saveCodeAnimation()"> Save </button> -->
+@if (isController) {
+<button (click)="addFrameToAnimation()"> Add frame </button>
+<button (click)="saveCodeAnimation()"> Save </button>
+}

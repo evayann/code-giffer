@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { CodeGeneratorComponent } from './core/code-generator/code-generator.component';
-import { CodeEditorComponent } from './core/code-editor/code-editor.component';
 import { CodeComponent } from './core/code/code.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, CodeGeneratorComponent, CodeEditorComponent, CodeComponent],
+  imports: [CommonModule, RouterOutlet, CodeComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  code = '<p class="test color" id="toto"> Hello <i class="icon icon-home" style="color: red"></i> </p> <div> <button> click </button> </div>';
 }
