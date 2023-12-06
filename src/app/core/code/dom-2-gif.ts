@@ -11,7 +11,8 @@ export type Dom2GifGenerationProperties<Frame> = {
     dom: HTMLElement,
     loadFrame: (frame: Frame) => void,
     frameLoaded: Observable<void>,
-    scaleFactor: number
+    scaleFactor?: number,
+    onFinish?: () => void
 }
 
 export class Dom2Gif<Frame> {
@@ -19,6 +20,7 @@ export class Dom2Gif<Frame> {
     private dom: HTMLElement;
     private scaleFactor: number;
     private animation: Animation<Frame>;
+    private onFinish?: () => void;
     private loadFrame: (frame: Frame) => void;
     private nextFrameLoadedSubscription: Subscription;
 
@@ -27,12 +29,13 @@ export class Dom2Gif<Frame> {
         codeGif.saveAnimation();
     }
 
-    private constructor({ animation, width, height, dom, loadFrame, frameLoaded, scaleFactor }: Dom2GifGenerationProperties<Frame>) {
+    private constructor({ animation, width, height, dom, loadFrame, frameLoaded, scaleFactor, onFinish }: Dom2GifGenerationProperties<Frame>) {
         this.dom = dom;
         this.loadFrame = loadFrame;
         this.animation = animation;
-        this.scaleFactor = scaleFactor;
-        this.gif = new Gif({ width, height, numberOfFrames: animation.numberOfFrame });
+        this.scaleFactor = scaleFactor ?? 1;
+        this.onFinish = onFinish;
+        this.gif = new Gif({ width: width * this.scaleFactor, height: height * this.scaleFactor, numberOfFrames: animation.numberOfFrame });
         this.nextFrameLoadedSubscription = frameLoaded.subscribe(() => this.saveFrame());
     }
 
@@ -48,8 +51,8 @@ export class Dom2Gif<Frame> {
 
         if (!nextFrame) {
             this.downloadGif();
+            this.onFinish?.();
             this.nextFrameLoadedSubscription.unsubscribe();
-            // this.changeDetectorReference.detectChanges();
             return;
         }
 
@@ -58,7 +61,7 @@ export class Dom2Gif<Frame> {
 
     private saveFrame(): void {
         const frameSubscription = from(html2canvas(this.dom, { scale: this.scaleFactor })).subscribe((canvas) => {
-            // document.body.appendChild(canvas);
+            document.body.appendChild(canvas);
 
             const context = canvas.getContext('2d');
             const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
@@ -66,7 +69,6 @@ export class Dom2Gif<Frame> {
             if (!pixelList) return;
 
             this.gif.addFrame(pixelList);
-
             this.loadNextFrame();
 
             frameSubscription.unsubscribe();

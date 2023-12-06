@@ -29,8 +29,8 @@ export class CodeComponent {
         isEditable: true,
         hideTextSelection: false
     };
+    protected codeAnimation = new CodeAnimation();
 
-    private codeAnimation = new CodeAnimation();
     private codeChangeFromAnimation$ = new Subject<void>();
 
     protected get codeWidth(): string {
@@ -55,6 +55,9 @@ export class CodeComponent {
     protected saveCodeAnimation(): void {
         if (this.codeAnimation.hasNoFrame) return;
 
+        this.codeConfiguration.hideTextSelection = true;
+        this.changeDetectorReference.detectChanges();
+
         Dom2Gif.generate({
             animation: this.codeAnimation,
             width: this.codeContainer.nativeElement.clientWidth,
@@ -62,10 +65,16 @@ export class CodeComponent {
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
             loadFrame: (frame: CodeFrame) => {
+                console.log(frame, this.code)
+                if (this.code === frame.code) {
+                    this.codeChangeFromAnimation$.next();
+                    return;
+                }
                 this.code = frame.code;
-                this.changeDetectorReference.detectChanges();
+                // this.changeDetectorReference.detectChanges();
             },
-            frameLoaded: this.codeChangeFromAnimation$.asObservable()
+            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+            onFinish: () => this.codeConfiguration.hideTextSelection = false
         });
     }
 }

@@ -3,11 +3,11 @@
         <app-window [code]="code" [codeConfiguration]="codeConfiguration" (hasChange)="codeHasChange($event)" />
     </div>
 
-    <!-- @if (codeAnimation.hasStart) {
-        <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
-    } -->
+    @if (codeAnimation.hasStart) {
+    <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
+    }
 </div>
-
+{{codeAnimation.hasStart}}
 @if (isController) {
 <button (click)="addFrameToAnimation()"> Add frame </button>
 <button (click)="saveCodeAnimation()"> Save </button>

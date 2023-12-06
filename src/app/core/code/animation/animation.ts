@@ -11,17 +11,17 @@ export abstract class Animation<Frame> {
     }
 
     get hasStart(): boolean {
-        return !!this.currentFrameIndex;
+        return this.currentFrameIndex !== undefined;
     }
 
     get currentFrame(): Frame | undefined {
-        if (!this.currentFrameIndex) return undefined;
+        if (this.currentFrameIndex === undefined) return undefined;
 
         return this.frameList.at(this.currentFrameIndex);
     }
 
     start(): void {
-        this.currentFrameIndex = 0;
+        this.currentFrameIndex = -1;
     }
 
     stop(): void {
@@ -29,7 +29,7 @@ export abstract class Animation<Frame> {
     }
 
     nextFrame(): Frame | undefined {
-        if (!this.currentFrameIndex) throw new Error('Can\'t get next frame');
+        if (this.currentFrameIndex === undefined) throw new Error('Can\'t get next frame');
 
         const newFrameNumber = this.currentFrameIndex + 1;
 
