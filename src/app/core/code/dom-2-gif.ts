@@ -1,18 +1,20 @@
-import { Observable, Subscription, from } from "rxjs";
-import html2canvas from "html2canvas";
+import { Observable, Subscription, from } from 'rxjs';
+import html2canvas from 'html2canvas';
 
-import { Animation } from "./animation/animation";
-import { Gif } from "../model/gif";
+import { Animation } from './animation/animation';
+import { Gif } from '../model/gif';
 
 export type Dom2GifGenerationProperties<Frame> = {
     animation: Animation<Frame>,
     width: number,
     height: number,
     dom: HTMLElement,
-    loadFrame: (frame: Frame) => void,
     frameLoaded: Observable<void>,
     scaleFactor?: number,
-    onFinish?: () => void
+
+    onStart?: () => void;
+    onFinish?: () => void,
+    loadFrame: (frame: Frame) => void,
 }
 
 export class Dom2Gif<Frame> {
@@ -20,8 +22,11 @@ export class Dom2Gif<Frame> {
     private dom: HTMLElement;
     private scaleFactor: number;
     private animation: Animation<Frame>;
+
+    private onStart?: () => void;
     private onFinish?: () => void;
     private loadFrame: (frame: Frame) => void;
+
     private nextFrameLoadedSubscription: Subscription;
 
     static generate<Frame>(codeGifGeneration: Dom2GifGenerationProperties<Frame>): void {
@@ -29,20 +34,28 @@ export class Dom2Gif<Frame> {
         codeGif.saveAnimation();
     }
 
-    private constructor({ animation, width, height, dom, loadFrame, frameLoaded, scaleFactor, onFinish }: Dom2GifGenerationProperties<Frame>) {
-        this.dom = dom;
-        this.loadFrame = loadFrame;
-        this.animation = animation;
-        this.scaleFactor = scaleFactor ?? 1;
-        this.onFinish = onFinish;
-        this.gif = new Gif({ width: width * this.scaleFactor, height: height * this.scaleFactor, numberOfFrames: animation.numberOfFrame });
-        this.nextFrameLoadedSubscription = frameLoaded.subscribe(() => this.saveFrame());
+    private constructor(dom2gifProperties: Dom2GifGenerationProperties<Frame>) {
+        this.dom = dom2gifProperties.dom;
+        this.animation = dom2gifProperties.animation;
+        this.scaleFactor = dom2gifProperties.scaleFactor ?? 1;
+
+        this.onStart = dom2gifProperties.onStart;
+        this.onFinish = dom2gifProperties.onFinish;
+        this.loadFrame = dom2gifProperties.loadFrame;
+
+        this.gif = new Gif({
+            width: dom2gifProperties.width * this.scaleFactor,
+            height: dom2gifProperties.height * this.scaleFactor,
+            numberOfFrames: dom2gifProperties.animation.numberOfFrame
+        });
+        this.nextFrameLoadedSubscription = dom2gifProperties.frameLoaded.subscribe(() => this.saveFrame());
     }
 
     private saveAnimation(): void {
         if (this.animation.hasNoFrame) return;
 
         this.animation.start();
+        this.onStart?.();
         this.loadNextFrame();
     }
 

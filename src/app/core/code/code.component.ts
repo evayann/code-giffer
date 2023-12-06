@@ -34,15 +34,18 @@ export class CodeComponent {
     private codeChangeFromAnimation$ = new Subject<void>();
 
     protected get codeWidth(): string {
-        return `${this.codeConfiguration.numberColumn}ch`;
+        return '64ch';
     }
 
     constructor(private changeDetectorReference: ChangeDetectorRef, private hljsLoader: HighlightLoader) { this.theme = 'androidstudio'; }
 
     protected codeHasChange(codeEvent: { value: string, position: number }): void {
         this.code = codeEvent.value;
-        console.log('test')
-        this.codeChangeFromAnimation$.next();
+
+        if (this.codeAnimation.hasStart)
+            this.codeChangeFromAnimation$.next();
+        else
+            this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(this.code);
     }
 
     protected addFrameToAnimation(): void {
@@ -55,26 +58,36 @@ export class CodeComponent {
     protected saveCodeAnimation(): void {
         if (this.codeAnimation.hasNoFrame) return;
 
-        this.codeConfiguration.hideTextSelection = true;
-        this.changeDetectorReference.detectChanges();
-
         Dom2Gif.generate({
             animation: this.codeAnimation,
             width: this.codeContainer.nativeElement.clientWidth,
             height: this.codeContainer.nativeElement.clientHeight,
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
+            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+
+            onStart: () => {
+                this.codeConfiguration.hideTextSelection = true;
+                this.codeConfiguration.numberRow = this.codeAnimation.nbMaxRow;
+                this.changeDetectorReference.detectChanges()
+            },
             loadFrame: (frame: CodeFrame) => {
-                console.log(frame, this.code)
-                if (this.code === frame.code) {
+                if (this.isAlreadyLoad(frame)) {
                     this.codeChangeFromAnimation$.next();
                     return;
                 }
+
                 this.code = frame.code;
-                // this.changeDetectorReference.detectChanges();
+                this.changeDetectorReference.detectChanges();
             },
-            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
-            onFinish: () => this.codeConfiguration.hideTextSelection = false
+            onFinish: () => {
+                this.codeConfiguration.hideTextSelection = false;
+                this.changeDetectorReference.detectChanges();
+            }
         });
+    }
+
+    private isAlreadyLoad(frame: CodeFrame): boolean {
+        return this.code === frame.code;
     }
 }

@@ -8,7 +8,7 @@
     }
 </div>
 {{codeAnimation.hasStart}}
-@if (isController) {
+@if (isController && !codeAnimation.hasStart) {
 <button (click)="addFrameToAnimation()"> Add frame </button>
 <button (click)="saveCodeAnimation()"> Save </button>
 }
