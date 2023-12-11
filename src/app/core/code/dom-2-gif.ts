@@ -1,5 +1,6 @@
 import { Observable, Subscription, from } from 'rxjs';
 import html2canvas from 'html2canvas';
+import domtoimage from 'dom-to-image';
 
 import { Animation } from './animation/animation';
 import { Gif } from '../model/gif';
@@ -44,8 +45,8 @@ export class Dom2Gif<Frame> {
         this.loadFrame = dom2gifProperties.loadFrame;
 
         this.gif = new Gif({
-            width: dom2gifProperties.width * this.scaleFactor,
-            height: dom2gifProperties.height * this.scaleFactor,
+            width: dom2gifProperties.width,
+            height: dom2gifProperties.height,
             numberOfFrames: dom2gifProperties.animation.numberOfFrame
         });
         this.nextFrameLoadedSubscription = dom2gifProperties.frameLoaded.subscribe(() => this.saveFrame());
@@ -73,14 +74,27 @@ export class Dom2Gif<Frame> {
     }
 
     private saveFrame(): void {
-        const frameSubscription = from(html2canvas(this.dom, { scale: this.scaleFactor })).subscribe((canvas) => {
-            document.body.appendChild(canvas);
+        // const frameSubscription = from(html2canvas(this.dom, { scale: this.scaleFactor })).subscribe((canvas) => {
+        //     document.body.appendChild(canvas);
 
-            const context = canvas.getContext('2d');
-            const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
+        //     const context = canvas.getContext('2d');
+        //     const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
 
-            if (!pixelList) return;
+        //     if (!pixelList) return;
 
+        //     this.gif.addFrame(pixelList);
+        //     this.loadNextFrame();
+
+        //     frameSubscription.unsubscribe();
+        // });
+
+        from(domtoimage.toPng(this.dom, { quality: 10 })).subscribe((png) => {
+            var img = new Image();
+            img.src = png;
+            document.body.appendChild(img);
+        });
+
+        const frameSubscription = from(domtoimage.toPixelData(this.dom, { quality: 10 })).subscribe((pixelList) => {
             this.gif.addFrame(pixelList);
             this.loadNextFrame();
 
