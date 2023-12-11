@@ -7,7 +7,7 @@ export type CodeFrame = {
 
 export class CodeAnimation extends Animation<CodeFrame> {
     get nbMaxRow(): number {
-        return Math.max(...this.frameList.map(frame => CodeAnimation.nbRowForCode(frame.code)));
+        return Math.max(...this._frameList.map(frame => CodeAnimation.nbRowForCode(frame.code)));
     }
 
     static nbRowForCode(code: string): number {

@@ -1,4 +1,5 @@
-<div class="stack-child">
+@if(isCodeController) {
+<div class="stack-child code-editor">
     <div #codeContainer class="screen" [ngStyle]="{ width: codeWidth }">
         <app-window [code]="code" [codeConfiguration]="codeConfiguration" (codeHasChange)="codeHasChange($event)"
             (domHasChange)="domHasChange()" />
@@ -8,8 +9,16 @@
     <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
     }
 </div>
-{{codeAnimation.hasStart}}
-@if (isController && !codeAnimation.hasStart) {
-<button (click)="addFrameToAnimation()"> Add frame </button>
-<button (click)="saveCodeAnimation()"> Save </button>
+
+@if (!codeAnimation.hasStart) {
+<div class="code-editor-actions">
+    <button class="secondary" (click)="addFrameToAnimation()"> Add frame </button>
+    <button class="primary" [disabled]="codeAnimation.hasNoFrame" (click)="saveCodeAnimation()"> Save </button>
+</div>
+}
+}
+@else {
+<div class="screen" [ngStyle]="{ width: codeWidth }">
+    <app-window [code]="codeFrame!.code" [codeConfiguration]="codeConfiguration" />
+</div>
 }

@@ -1,13 +1,13 @@
 export abstract class Animation<Frame> {
-    protected frameList: Frame[] = [];
+    protected _frameList: Frame[] = [];
     private currentFrameIndex?: number;
 
     get hasNoFrame(): boolean {
-        return this.frameList.length <= 0;
+        return this._frameList.length <= 0;
     }
 
     get numberOfFrame(): number {
-        return this.frameList.length;
+        return this._frameList.length;
     }
 
     get hasStart(): boolean {
@@ -17,7 +17,11 @@ export abstract class Animation<Frame> {
     get currentFrame(): Frame | undefined {
         if (this.currentFrameIndex === undefined) return undefined;
 
-        return this.frameList.at(this.currentFrameIndex);
+        return this._frameList.at(this.currentFrameIndex);
+    }
+
+    get frameList(): readonly Frame[] {
+        return this._frameList;
     }
 
     start(): void {
@@ -33,7 +37,7 @@ export abstract class Animation<Frame> {
 
         const newFrameNumber = this.currentFrameIndex + 1;
 
-        if (newFrameNumber >= this.frameList.length) {
+        if (newFrameNumber >= this._frameList.length) {
             this.stop();
             return undefined;
         }
@@ -44,6 +48,10 @@ export abstract class Animation<Frame> {
     }
 
     addFrame(frame: Frame): void {
-        this.frameList.push(frame);
+        this._frameList.push(frame);
+    }
+
+    removeFrame(index: number): void {
+        this._frameList.splice(index, 1);
     }
 }

@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CodeComponent } from './core/code/code.component';
+import { CodeToGifComponent } from './pages/code-to-gif/code-to-gif-page.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, CodeComponent],
+  imports: [CommonModule, RouterOutlet, CodeToGifComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

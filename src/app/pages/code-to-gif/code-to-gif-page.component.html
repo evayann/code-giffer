@@ -1,0 +1,17 @@
+<app-code #codeEditor (frameList)="frameList = $event" />
+
+<div class="frame-list">
+    @for(frame of frameList; track $index) {
+    <div class="frame">
+        <button aria-label="Delete frame" class="secondary delete-frame" (click)="codeEditor.deleteFrame($index)"> X
+        </button>
+        <div class="frame-card">
+            <p> Frame {{$index}} </p>
+            <app-code [codeFrame]="frame" />
+        </div>
+    </div>
+    }
+    @empty {
+    <p> No frame yet ! Try something :) </p>
+    }
+</div>

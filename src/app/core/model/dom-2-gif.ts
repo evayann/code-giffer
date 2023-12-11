@@ -1,8 +1,8 @@
 import { Observable, Subscription, from } from 'rxjs';
 import domtoimage from 'dom-to-image';
 
-import { Animation } from './animation/animation';
-import { Gif } from '../model/gif';
+import { Animation } from '../code/animation/animation';
+import { Gif } from './gif';
 
 export type Dom2GifGenerationProperties<Frame> = {
     animation: Animation<Frame>,

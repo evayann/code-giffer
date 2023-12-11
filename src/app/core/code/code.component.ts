@@ -1,10 +1,10 @@
 import { NgStyle } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { HighlightLoader } from 'ngx-highlightjs';
 import { Subject } from 'rxjs';
 import { CodeAnimation, CodeFrame } from './animation/code-animation';
 import { CodeConfiguration } from './code-configuration';
-import { Dom2Gif } from './dom-2-gif';
+import { Dom2Gif } from '../model/dom-2-gif';
 import { WindowComponent } from './window/window.component';
 
 @Component({
@@ -17,7 +17,8 @@ import { WindowComponent } from './window/window.component';
 })
 export class CodeComponent {
     @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
-    @Input() isController: boolean = true;
+    @Output() frameList = new EventEmitter<readonly CodeFrame[]>();
+    @Input() codeFrame?: CodeFrame;
     @Input() set theme(themeName: string) {
         this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/${themeName}.min.css`);
     }
@@ -37,7 +38,16 @@ export class CodeComponent {
         return '64ch';
     }
 
+    protected get isCodeController(): boolean {
+        return !this.codeFrame;
+    }
+
     constructor(private changeDetectorReference: ChangeDetectorRef, private hljsLoader: HighlightLoader) { this.theme = 'androidstudio'; }
+
+    deleteFrame(index: number): void {
+        this.codeAnimation.removeFrame(index);
+        this.frameList.emit(this.codeAnimation.frameList);
+    }
 
     protected codeHasChange(codeEvent: { value: string, position: number }): void {
         if (this.codeAnimation.hasStart) return;
@@ -57,6 +67,7 @@ export class CodeComponent {
             code: this.code,
             caretPosition: 0
         });
+        this.frameList.emit(this.codeAnimation.frameList);
     }
 
     protected saveCodeAnimation(): void {
