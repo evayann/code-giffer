@@ -1,5 +1,4 @@
 import { Observable, Subscription, from } from 'rxjs';
-import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 
 import { Animation } from './animation/animation';
@@ -21,7 +20,6 @@ export type Dom2GifGenerationProperties<Frame> = {
 export class Dom2Gif<Frame> {
     private gif: Gif;
     private dom: HTMLElement;
-    private scaleFactor: number;
     private animation: Animation<Frame>;
 
     private onStart?: () => void;
@@ -38,7 +36,6 @@ export class Dom2Gif<Frame> {
     private constructor(dom2gifProperties: Dom2GifGenerationProperties<Frame>) {
         this.dom = dom2gifProperties.dom;
         this.animation = dom2gifProperties.animation;
-        this.scaleFactor = dom2gifProperties.scaleFactor ?? 1;
 
         this.onStart = dom2gifProperties.onStart;
         this.onFinish = dom2gifProperties.onFinish;
@@ -74,32 +71,13 @@ export class Dom2Gif<Frame> {
     }
 
     private saveFrame(): void {
-        // const frameSubscription = from(html2canvas(this.dom, { scale: this.scaleFactor })).subscribe((canvas) => {
-        //     document.body.appendChild(canvas);
+        const frameSubscription = from(domtoimage.toPixelData(this.dom))
+            .subscribe((pixelList) => {
+                this.gif.addFrame(pixelList);
+                this.loadNextFrame();
 
-        //     const context = canvas.getContext('2d');
-        //     const pixelList = context?.getImageData(0, 0, canvas.width, canvas.height)?.data;
-
-        //     if (!pixelList) return;
-
-        //     this.gif.addFrame(pixelList);
-        //     this.loadNextFrame();
-
-        //     frameSubscription.unsubscribe();
-        // });
-
-        from(domtoimage.toPng(this.dom, { quality: 10 })).subscribe((png) => {
-            var img = new Image();
-            img.src = png;
-            document.body.appendChild(img);
-        });
-
-        const frameSubscription = from(domtoimage.toPixelData(this.dom, { quality: 10 })).subscribe((pixelList) => {
-            this.gif.addFrame(pixelList);
-            this.loadNextFrame();
-
-            frameSubscription.unsubscribe();
-        });
+                frameSubscription.unsubscribe();
+            });
     }
 
     private downloadGif(): void {

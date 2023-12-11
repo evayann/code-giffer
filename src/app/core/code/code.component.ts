@@ -1,11 +1,11 @@
 import { NgStyle } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild, ViewChildren } from '@angular/core';
-import { WindowComponent } from './window/window.component';
-import { CodeConfiguration } from './code-configuration';
-import { CodeAnimation, CodeFrame } from './animation/code-animation';
-import { Dom2Gif } from './dom-2-gif';
-import { Subject, of } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { HighlightLoader } from 'ngx-highlightjs';
+import { Subject } from 'rxjs';
+import { CodeAnimation, CodeFrame } from './animation/code-animation';
+import { CodeConfiguration } from './code-configuration';
+import { Dom2Gif } from './dom-2-gif';
+import { WindowComponent } from './window/window.component';
 
 @Component({
     selector: 'app-code',
@@ -40,12 +40,16 @@ export class CodeComponent {
     constructor(private changeDetectorReference: ChangeDetectorRef, private hljsLoader: HighlightLoader) { this.theme = 'androidstudio'; }
 
     protected codeHasChange(codeEvent: { value: string, position: number }): void {
-        this.code = codeEvent.value;
+        if (this.codeAnimation.hasStart) return;
 
-        if (this.codeAnimation.hasStart)
-            this.codeChangeFromAnimation$.next();
-        else
-            this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(this.code);
+        this.code = codeEvent.value;
+        this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(this.code);
+    }
+
+    protected domHasChange(): void {
+        if (!this.codeAnimation.hasStart) return;
+
+        this.codeChangeFromAnimation$.next();
     }
 
     protected addFrameToAnimation(): void {

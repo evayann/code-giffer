@@ -1,20 +1,8 @@
 <app-title-bar />
 @if(codeConfiguration.isEditable) {
 <div class="stack-child code-container">
-    <!--@if (codeConfiguration.hideTextSelection) {
-    <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="codeConfiguration.numberRow"
-        [cols]="codeConfiguration.numberColumn" (input)="codeModify(textArea)">{{code}}</textarea>
-    }
-
-    <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
-        (hasChange)="codeHasChange()"></code>
-
-    @if (!codeConfiguration.hideTextSelection) {
-    <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="codeConfiguration.numberRow"
-        [cols]="codeConfiguration.numberColumn" (input)="codeModify(textArea)">{{code}}</textarea>
-    }-->
-    <code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
-        (hasChange)="codeHasChange()"></code>
+    <code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
+        (hasChange)="codeTagHasChange()"></code>
 
     <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="codeConfiguration.numberRow"
         [cols]="codeConfiguration.numberColumn" (input)="codeModify(textArea)">{{code}}</textarea>
@@ -23,5 +11,5 @@
 </div>
 }
 @else {
-<code #codeTag class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
+<code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
 }

@@ -17,14 +17,14 @@ export class WindowComponent {
     @Input({ required: true }) code!: string;
     @Input({ required: true }) codeConfiguration!: CodeConfiguration;
 
-    @Output() updatedInDom = new EventEmitter<void>();
-    @Output() hasChange = new EventEmitter<{ value: string, position: number }>();
+    @Output() domHasChange = new EventEmitter<void>();
+    @Output() codeHasChange = new EventEmitter<{ value: string, position: number }>();
 
-    protected codeHasChange(): void {
-        this.updatedInDom.next();
+    protected codeTagHasChange(): void {
+        this.domHasChange.next();
     }
 
     protected codeModify(textArea: HTMLTextAreaElement): void {
-        this.hasChange.emit({ value: textArea.value, position: textArea.selectionEnd });
+        this.codeHasChange.emit({ value: textArea.value, position: textArea.selectionEnd });
     }
 }

@@ -1,6 +1,7 @@
 <div class="stack-child">
     <div #codeContainer class="screen" [ngStyle]="{ width: codeWidth }">
-        <app-window [code]="code" [codeConfiguration]="codeConfiguration" (hasChange)="codeHasChange($event)" />
+        <app-window [code]="code" [codeConfiguration]="codeConfiguration" (codeHasChange)="codeHasChange($event)"
+            (domHasChange)="domHasChange()" />
     </div>
 
     @if (codeAnimation.hasStart) {
