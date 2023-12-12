@@ -1,13 +1,16 @@
-<app-code #codeEditor (frameList)="frameList = $event" />
+<app-code-editor #codeEditor [theme]="theme" (animation)="loadAnimation($event)" />
 
 <div class="frame-list">
-    @for(frame of frameList; track $index) {
+    @for(frame of animation.frameList; track frame) {
     <div class="frame">
-        <button aria-label="Delete frame" class="secondary delete-frame" (click)="codeEditor.deleteFrame($index)"> X
-        </button>
+        <div class="frame-actions">
+            <button aria-label="Delete frame" class="secondary delete-frame" (click)="codeEditor.deleteFrame($index)">
+                X
+            </button>
+        </div>
         <div class="frame-card">
             <p> Frame {{$index}} </p>
-            <app-code [codeFrame]="frame" />
+            <app-code-viewer [theme]="theme" [frame]="frame" [dimension]="{column: 64, row: animation.maxRow }" />
         </div>
     </div>
     }

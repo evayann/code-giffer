@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { TitleBarComponent } from '../title-bar/title-bar.component';
 import { Highlight } from 'ngx-highlightjs';
-import { CodeConfiguration } from '../code-configuration';
+import { WindowConfiguration } from './window-configuration';
 import { HasChangeDirective } from '../../directives/has-change.directive';
 import { NgClass } from '@angular/common';
 
@@ -15,7 +15,7 @@ import { NgClass } from '@angular/common';
 })
 export class WindowComponent {
     @Input({ required: true }) code!: string;
-    @Input({ required: true }) codeConfiguration!: CodeConfiguration;
+    @Input({ required: true }) windowConfiguration!: WindowConfiguration;
 
     @Output() domHasChange = new EventEmitter<void>();
     @Output() codeHasChange = new EventEmitter<{ value: string, position: number }>();

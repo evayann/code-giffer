@@ -1,11 +1,11 @@
 <app-title-bar />
-@if(codeConfiguration.isEditable) {
+@if(windowConfiguration.isEditable) {
 <div class="stack-child code-container">
     <code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"
         (hasChange)="codeTagHasChange()"></code>
 
-    <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="codeConfiguration.numberRow"
-        [cols]="codeConfiguration.numberColumn" (input)="codeModify(textArea)">{{code}}</textarea>
+    <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="windowConfiguration.numberRow"
+        [cols]="windowConfiguration.numberColumn" (input)="codeModify(textArea)">{{code}}</textarea>
 
     <!-- <span class="caret"></span> -->
 </div>

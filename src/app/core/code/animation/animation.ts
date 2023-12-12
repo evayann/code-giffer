@@ -54,4 +54,8 @@ export abstract class Animation<Frame> {
     removeFrame(index: number): void {
         this._frameList.splice(index, 1);
     }
+
+    copy(): this {
+        return new (<any>this.constructor);
+    }
 }

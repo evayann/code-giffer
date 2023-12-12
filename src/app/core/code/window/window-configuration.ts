@@ -1,4 +1,4 @@
-export type CodeConfiguration = {
+export type WindowConfiguration = {
     isEditable: boolean,
     numberRow: number;
     numberColumn: number;

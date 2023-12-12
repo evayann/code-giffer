@@ -5,12 +5,15 @@
 }
 
 .code {
+    display: inline-block;
+
     font-size: var(--font-size, 16px);
     font-family: monospace;
     white-space: pre;
 
     text-wrap: wrap;
 
+    width: 100%;
     padding: var(--padding-4);
 }
 
