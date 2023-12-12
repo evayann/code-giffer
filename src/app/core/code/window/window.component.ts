@@ -4,6 +4,7 @@ import { Highlight } from 'ngx-highlightjs';
 import { WindowConfiguration } from './window-configuration';
 import { HasChangeDirective } from '../../directives/has-change.directive';
 import { NgClass } from '@angular/common';
+import { CodeTheme } from '../code-theme';
 
 @Component({
     selector: 'app-window',
@@ -15,6 +16,7 @@ import { NgClass } from '@angular/common';
 })
 export class WindowComponent {
     @Input({ required: true }) code!: string;
+    @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
 
     @Output() domHasChange = new EventEmitter<void>();

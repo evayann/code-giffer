@@ -1,4 +1,4 @@
-<app-title-bar />
+<app-title-bar [theme]="theme" />
 @if(windowConfiguration.isEditable) {
 <div class="stack-child code-container">
     <code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"

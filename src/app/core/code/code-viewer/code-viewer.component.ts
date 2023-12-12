@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { WindowComponent } from '../window/window.component';
 import { CodeFrame } from '../animation/code-animation';
 import { WindowConfiguration } from '../window/window-configuration';
+import { CodeTheme } from '../code-theme';
 
 @Component({
     selector: 'app-code-viewer',
@@ -15,7 +16,7 @@ import { WindowConfiguration } from '../window/window-configuration';
 export class CodeViewerComponent {
     @Input({ required: true }) frame!: CodeFrame;
     @Input({ required: true }) dimension!: { row: number, column: number };
-    @Input({ required: true }) theme!: { padding: string, background: string };
+    @Input({ required: true }) theme!: CodeTheme;
 
     protected get code(): string {
         return this.frame.code;

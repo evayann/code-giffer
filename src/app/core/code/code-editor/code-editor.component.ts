@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { HighlightLoader } from 'ngx-highlightjs';
 import { Subject } from 'rxjs';
 import { Dom2Gif } from '../../model/dom-2-gif';
 import { CodeAnimation, CodeFrame } from '../animation/code-animation';
+import { CodeTheme } from '../code-theme';
 import { WindowConfiguration } from '../window/window-configuration';
 import { WindowComponent } from '../window/window.component';
 
@@ -24,7 +24,7 @@ export class CodeEditorComponent {
 	@Input() set initialCode(code: string) {
 		this.code = code;
 	}
-	@Input({ required: true }) theme!: { padding: string, background: string };
+	@Input({ required: true }) theme!: CodeTheme;
 
 	protected code = '';
 	protected codeWidth = '64ch';
@@ -38,10 +38,7 @@ export class CodeEditorComponent {
 
 	private codeChangeFromAnimation$ = new Subject<void>();
 
-	constructor(private changeDetectorReference: ChangeDetectorRef, private hljsLoader: HighlightLoader) {
-		const themeName = 'androidstudio';
-		this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/${themeName}.min.css`);
-	}
+	constructor(private changeDetectorReference: ChangeDetectorRef) { }
 
 	deleteFrame(index: number): void {
 		this.codeAnimation.removeFrame(index);
