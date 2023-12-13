@@ -16,7 +16,7 @@ import { HighlightLoader } from 'ngx-highlightjs';
 export class CodeToGifComponent {
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected theme = {
-        background: 'linear-gradient(140deg, rgb(165, 142, 251), rgb(233, 191, 248))',
+        background: 'linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))',
         padding: 'var(--padding-5)',
         codeSyntaxThemeName: 'androidstudio',
         titleColor: 'white'

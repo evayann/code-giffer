@@ -1,4 +1,23 @@
+:host {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 2fr 6fr 3fr;
+    gap: 0px 0px;
+    grid-template-areas:
+        "."
+        "editor"
+        "frame-list";
+
+    margin: var(--space-5) 0;
+}
+
+app-code-editor {
+    grid-area: editor;
+}
+
 .frame-list {
+    grid-area: frame-list;
+
     display: flex;
     gap: 10px;
     overflow-x: auto;
@@ -6,11 +25,9 @@
 
 .frame {
     position: relative;
-
 }
 
 .frame-card {
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -31,4 +48,15 @@
     font-size: 18px;
 
     padding: 0.5rem;
+}
+
+.tools {
+    position: fixed;
+    bottom: 10%;
+    left: 50%;
+    translate: -50% 0;
+
+    color: white;
+    background-color: #000000DD;
+    border-radius: var(--space-3);
 }

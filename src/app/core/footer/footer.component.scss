@@ -1,0 +1,19 @@
+footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    align-items: center;
+    justify-items: center;
+
+    height: 100%;
+}
+
+.social-networks {
+    display: flex;
+    flex-direction: row;
+    gap: var(--space-2);
+}
+
+.logo {
+    width: 20vw;
+    border-radius: 12px;
+}
