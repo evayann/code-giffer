@@ -52,11 +52,41 @@ app-code-editor {
 
 .tools {
     position: fixed;
-    bottom: 10%;
+    top: 5%;
     left: 50%;
     translate: -50% 0;
 
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+
     color: white;
-    background-color: #000000DD;
+    background: rgba(0, 0, 0, 40%), url('../../../assets/noise.svg');
+
     border-radius: var(--space-3);
+
+    padding: var(--padding-4);
+
+    height: 60px;
+
+    &>div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        height: 100%;
+
+        & :is(input, select) {
+            width: 100px;
+        }
+
+        & p {
+            text-align: center;
+
+        }
+    }
+}
+
+.export {
+    height: 100%;
 }
