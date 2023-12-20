@@ -50,15 +50,11 @@ app-code-editor {
     padding: 0.5rem;
 }
 
-.tools {
+.tools-area {
     position: fixed;
     top: 5%;
     left: 50%;
     translate: -50% 0;
-
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
 
     color: white;
     background: rgba(0, 0, 0, 40%), url('../../../assets/noise.svg');
@@ -68,6 +64,12 @@ app-code-editor {
     padding: var(--padding-4);
 
     height: 60px;
+}
+
+.tools-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
 
     &>div {
         display: flex;
@@ -82,11 +84,10 @@ app-code-editor {
 
         & p {
             text-align: center;
-
         }
     }
-}
 
-.export {
-    height: 100%;
+    .export {
+        height: 100%;
+    }
 }
