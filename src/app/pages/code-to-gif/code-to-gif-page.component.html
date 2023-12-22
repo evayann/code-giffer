@@ -1,4 +1,4 @@
-<app-code-editor #codeEditor [theme]="theme" (animation)="loadAnimation($event)" />
+<app-code-editor #codeEditor [language]="language" [theme]="theme" (animation)="loadAnimation($event)" />
 
 <div class="frame-list">
     @for(frame of animation.frameList; track frame) {
@@ -10,12 +10,13 @@
         </div>
         <div class="frame-card">
             <p> Frame {{$index}} </p>
-            <app-code-viewer [theme]="theme" [frame]="frame" [dimension]="{ column: 64, row: animation.maxRow }" />
+            <app-code-viewer [language]="language" [theme]="theme" [frame]="frame"
+                [dimension]="{ column: 64, row: animation.maxRow }" />
         </div>
     </div>
     }
     @empty {
-    <p> No frame yet ! Try something :) </p>
+    <p class="xl"> No frame yet ! Try something :) </p>
     }
 </div>
 
@@ -39,7 +40,18 @@
         <input type="number" formControlName="loopIteration" />
     </div>
 
-    <button class="export primary"> Export </button>
+    <div>
+        <div class="export-container">
+            <button class="primary" (click)="showExportType = true"> Export </button>
+            @if (showExportType) {
+            <ul class="export-type">
+                <li><button class="invisible" (click)="saveAsGif()"> Gif </button></li>
+                <li><button class="invisible" (click)="saveAsVideo()"> Video </button></li>
+            </ul>
+            }
+        </div>
+        <button class="secondary"> Add Frame </button>
+    </div>
 
     <div>
         <p class="label"> Background </p>

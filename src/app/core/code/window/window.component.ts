@@ -3,18 +3,19 @@ import { TitleBarComponent } from '../title-bar/title-bar.component';
 import { Highlight } from 'ngx-highlightjs';
 import { WindowConfiguration } from './window-configuration';
 import { HasChangeDirective } from '../../directives/has-change.directive';
-import { NgClass } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { CodeTheme } from '../code-theme';
 
 @Component({
     selector: 'app-window',
     standalone: true,
-    imports: [TitleBarComponent, HasChangeDirective, Highlight, NgClass],
+    imports: [TitleBarComponent, HasChangeDirective, Highlight, CommonModule],
     templateUrl: './window.component.html',
     styleUrls: ['./window.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WindowComponent {
+    @Input({ required: true }) language!: string;
     @Input({ required: true }) code!: string;
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;

@@ -1,0 +1,10 @@
+input {
+    color: white;
+    background-color: var(--primary);
+    border-radius: var(--space-2);
+    border: 1px solid gray;
+}
+
+input[type=checkbox] {
+    accent-color: var(--primary);
+}

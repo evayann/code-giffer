@@ -1,6 +1,6 @@
 <div class="stack-child code-editor">
     <div #codeContainer [ngStyle]="{ width: codeWidth, padding: theme.padding, background: theme.background }">
-        <app-window [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
+        <app-window [language]="language" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
             (codeHasChange)="codeHasChange($event)" (domHasChange)="domHasChange()" />
     </div>
 

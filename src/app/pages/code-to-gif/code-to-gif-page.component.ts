@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { CodeFrame } from '../../core/code/animation/code-animation';
 import { CodeViewerComponent } from '../../core/code/code-viewer/code-viewer.component';
 import { CodeEditorComponent } from '../../core/code/code-editor/code-editor.component';
@@ -17,17 +17,23 @@ import { ToolsBarOptions } from './tools-bar';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeToGifComponent {
+    protected showExportType = false;
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected languagesList = ['auto'].concat(languageList);
     protected toolsForm: FormGroup;
 
     protected get theme(): any {
         return {
-            background: this.geToolsValue('hasBackground') ? 'linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))' : 'transparent',
-            padding: this.geToolsValue('hasPadding') ? 'var(--padding-5)' : '0',
+            background: this.getToolsValue('hasBackground') ? 'linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))' : 'transparent',
+            padding: this.getToolsValue('hasPadding') ? 'var(--padding-5)' : '0',
             codeSyntaxThemeName: 'androidstudio',
-            titleColor: 'white'
+            titleColor: 'white',
+            caretColor: 'white'
         };
+    }
+
+    protected get language(): string {
+        return this.getToolsValue('language');
     }
 
     constructor(private hljsLoader: HighlightLoader, formBuilder: FormBuilder) {
@@ -50,7 +56,15 @@ export class CodeToGifComponent {
         }
     }
 
-    private geToolsValue<T = unknown>(key: keyof ToolsBarOptions): T {
+    protected saveAsGif(): void {
+        this.showExportType = false;
+    }
+
+    protected saveAsVideo(): void {
+        this.showExportType = false;
+    }
+
+    private getToolsValue<T = unknown>(key: keyof ToolsBarOptions): T {
         return this.toolsForm.get(key)?.value;
     }
 }

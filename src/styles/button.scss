@@ -11,7 +11,8 @@ button {
 
     transition: all 0.3s ease-in-out, font-weight 0.4s ease-in-out;
 
-    --btn-color: black;
+    --default-btn-color: black;
+    --btn-color: var(--default-btn-color);
     --btn-bg: transparent;
     --btn-border-width: 1px;
     --btn-border-color: black;
@@ -23,8 +24,8 @@ button {
     }
 
     &:hover:not(&:disabled) {
-        filter: brightness(1.15) saturate(1.5);
-        --btn-font-weight: bold;
+        --btn-color: color-mix(in srgb, var(--default-btn-color), white 80%);
+        --btn-bg: color-mix(in srgb, black, white 20%);
     }
 
     &.primary {
@@ -35,5 +36,10 @@ button {
     &.secondary {
         --btn-color: var(--text);
         --btn-bg: var(--secondary);
+    }
+
+    &.invisible {
+        --btn-bg: transparent;
+        --btn-border-width: 0;
     }
 }

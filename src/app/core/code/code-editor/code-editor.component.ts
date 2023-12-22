@@ -17,14 +17,14 @@ import { WindowComponent } from '../window/window.component';
 })
 export class CodeEditorComponent {
 	@ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
-	@Output() animation = new EventEmitter<{ frameList: readonly CodeFrame[]; maxRow: number }>();
-	// @Input() set codeStyle(codeStyle: CodeStyle) {
-	// 	this.codeWidth = `${codeStyle.characterPerLine}ch`;
-	// }
+
 	@Input() set initialCode(code: string) {
+		if (this.code !== '') return;
 		this.code = code;
 	}
+	@Input({ required: true }) language!: string;
 	@Input({ required: true }) theme!: CodeTheme;
+	@Output() animation = new EventEmitter<{ frameList: readonly CodeFrame[]; maxRow: number }>();
 
 	protected code = '';
 	protected codeWidth = '64ch';

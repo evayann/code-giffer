@@ -12,7 +12,8 @@
 
     overflow: auto;
 
-    background: radial-gradient(ellipse at bottom left, var(--text) 0, var(--background) 12%),
+    background: radial-gradient(ellipse at 0% 100%, var(--text) 0%, color-mix(in srgb, #394d59, black 15%) 20%, #394d59 50%),
+        radial-gradient(ellipse at 120% 10%, var(--text), #394d59 70%),
         url('../assets/noise.svg');
 }
 

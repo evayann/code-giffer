@@ -17,6 +17,7 @@ export class CodeViewerComponent {
     @Input({ required: true }) frame!: CodeFrame;
     @Input({ required: true }) dimension!: { row: number, column: number };
     @Input({ required: true }) theme!: CodeTheme;
+    @Input({ required: true }) language!: string;
 
     protected get code(): string {
         return this.frame.code;

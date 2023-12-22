@@ -1,1 +1,1 @@
-export const languageList = ['html', 'js'];
+export const languageList = ['html', 'javascript'];

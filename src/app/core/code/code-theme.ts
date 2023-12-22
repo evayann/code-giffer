@@ -3,4 +3,5 @@ export type CodeTheme = {
     padding: string;
     codeSyntaxThemeName: string;
     titleColor: string;
+    caretColor: string;
 };
