@@ -42,7 +42,8 @@
 
     <div>
         <div class="export-container">
-            <button class="primary" (click)="showExportType = true"> Export </button>
+            <button class="primary" (click)="showExportType = true" [disabled]="!isExportable"> Export
+            </button>
             @if (showExportType) {
             <ul class="export-type">
                 <li><button class="invisible" (click)="saveAsGif()"> Gif </button></li>
@@ -50,7 +51,7 @@
             </ul>
             }
         </div>
-        <button class="secondary"> Add Frame </button>
+        <button class="secondary" (click)="addCurrentFrame()"> Add Frame </button>
     </div>
 
     <div>

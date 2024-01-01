@@ -1,3 +1,5 @@
+@use '../../../styles' as style;
+
 :host {
     display: grid;
     grid-template-columns: 1fr;
@@ -8,7 +10,7 @@
         "editor"
         "frame-list";
 
-    margin: var(--space-5) 0;
+    margin: var(--space-5);
 }
 
 app-code-editor {
@@ -24,6 +26,9 @@ app-code-editor {
     gap: 10px;
 
     overflow-x: auto;
+
+    border-radius: var(--space-4);
+    background-color: style.transparent(secondary, 10%);
 }
 
 .frame {
@@ -78,10 +83,11 @@ app-code-editor {
         display: flex;
         flex-direction: column;
         justify-content: center;
+        align-items: center;
 
         height: 100%;
 
-        & :is(input, select) {
+        & :is(input:not(&[type="checkbox"]), select) {
             width: 100px;
         }
 

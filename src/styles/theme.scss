@@ -1,4 +1,4 @@
-@use 'sass:list';
+@use './functions';
 
 $padding-size-list: 2px, 4px, 8px, 16px, 32px;
 
@@ -13,8 +13,6 @@ $padding-size-list: 2px, 4px, 8px, 16px, 32px;
     --text: white;
     --background: #354752;
 
-    @for $index from 1 through length($padding-size-list) {
-        --padding-#{$index}: #{list.nth($padding-size-list, $index)};
-        --space-#{$index}: #{list.nth($padding-size-list, $index)};
-    }
+    @include functions.createProperties($padding-size-list, space);
+    @include functions.createProperties($padding-size-list, padding);
 }

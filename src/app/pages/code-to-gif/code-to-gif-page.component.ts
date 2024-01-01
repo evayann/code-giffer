@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { CodeFrame } from '../../core/code/animation/code-animation';
-import { CodeViewerComponent } from '../../core/code/code-viewer/code-viewer.component';
-import { CodeEditorComponent } from '../../core/code/code-editor/code-editor.component';
-import { HighlightLoader } from 'ngx-highlightjs';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { HighlightLoader } from 'ngx-highlightjs';
+import { CodeFrame } from '../../core/code/animation/code-animation';
+import { CodeEditorComponent } from '../../core/code/code-editor/code-editor.component';
+import { CodeViewerComponent } from '../../core/code/code-viewer/code-viewer.component';
 import { languageList } from './languages';
 import { ToolsBarOptions } from './tools-bar';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
     selector: 'app-code-to-gif',
@@ -21,6 +22,9 @@ export class CodeToGifComponent {
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected languagesList = ['auto'].concat(languageList);
     protected toolsForm: FormGroup;
+    protected saveCurrentFrame$: Observable<void>;
+
+    private saveCurrentFrameSubject$ = new Subject<void>();
 
     protected get theme(): any {
         return {
@@ -36,6 +40,10 @@ export class CodeToGifComponent {
         return this.getToolsValue('language');
     }
 
+    protected get isExportable(): boolean {
+        return this.animation.frameList.length !== 0;
+    }
+
     constructor(private hljsLoader: HighlightLoader, formBuilder: FormBuilder) {
         this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
         // this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/${this.theme.codeSyntaxThemeName}.min.css`);
@@ -47,6 +55,7 @@ export class CodeToGifComponent {
             hasPadding: true,
             isDarkMode: true,
         });
+        this.saveCurrentFrame$ = this.saveCurrentFrameSubject$.asObservable();
     }
 
     protected loadAnimation(animation: { frameList: readonly CodeFrame[]; maxRow: number }): void {
@@ -54,6 +63,10 @@ export class CodeToGifComponent {
             frameList: [...animation.frameList],
             maxRow: animation.maxRow
         }
+    }
+
+    protected addCurrentFrame(): void {
+
     }
 
     protected saveAsGif(): void {

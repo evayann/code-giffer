@@ -1,8 +1,8 @@
 button {
     cursor: pointer;
 
-    color: var(--btn-color);
-    background-color: var(--btn-bg);
+    color: var(--_btn-color);
+    background-color: var(--_btn-bg);
     border: var(--btn-border-width) solid var(--btn-border-color);
     border-radius: var(--space-3);
     font-weight: var(--btn-font-weight);
@@ -11,11 +11,15 @@ button {
 
     transition: all 0.3s ease-in-out, font-weight 0.4s ease-in-out;
 
-    --default-btn-color: black;
-    --btn-color: var(--default-btn-color);
+    --btn-color: black;
+    --_btn-color: var(--btn-color);
+
     --btn-bg: transparent;
+    --_btn-bg: var(--btn-bg);
+
     --btn-border-width: 1px;
     --btn-border-color: black;
+
     --btn-font-weight: normal;
 
     &:disabled {
@@ -24,8 +28,8 @@ button {
     }
 
     &:hover:not(&:disabled) {
-        --btn-color: color-mix(in srgb, var(--default-btn-color), white 80%);
-        --btn-bg: color-mix(in srgb, black, white 20%);
+        --_btn-color: color-mix(in srgb, var(--btn-color), white 80%);
+        --_btn-bg: color-mix(in srgb, var(--btn-bg), black 20%);
     }
 
     &.primary {

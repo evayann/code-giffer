@@ -10,7 +10,7 @@
 </div>
 
 @if (!codeAnimation.hasStart) {
-<div class="">
+<div>
     <button class="secondary" (click)="addFrameToAnimation()"> Add frame </button>
     <button class="primary" [disabled]="codeAnimation.hasNoFrame" (click)="saveCodeAnimation()"> Save </button>
 </div>

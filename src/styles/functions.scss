@@ -1,5 +1,16 @@
-@use 'sass:color';
+@use 'sass:list';
 
-@function color2rgb($color) {
-    @return color.red($color), color.green($color), color.blue($color);
+@function transparent($colorVariable, $alpha) {
+    @return color-mix(in srgb, var(--#{$colorVariable}) $alpha, transparent);
+}
+
+@function invert($color, $amount: 100%) {
+    $inverse: change-color($color, $hue: hue($color) + 180);
+    @return mix($inverse, $color, $amount);
+}
+
+@mixin createProperties($list, $propertyName) {
+    @for $index from 1 through length($list) {
+        --#{propertyName}-#{$index}: #{list.nth($list, $index)};
+    }
 }
