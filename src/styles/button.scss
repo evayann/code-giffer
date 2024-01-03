@@ -9,7 +9,9 @@ button {
 
     padding: var(--space-3);
 
-    transition: all 0.3s ease-in-out, font-weight 0.4s ease-in-out;
+    transition:
+        all 0.3s ease-in-out,
+        font-weight 0.4s ease-in-out;
 
     --btn-color: black;
     --_btn-color: var(--btn-color);
@@ -33,12 +35,12 @@ button {
     }
 
     &.primary {
-        --btn-color: var(--text);
+        --btn-color: var(--text-primary);
         --btn-bg: var(--primary);
     }
 
     &.secondary {
-        --btn-color: var(--text);
+        --btn-color: var(--text-secondary);
         --btn-bg: var(--secondary);
     }
 

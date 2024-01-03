@@ -1,7 +1,17 @@
-@use 'sass:list';
+@use "sass:list";
+@use "sass:color";
+@use "sass:math";
 
 @function transparent($colorVariable, $alpha) {
-    @return color-mix(in srgb, var(--#{$colorVariable}) $alpha, transparent);
+    @return color-mix(in srgb, #{$colorVariable}, transparent $alpha);
+}
+
+@function dark($colorVariable, $alpha) {
+    @return color-mix(in srgb, #{$colorVariable}, black $alpha);
+}
+
+@function light($colorVariable, $alpha) {
+    @return color-mix(in srgb, #{$colorVariable}, white $alpha);
 }
 
 @function invert($color, $amount: 100%) {
@@ -9,8 +19,42 @@
     @return mix($inverse, $color, $amount);
 }
 
+@function contrast-ratio($color1, $color2) {
+    $luminance1: 0.2126 * color.red($color1) + 0.7152 * color.green($color1) +
+        0.0722 * color.blue($color1);
+    $luminance2: 0.2126 * color.red($color2) + 0.7152 * color.green($color2) +
+        0.0722 * color.blue($color2);
+
+    $contrastRatio: 0;
+
+    @if $luminance1 > $luminance2 {
+        $contrastRatio: math.div(($luminance1 + 0.05), ($luminance2 + 0.05));
+    } @else {
+        $contrastRatio: math.div(($luminance2 + 0.05), ($luminance1 + 0.05));
+    }
+
+    @return $contrastRatio;
+}
+
+@function contrast($color) {
+    $min-contrast-ratio: 2;
+    $candidate-color-list-for-contrast: #f4f5f8, #92949c, #222428;
+
+    @each $candidate-color-for-contrast in $candidate-color-list-for-contrast {
+        @if (
+            contrast-ratio($candidate-color-for-contrast, $color) >
+                $min-contrast-ratio
+        ) {
+            @return $candidate-color-for-contrast;
+        }
+    }
+
+    @warn "No color found with good contrast";
+    @return red;
+}
+
 @mixin createProperties($list, $propertyName) {
     @for $index from 1 through length($list) {
-        --#{propertyName}-#{$index}: #{list.nth($list, $index)};
+        --#{$propertyName}-#{$index}: #{list.nth($list, $index)};
     }
 }

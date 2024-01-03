@@ -1,18 +1,21 @@
-@use './functions';
+@use "./functions";
+@use "sass:map";
 
-$padding-size-list: 2px, 4px, 8px, 16px, 32px;
+$primary: #3880ff;
+$secondary: #3dc2ff;
+$tertiary: #5260ff;
+
+$color-list: (
+    primary: $primary,
+    secondary: $secondary,
+    tertiary: $tertiary,
+);
 
 :root {
-    --primary: #2274A5;
-    --secondary: #F75C03;
-
-    --success: #00CC66;
-    --warning: #F1C40F;
-    --danger: #D90368;
-
-    --text: white;
-    --background: #354752;
-
-    @include functions.createProperties($padding-size-list, space);
-    @include functions.createProperties($padding-size-list, padding);
+    @each $color-name, $color in $color-list {
+        --#{$color-name}: #{$color};
+        --#{$color-name}-dark: #{functions.dark(var(--#{$color-name}), 30%)};
+        --#{$color-name}-light: #{functions.light(var(--#{$color-name}), 30%)};
+        --text-#{$color-name}: #{functions.contrast($color)};
+    }
 }
