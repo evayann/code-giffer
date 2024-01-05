@@ -4,7 +4,7 @@
     @for(frame of animation.frameList; track frame) {
     <div class="frame">
         <div class="frame-actions">
-            <button aria-label="Delete frame" class="secondary delete-frame" (click)="codeEditor.deleteFrame($index)">
+            <button aria-label="Delete frame" class="secondary icon" (click)="codeEditor.deleteFrame($index)">
                 X
             </button>
         </div>
@@ -40,7 +40,7 @@
         <input type="number" formControlName="loopIteration" />
     </div>
 
-    <div>
+    <div class="export-and-save">
         <div class="export-container">
             <button class="primary" (click)="showExportType = true" [disabled]="!isExportable"> Export
             </button>

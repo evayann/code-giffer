@@ -1,4 +1,4 @@
-@use '../../../styles' as style;
+@use "../../../styles" as style;
 
 :host {
     display: grid;
@@ -20,15 +20,22 @@ app-code-editor {
 .frame-list {
     grid-area: frame-list;
 
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min-content;
     overflow-x: auto;
 
     border-radius: var(--space-4);
-    background-color: style.transparent(secondary, 10%);
+    background-color: style.transparent(var(--secondary), 80%);
+
+    &:has(p:only-child) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+
+        overflow-x: auto;
+    }
 }
 
 .frame {
@@ -64,28 +71,21 @@ app-code-editor {
     left: 50%;
     translate: -50% 0;
 
-    color: white;
-    background: rgba(0, 0, 0, 40%), url('../../../assets/noise.svg');
+    background: rgba(0, 0, 0, 40%);
 
     border-radius: var(--space-3);
 
     padding: var(--padding-4);
-
-    height: 60px;
 }
 
 .tools-bar {
     display: flex;
-    align-items: center;
     gap: var(--space-3);
 
-    &>div {
+    & > div {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
-
-        height: 100%;
 
         & :is(input:not(&[type="checkbox"]), select) {
             width: 100px;
@@ -93,7 +93,12 @@ app-code-editor {
 
         & p {
             text-align: center;
+            margin-bottom: var(--space-2);
         }
+    }
+
+    .export-and-save {
+        gap: var(--space-3);
     }
 
     .export-container {
@@ -102,8 +107,9 @@ app-code-editor {
 
     .export-type {
         position: absolute;
-        top: 0;
-        left: 0;
+        top: 50%;
+        left: 50%;
+        translate: -50% -50%;
 
         display: flex;
         flex-direction: column;

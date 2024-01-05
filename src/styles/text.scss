@@ -1,13 +1,24 @@
-p {
+* {
+    font-family: "Chillax-Regular";
     color: var(--text-primary);
 
     margin: 0;
 
     &.label {
+        font-family: "Chillax-Light";
         font-size: 12px;
     }
 
     &.xl {
+        font-family: "Chillax-Medium";
         font-size: 24px;
+    }
+}
+
+a {
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: none;
     }
 }
