@@ -31,13 +31,17 @@
     </div>
 
     <div>
-        <p class="label"> Frame interval </p>
-        <input type="number" formControlName="frameInterval" />
+        <p class="label"> Loop iteration </p>
+        <input type="number" formControlName="loopIteration" />
     </div>
 
     <div>
-        <p class="label"> Loop iteration </p>
-        <input type="number" formControlName="loopIteration" />
+        <p class="label"> Theme </p>
+        <select formControlName="theme" (ngModelChange)="updateTheme()">
+            @for(themeName of themeNameList; track theme) {
+            <option [value]="themeName"> {{ themeName }} </option>
+            }
+        </select>
     </div>
 
     <div class="export-and-save">
@@ -61,7 +65,7 @@
 
     <div>
         <p class="label"> Dark mode </p>
-        <input type="checkbox" formControlName="isDarkMode" />
+        <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="updateTheme()" />
     </div>
 
     <div>

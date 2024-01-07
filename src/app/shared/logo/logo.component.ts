@@ -11,6 +11,6 @@ import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LogoComponent {
-    @HostBinding('style.--color') @Input() color?: string;
-    @HostBinding('style.--background') @Input() background?: string;
+    @HostBinding('style.--logo-color') @Input() color?: string;
+    @HostBinding('style.--logo-background') @Input() background?: string;
 }

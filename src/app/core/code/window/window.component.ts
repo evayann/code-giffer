@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 import { TitleBarComponent } from '../title-bar/title-bar.component';
 import { Highlight } from 'ngx-highlightjs';
 import { WindowConfiguration } from './window-configuration';
-import { HasChangeDirective } from '../../directives/has-change.directive';
+import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
 import { CommonModule, NgClass } from '@angular/common';
 import { CodeTheme } from '../code-theme';
 

@@ -1,21 +1,29 @@
 @use "./functions";
 @use "sass:map";
 
-$primary: #3880ff;
-$secondary: #3dc2ff;
-$tertiary: #5260ff;
-
-$color-list: (
-    primary: $primary,
-    secondary: $secondary,
-    tertiary: $tertiary,
-);
-
-:root {
-    @each $color-name, $color in $color-list {
-        --#{$color-name}: #{$color};
-        --#{$color-name}-dark: #{functions.dark(var(--#{$color-name}), 30%)};
-        --#{$color-name}-light: #{functions.light(var(--#{$color-name}), 30%)};
-        --text-#{$color-name}: #{functions.contrast($color)};
+@mixin create-theme($theme-name, $color-list, $background) {
+    :root[theme="#{$theme-name}"] {
+        --background: #{$background};
+        @each $color-name, $color in $color-list {
+            --#{$color-name}: #{$color};
+            --#{$color-name}-dark: #{functions.dark(
+                    var(--#{$color-name}),
+                    30%
+                )};
+            --#{$color-name}-light: #{functions.light(
+                    var(--#{$color-name}),
+                    30%
+                )};
+            --text-#{$color-name}: #{functions.contrast($color)};
+        }
     }
 }
+
+@include create-theme(
+    "blue-dark",
+    (
+        primary: #3880ff,
+        secondary: #3dc2ff,
+    ),
+    #5260ff
+);

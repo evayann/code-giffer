@@ -1,7 +1,7 @@
 export type ToolsBarOptions = {
     language: string;
-    frameInterval: number;
     loopIteration: number;
+    theme: string;
     hasBackground: boolean;
     hasPadding: boolean;
     isDarkMode: boolean;
