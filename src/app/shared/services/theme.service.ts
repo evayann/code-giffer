@@ -1,9 +1,8 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
-export type ThemeName = 'blue' | 'red';
+export type ThemeName = 'blue' | 'green';
 export type ThemeVariant = 'light' | 'dark';
-export const themeNameList: ThemeName[] = ['blue', 'red'];
 
 export type Theme = { name: ThemeName, variant: ThemeVariant };
 
@@ -23,6 +22,10 @@ export class ThemeService {
             name: this.themeName,
             variant: this.themeVariant
         };
+    }
+
+    get themeNameList(): ThemeName[] {
+        return ['blue', 'green'];
     }
 
     constructor(@Inject(DOCUMENT) document: Document) {

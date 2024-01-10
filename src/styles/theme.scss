@@ -1,11 +1,17 @@
 @use "./functions";
 @use "sass:map";
+@use "sass:color";
 
-@mixin create-theme($theme-name, $color-list, $background) {
+@mixin create-theme($theme-name, $color-list, $background, $logo, $gradient) {
     :root[theme="#{$theme-name}"] {
         --background: #{$background};
+        --text-background: #{functions.contrast($background, 4.5)};
+        --gradient: #{$gradient};
+        --logo: #{$logo};
         @each $color-name, $color in $color-list {
             --#{$color-name}: #{$color};
+            --#{$color-name}-rgb: #{color.red($color)}, #{color.green($color)},
+                #{color.blue($color)};
             --#{$color-name}-dark: #{functions.dark(
                     var(--#{$color-name}),
                     30%
@@ -25,5 +31,40 @@
         primary: #3880ff,
         secondary: #3dc2ff,
     ),
-    #5260ff
+    #455b84,
+    #3880ff,
+    "linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))"
+);
+
+@include create-theme(
+    "blue-light",
+    (
+        primary: #5667ad,
+        secondary: #919fdb,
+    ),
+    #d1d1f4,
+    #5667ad,
+    "linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))"
+);
+
+@include create-theme(
+    "green-light",
+    (
+        primary: #55ab63,
+        secondary: #88d1b6,
+    ),
+    #ecfcec,
+    #4d9759,
+    "linear-gradient(140deg, #74D680, #378B29)"
+);
+
+@include create-theme(
+    "green-dark",
+    (
+        primary: #54ab63,
+        secondary: #2d5c4b,
+    ),
+    #062606,
+    #54ab63,
+    "linear-gradient(140deg, #74D680, #378B29)"
 );

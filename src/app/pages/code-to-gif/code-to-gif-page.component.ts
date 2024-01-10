@@ -8,7 +8,7 @@ import { CodeViewerComponent } from '../../core/code/code-viewer/code-viewer.com
 import { languageList } from './languages';
 import { ToolsBarOptions } from './tools-bar';
 import { Observable, Subject } from 'rxjs';
-import { ThemeService, themeNameList } from '../../shared/services/theme.service';
+import { ThemeName, ThemeService } from '../../shared/services/theme.service';
 
 @Component({
     selector: 'app-code-to-gif',
@@ -19,7 +19,7 @@ import { ThemeService, themeNameList } from '../../shared/services/theme.service
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeToGifComponent {
-    protected themeNameList = themeNameList;
+    protected themeNameList: ThemeName[];
     protected showExportType = false;
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected languagesList = ['auto'].concat(languageList);
@@ -30,7 +30,7 @@ export class CodeToGifComponent {
 
     protected get theme(): any {
         return {
-            background: this.getToolsValue('hasBackground') ? 'linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))' : 'transparent',
+            background: this.getToolsValue('hasBackground') ? 'var(--gradient)' : 'transparent',
             padding: this.getToolsValue('hasPadding') ? 'var(--padding-5)' : '0',
             codeSyntaxThemeName: 'androidstudio',
             titleColor: 'white',
@@ -50,6 +50,7 @@ export class CodeToGifComponent {
         this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
         // this.hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/${this.theme.codeSyntaxThemeName}.min.css`);
 
+        this.themeNameList = themeService.themeNameList;
         const currentTheme = themeService.currentTheme;
         this.toolsForm = formBuilder.group<ToolsBarOptions>({
             language: 'auto',

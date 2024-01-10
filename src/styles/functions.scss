@@ -25,20 +25,15 @@
     $luminance2: 0.2126 * color.red($color2) + 0.7152 * color.green($color2) +
         0.0722 * color.blue($color2);
 
-    $contrastRatio: 0;
-
     @if $luminance1 > $luminance2 {
-        $contrastRatio: math.div(($luminance1 + 0.05), ($luminance2 + 0.05));
+        @return math.div(($luminance1 + 0.05), ($luminance2 + 0.05));
     } @else {
-        $contrastRatio: math.div(($luminance2 + 0.05), ($luminance1 + 0.05));
+        @return math.div(($luminance2 + 0.05), ($luminance1 + 0.05));
     }
-
-    @return $contrastRatio;
 }
 
-@function contrast($color) {
-    $min-contrast-ratio: 2;
-    $candidate-color-list-for-contrast: #f4f5f8, #92949c, #222428;
+@function contrast($color, $min-contrast-ratio: 2) {
+    $candidate-color-list-for-contrast: #f4f5f8, #d0d0d0, #222428, #fff, #000;
 
     @each $candidate-color-for-contrast in $candidate-color-list-for-contrast {
         @if (
