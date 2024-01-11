@@ -9,11 +9,13 @@ import { languageList } from './languages';
 import { ToolsBarOptions } from './tools-bar';
 import { Observable, Subject } from 'rxjs';
 import { ThemeName, ThemeService } from '../../shared/services/theme.service';
+import { ArrowLeftComponent } from '../../shared/icons/arrow-left.component';
+import { ArrowRightComponent } from '../../shared/icons/arrow-right.component';
 
 @Component({
     selector: 'app-code-to-gif',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeViewerComponent],
+    imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeViewerComponent, ArrowLeftComponent, ArrowRightComponent],
     templateUrl: './code-to-gif-page.component.html',
     styleUrls: ['./code-to-gif-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

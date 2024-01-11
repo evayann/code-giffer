@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { LogoComponent } from '../../shared/logo/logo.component';
+import { LogoComponent } from '../../shared/icons/logo.component';
 
 @Component({
     selector: 'app-footer',

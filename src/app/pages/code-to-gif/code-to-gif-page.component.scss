@@ -19,14 +19,15 @@ app-code-editor {
 
 .frame-list {
     grid-area: frame-list;
+    position: relative;
 
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: min-content;
     overflow-x: auto;
+    align-items: center;
 
     border-radius: var(--space-4);
-    background-color: style.transparent(var(--secondary), 80%);
 
     &:has(p:only-child) {
         display: flex;
@@ -36,10 +37,37 @@ app-code-editor {
 
         overflow-x: auto;
     }
+
+    &:not(:has(p:only-child)) {
+        $mask-border-length: var(--space-5);
+        mask: linear-gradient(
+            90deg,
+            #0000,
+            #fff #{$mask-border-length} #{calc(100% - $mask-border-length)},
+            #0000
+        );
+    }
 }
 
 .frame {
     position: relative;
+
+    &-previous,
+    &-next {
+        position: sticky;
+
+        top: -50%;
+
+        z-index: 1;
+    }
+
+    &-previous {
+        left: 5%;
+    }
+
+    &-next {
+        right: 5%;
+    }
 }
 
 .frame-card {

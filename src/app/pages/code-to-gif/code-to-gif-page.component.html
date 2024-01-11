@@ -1,6 +1,8 @@
 <app-code-editor #codeEditor [language]="language" [theme]="theme" (animation)="loadAnimation($event)" />
 
 <div class="frame-list">
+    @if (animation.frameList.length > 0) {
+    <button class="frame-previous invisible text-primary xl"> <app-arrow-left /> </button>
     @for(frame of animation.frameList; track frame) {
     <div class="frame">
         <div class="frame-actions">
@@ -15,7 +17,9 @@
         </div>
     </div>
     }
-    @empty {
+    <button class="frame-next invisible text-primary xl"> <app-arrow-right class="xl" /> </button>
+    }
+    @else {
     <p class="xl"> No frame yet ! Try something :) </p>
     }
 </div>
