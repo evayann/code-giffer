@@ -19,33 +19,37 @@
     @return mix($inverse, $color, $amount);
 }
 
-@function contrast-ratio($color1, $color2) {
-    $luminance1: 0.2126 * color.red($color1) + 0.7152 * color.green($color1) +
-        0.0722 * color.blue($color1);
-    $luminance2: 0.2126 * color.red($color2) + 0.7152 * color.green($color2) +
-        0.0722 * color.blue($color2);
+// @function contrast-ratio($color1, $color2) {
+//     $luminance1: 0.2126 * color.red($color1) + 0.7152 * color.green($color1) +
+//         0.0722 * color.blue($color1);
+//     $luminance2: 0.2126 * color.red($color2) + 0.7152 * color.green($color2) +
+//         0.0722 * color.blue($color2);
 
-    @if $luminance1 > $luminance2 {
-        @return math.div(($luminance1 + 0.05), ($luminance2 + 0.05));
-    } @else {
-        @return math.div(($luminance2 + 0.05), ($luminance1 + 0.05));
-    }
-}
+//     @if $luminance1 > $luminance2 {
+//         @return math.div(($luminance1 + 0.05), ($luminance2 + 0.05));
+//     }
 
-@function contrast($color, $min-contrast-ratio: 2) {
-    $candidate-color-list-for-contrast: #f4f5f8, #d0d0d0, #222428, #fff, #000;
+//     @return math.div(($luminance2 + 0.05), ($luminance1 + 0.05));
+// }
 
-    @each $candidate-color-for-contrast in $candidate-color-list-for-contrast {
-        @if (
-            contrast-ratio($candidate-color-for-contrast, $color) >
-                $min-contrast-ratio
-        ) {
-            @return $candidate-color-for-contrast;
-        }
-    }
+// @function contrast($color, $min-contrast-ratio: 2) {
+//     $candidate-color-list-for-contrast: #f4f5f8, #d0d0d0, #222428, #fff, #000;
 
-    @warn "No color found with good contrast";
-    @return red;
+//     @each $candidate-color-for-contrast in $candidate-color-list-for-contrast {
+//         @if (
+//             contrast-ratio($candidate-color-for-contrast, $color) >
+//                 $min-contrast-ratio
+//         ) {
+//             @return $candidate-color-for-contrast;
+//         }
+//     }
+
+//     @warn "No color found with good contrast";
+//     @return red;
+// }
+
+@function contrast($color, $threshold: 50%, $light: #f4f5f8, $dark: #222428) {
+    @return if(lightness($color) < $threshold, $light, $dark);
 }
 
 @mixin createProperties($list, $propertyName) {

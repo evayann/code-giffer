@@ -1,11 +1,10 @@
 @use "./functions";
-@use "sass:map";
 @use "sass:color";
 
 @mixin create-theme($theme-name, $color-list, $background, $logo, $gradient) {
     :root[theme="#{$theme-name}"] {
         --background: #{$background};
-        --text-background: #{functions.contrast($background, 4.5)};
+        --text-background: #{functions.contrast($background)};
         --gradient: #{$gradient};
         --logo: #{$logo};
         @each $color-name, $color in $color-list {

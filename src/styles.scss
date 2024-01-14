@@ -1,1 +1,5 @@
-@import './styles/index';
+@import "./styles/index";
+
+* {
+    transition: 0.35s linear;
+}
