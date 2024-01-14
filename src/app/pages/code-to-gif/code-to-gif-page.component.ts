@@ -1,28 +1,28 @@
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+
 import { HighlightLoader } from 'ngx-highlightjs';
+import { Observable, Subject } from 'rxjs';
 import { CodeFrame } from '../../core/code/animation/code-animation';
 import { CodeEditorComponent } from '../../core/code/code-editor/code-editor.component';
-import { CodeViewerComponent } from '../../core/code/code-viewer/code-viewer.component';
+import { ThemeName, ThemeService } from '../../shared/services/theme.service';
+import { CodeAnimationVisualisationComponent } from './code-animation-visualisation/code-animation-visualisation.component';
 import { languageList } from './languages';
 import { ToolsBarOptions } from './tools-bar';
-import { Observable, Subject } from 'rxjs';
-import { ThemeName, ThemeService } from '../../shared/services/theme.service';
-import { ArrowLeftComponent } from '../../shared/icons/arrow-left.component';
-import { ArrowRightComponent } from '../../shared/icons/arrow-right.component';
+
 
 @Component({
     selector: 'app-code-to-gif',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeViewerComponent, ArrowLeftComponent, ArrowRightComponent],
+    imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeAnimationVisualisationComponent, CdkMenuTrigger, CdkMenu, CdkMenuItem],
     templateUrl: './code-to-gif-page.component.html',
     styleUrls: ['./code-to-gif-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeToGifComponent {
     protected themeNameList: ThemeName[];
-    protected showExportType = false;
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected languagesList = ['auto'].concat(languageList);
     protected toolsForm: FormGroup;
@@ -84,11 +84,10 @@ export class CodeToGifComponent {
     }
 
     protected saveAsGif(): void {
-        this.showExportType = false;
+        console.log('test');
     }
 
     protected saveAsVideo(): void {
-        this.showExportType = false;
     }
 
     private getToolsValue<T = unknown>(key: keyof ToolsBarOptions): T {

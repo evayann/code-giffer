@@ -17,80 +17,8 @@ app-code-editor {
     grid-area: editor;
 }
 
-.frame-list {
+app-code-animation-visualisation {
     grid-area: frame-list;
-    position: relative;
-
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: min-content;
-    overflow-x: auto;
-    align-items: center;
-
-    border-radius: var(--space-4);
-
-    &:has(p:only-child) {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 10px;
-
-        overflow-x: auto;
-    }
-
-    &:not(:has(p:only-child)) {
-        $mask-border-length: var(--space-5);
-        mask: linear-gradient(
-            90deg,
-            #0000,
-            #fff #{$mask-border-length} #{calc(100% - $mask-border-length)},
-            #0000
-        );
-    }
-}
-
-.frame {
-    position: relative;
-
-    &-previous,
-    &-next {
-        position: sticky;
-
-        top: -50%;
-
-        z-index: 1;
-    }
-
-    &-previous {
-        left: 5%;
-    }
-
-    &-next {
-        right: 5%;
-    }
-}
-
-.frame-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    border: 1px solid var(--text-background);
-    border-radius: 12px;
-    overflow: hidden;
-
-    margin: 1rem;
-}
-
-.frame-actions {
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    border-radius: 50px;
-    font-size: 18px;
-
-    padding: 0.5rem;
 }
 
 .tools-area {
@@ -134,30 +62,25 @@ app-code-editor {
     .export-container {
         position: relative;
     }
+}
 
-    .export-type {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        translate: -50% -50%;
+.export-type {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
 
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-2);
+    list-style: none;
 
-        list-style: none;
+    border: 1px solid white;
+    border-radius: var(--space-3);
+    background-color: var(--primary);
 
-        border: 1px solid white;
-        border-radius: var(--space-3);
-        background-color: var(--primary);
+    margin: 0;
+    padding: var(--padding-2);
 
-        margin: 0;
-        padding: var(--padding-2);
+    width: 100%;
 
+    & button {
         width: 100%;
-
-        & button {
-            width: 100%;
-        }
     }
 }

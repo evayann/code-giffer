@@ -1,28 +1,6 @@
 <app-code-editor #codeEditor [language]="language" [theme]="theme" (animation)="loadAnimation($event)" />
 
-<div class="frame-list">
-    @if (animation.frameList.length > 0) {
-    <button class="frame-previous invisible text-primary xl"> <app-arrow-left /> </button>
-    @for(frame of animation.frameList; track frame) {
-    <div class="frame">
-        <div class="frame-actions">
-            <button aria-label="Delete frame" class="secondary icon" (click)="codeEditor.deleteFrame($index)">
-                X
-            </button>
-        </div>
-        <div class="frame-card">
-            <p> Frame {{$index}} </p>
-            <app-code-viewer [language]="language" [theme]="theme" [frame]="frame"
-                [dimension]="{ column: 64, row: animation.maxRow }" />
-        </div>
-    </div>
-    }
-    <button class="frame-next invisible text-primary xl"> <app-arrow-right class="xl" /> </button>
-    }
-    @else {
-    <p class="xl"> No frame yet ! Try something :) </p>
-    }
-</div>
+<app-code-animation-visualisation [animation]="animation" [language]="language" [theme]="theme" />
 
 <div class="tools-area tools-bar" [formGroup]="toolsForm">
     <div>
@@ -50,14 +28,15 @@
 
     <div class="export-and-save">
         <div class="export-container">
-            <button class="primary" (click)="showExportType = true" [disabled]="!isExportable"> Export
-            </button>
-            @if (showExportType) {
-            <ul class="export-type">
-                <li><button class="invisible" (click)="saveAsGif()"> Gif </button></li>
-                <li><button class="invisible" (click)="saveAsVideo()"> Video </button></li>
-            </ul>
-            }
+            <button [cdkMenuTriggerFor]="exportMenu" [disabled]="!isExportable" class="primary"> Export </button>
+
+            <ng-template #exportMenu>
+                <ul class="export-type" cdkMenu>
+                    <li><button class="invisible" cdkMenuItem (cdkMenuItemTriggered)="saveAsGif()"> Gif </button></li>
+                    <li><button class="invisible" cdkMenuItem (cdkMenuItemTriggered)="saveAsVideo()"> Video </button>
+                    </li>
+                </ul>
+            </ng-template>
         </div>
         <button class="secondary" (click)="addCurrentFrame()"> Add Frame </button>
     </div>
