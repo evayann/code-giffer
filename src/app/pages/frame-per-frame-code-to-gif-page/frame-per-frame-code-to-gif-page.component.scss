@@ -11,6 +11,8 @@
         "frame-list";
 
     margin: var(--space-5);
+
+    height: 100%;
 }
 
 app-code-editor {
@@ -60,7 +62,7 @@ app-code-animation-visualisation {
     }
 
     .export-container {
-        position: relative;
+        // position: relative;
     }
 }
 

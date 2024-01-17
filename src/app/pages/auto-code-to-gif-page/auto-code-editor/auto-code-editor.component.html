@@ -1,0 +1,9 @@
+@if (!isRecording) {
+<app-window language="auto" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
+    (codeHasChange)="updateCode($event.value)" />
+}
+@else {
+<app-code-recorder language="auto" [theme]="theme" [codeAnimation]="codeAnimation" (onRecordFinish)="finishRecord()" />
+}
+
+<button (click)="startRecord()"> Animate my snippet ! </button>

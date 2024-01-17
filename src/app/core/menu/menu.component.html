@@ -1,0 +1,45 @@
+<ng-container [formGroup]="formGroup">
+    <div>
+        <p class="label"> Language </p>
+        <select formControlName="language">
+            @for(language of languageNameList; track language) {
+            <option [value]="language"> {{language}} </option>
+            }
+        </select>
+    </div>
+
+    <div>
+        <p class="label"> Loop iteration </p>
+        <!-- <input type="number" formControlName="loopIteration" /> -->
+        <input type="number" />
+    </div>
+
+    <div>
+        <p class="label"> Theme </p>
+        <select formControlName="theme" (ngModelChange)="onThemeChange()">
+            @for(themeName of themeNameList; track themeName) {
+            <option [value]="themeName"> {{ themeName }} </option>
+            }
+        </select>
+    </div>
+
+
+    <button [cdkMenuTriggerFor]="styleMenu" class="primary"> Style </button>
+
+    <ng-template #styleMenu>
+        <ul class="style-menu" cdkMenu>
+            <li>
+                <p class="label"> Background </p>
+                <input type="checkbox" formControlName="hasBackground" />
+            </li>
+            <li>
+                <p class="label"> Dark mode </p>
+                <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="onThemeChange()" />
+            </li>
+            <li>
+                <p class="label"> Padding </p>
+                <input type="checkbox" formControlName="hasPadding" />
+            </li>
+        </ul>
+    </ng-template>
+</ng-container>

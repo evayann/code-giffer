@@ -14,14 +14,14 @@ import { ToolsBarOptions } from './tools-bar';
 
 
 @Component({
-    selector: 'app-code-to-gif',
+    selector: 'app-frame-per-frame-code-to-gif-page',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeAnimationVisualisationComponent, CdkMenuTrigger, CdkMenu, CdkMenuItem],
-    templateUrl: './code-to-gif-page.component.html',
-    styleUrls: ['./code-to-gif-page.component.scss'],
+    templateUrl: './frame-per-frame-code-to-gif-page.component.html',
+    styleUrls: ['./frame-per-frame-code-to-gif-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CodeToGifComponent {
+export class FramePerFrameCodeToGifPageComponent {
     protected themeNameList: ThemeName[];
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
     protected languagesList = ['auto'].concat(languageList);

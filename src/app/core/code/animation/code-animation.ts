@@ -30,4 +30,18 @@ export class CodeAnimation extends Animation<CodeFrame> {
 
         return rowCounter;
     }
+
+    static fromCode(codeString: string): CodeAnimation {
+        const codeAnimation = new CodeAnimation();
+
+        let currentCode = '';
+        codeAnimation.addFrame({ code: currentCode, caretPosition: 0 });
+
+        for (let index = 0; index < codeString.length; index++) {
+            currentCode += codeString.charAt(index);
+            codeAnimation.addFrame({ code: currentCode, caretPosition: index + 1 });
+        }
+
+        return codeAnimation;
+    }
 }

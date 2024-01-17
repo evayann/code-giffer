@@ -1,0 +1,52 @@
+:host {
+    display: flex;
+    gap: var(--space-3);
+
+    backdrop-filter: blur(5px);
+    background: rgba(var(--secondary-rgb), 40%);
+    border-radius: var(--space-3);
+
+    padding: var(--padding-4);
+
+    & > div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        // & :is(input:not(&[type="checkbox"]), select) {
+        //     width: 100px;
+        // }
+
+        & p {
+            text-align: center;
+            margin-bottom: var(--space-2);
+        }
+    }
+}
+
+.style-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+
+    list-style: none;
+
+    border: 1px solid white;
+    border-radius: var(--space-3);
+    background-color: var(--secondary);
+
+    margin: 0;
+    padding: var(--padding-2);
+
+    width: 100%;
+}
+
+.style-menu > li {
+    display: flex;
+    gap: var(--space-1);
+    width: 100%;
+
+    & > input {
+        margin-left: auto;
+    }
+}

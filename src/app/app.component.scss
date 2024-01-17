@@ -24,3 +24,11 @@
 app-footer {
     grid-area: footer;
 }
+
+app-navigation {
+    position: absolute;
+    top: var(--space-5);
+    left: var(--space-5);
+
+    z-index: 1;
+}
