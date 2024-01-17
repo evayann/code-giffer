@@ -9,3 +9,7 @@ app-menu {
     top: var(--space-5);
     right: var(--space-5);
 }
+
+app-auto-code-editor {
+    padding: calc(var(--space-5) * 2) 0;
+}

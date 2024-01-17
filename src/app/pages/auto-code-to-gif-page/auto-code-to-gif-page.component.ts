@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { WindowComponent } from '../../core/code/window/window.component';
-import { HighlightLoader } from 'ngx-highlightjs';
-import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
-import { MenuComponent } from '../../core/menu/menu.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { HighlightLoader } from 'ngx-highlightjs';
+import { MenuComponent } from '../../core/menu/menu.component';
 import { ThemeService } from '../../shared/services/theme.service';
+import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',

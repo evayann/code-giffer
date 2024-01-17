@@ -1,16 +1,18 @@
-<app-title-bar [theme]="theme" />
-@if(windowConfiguration.isEditable) {
-<div class="stack-child code-container">
-    <code class="code" [highlight]="code" [languages]="[language]" [lineNumbers]="false"
-        (hasChange)="codeTagHasChange()"></code>
+<div class="window" [ngStyle]="{ width: '64ch' }">
+    <app-title-bar [theme]="_theme" />
+    @if(windowConfiguration.isEditable) {
+    <div class="stack-child code-container">
+        <code class="code" [highlight]="code" [languages]="['html']" [lineNumbers]="false"
+            (hasChange)="codeTagHasChange()"></code>
 
-    <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="windowConfiguration.numberRow"
-        [cols]="windowConfiguration.numberColumn" (input)="codeModify(textArea)"
-        [ngStyle]="{'caret-color': theme.caretColor}">{{code}}</textarea>
+        <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="windowConfiguration.numberRow"
+            [cols]="windowConfiguration.numberColumn" (input)="codeModify(textArea)"
+            [ngStyle]="{'caret-color': _theme.caretColor}">{{code}}</textarea>
 
-    <!-- <span class="caret"></span> -->
+        <!-- <span class="caret"></span> -->
+    </div>
+    }
+    @else {
+    <code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
+    }
 </div>
-}
-@else {
-<code class="code" [highlight]="code" [languages]="['xml']" [lineNumbers]="false"></code>
-}

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { CodeTheme } from '../code-theme';
+import { CodeTheme } from '../../code-theme';
 import { CommonModule } from '@angular/common';
 
 @Component({

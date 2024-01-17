@@ -8,19 +8,11 @@
 
     padding: var(--padding-4);
 
-    & > div {
+    & > label {
         display: flex;
         flex-direction: column;
         justify-content: center;
-
-        // & :is(input:not(&[type="checkbox"]), select) {
-        //     width: 100px;
-        // }
-
-        & p {
-            text-align: center;
-            margin-bottom: var(--space-2);
-        }
+        max-width: 90px;
     }
 }
 
@@ -41,7 +33,7 @@
     width: 100%;
 }
 
-.style-menu > li {
+.style-menu label {
     display: flex;
     gap: var(--space-1);
     width: 100%;

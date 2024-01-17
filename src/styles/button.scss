@@ -25,12 +25,13 @@ button,
 
     --btn-font-weight: normal;
 
-    &:disabled {
+    &:disabled,
+    &.disabled {
         cursor: auto;
         opacity: 0.6;
     }
 
-    &:hover:not(&:disabled) {
+    &:hover:not(&:disabled, &.disabled) {
         --_btn-color: color-mix(in srgb, var(--btn-color), white 80%);
         --_btn-bg: color-mix(in srgb, var(--btn-bg), black 20%);
     }

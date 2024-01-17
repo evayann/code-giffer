@@ -1,8 +1,7 @@
 <div class="stack-child code-editor">
-    <div #codeContainer [ngStyle]="{ width: codeWidth, padding: theme.padding, background: theme.background }">
-        <app-window [language]="language" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
-            (codeHasChange)="codeHasChange($event)" (domHasChange)="domHasChange()" />
-    </div>
+    <app-window #codeContainer [language]="language" [code]="code" [theme]="theme"
+        [windowConfiguration]="codeConfiguration" (codeHasChange)="codeHasChange($event)"
+        (domHasChange)="domHasChange()" />
 
-    <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render frames </p>
+    <p class="spinner"> Render frames </p>
 </div>

@@ -18,7 +18,7 @@ import { WindowComponent } from '../../window/window.component';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeRecorderComponent implements AfterViewInit {
-    @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
+    @ViewChild('codeContainer', { read: ElementRef }) codeContainer!: ElementRef<HTMLDivElement>;
 
     @Input({ required: true }) codeAnimation!: CodeAnimation;
     @Input({ required: true }) language!: string;
@@ -58,6 +58,7 @@ export class CodeRecorderComponent implements AfterViewInit {
     protected saveCodeAnimation(): void {
         if (this.codeAnimation.hasNoFrame) return;
 
+        console.log(this.codeContainer, this.codeContainer.nativeElement)
         Dom2Gif.generate({
             animation: this.codeAnimation,
             width: this.codeContainer.nativeElement.clientWidth,

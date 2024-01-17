@@ -1,44 +1,42 @@
 <ng-container [formGroup]="formGroup">
-    <div>
-        <p class="label"> Language </p>
+    <label class="label"> Language
         <select formControlName="language">
             @for(language of languageNameList; track language) {
             <option [value]="language"> {{language}} </option>
             }
         </select>
-    </div>
+    </label>
 
-    <div>
-        <p class="label"> Loop iteration </p>
-        <!-- <input type="number" formControlName="loopIteration" /> -->
-        <input type="number" />
-    </div>
+    <label class="label"> Loop iteration
+        <input type="number" formControlName="loopIteration" />
+    </label>
 
-    <div>
-        <p class="label"> Theme </p>
+    <label class="label"> Theme
         <select formControlName="theme" (ngModelChange)="onThemeChange()">
             @for(themeName of themeNameList; track themeName) {
             <option [value]="themeName"> {{ themeName }} </option>
             }
         </select>
-    </div>
-
+    </label>
 
     <button [cdkMenuTriggerFor]="styleMenu" class="primary"> Style </button>
 
     <ng-template #styleMenu>
         <ul class="style-menu" cdkMenu>
             <li>
-                <p class="label"> Background </p>
-                <input type="checkbox" formControlName="hasBackground" />
+                <label class="label"> Background
+                    <input type="checkbox" formControlName="hasBackground" />
+                </label>
             </li>
             <li>
-                <p class="label"> Dark mode </p>
-                <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="onThemeChange()" />
+                <label class="label"> Dark mode
+                    <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="onThemeChange()" />
+                </label>
             </li>
             <li>
-                <p class="label"> Padding </p>
-                <input type="checkbox" formControlName="hasPadding" />
+                <label class="label"> Padding
+                    <input type="checkbox" formControlName="hasPadding" />
+                </label>
             </li>
         </ul>
     </ng-template>
