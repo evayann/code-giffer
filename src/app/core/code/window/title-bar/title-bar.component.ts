@@ -12,4 +12,5 @@ import { CommonModule } from '@angular/common';
 })
 export class TitleBarComponent {
     @Input({ required: true }) theme!: CodeTheme;
+    @Input({ required: true }) title!: string;
 }

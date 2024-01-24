@@ -1,5 +1,5 @@
 <div class="window" [ngStyle]="{ width: '64ch' }">
-    <app-title-bar [theme]="_theme" />
+    <app-title-bar [theme]="_theme" [title]="title" />
     @if(windowConfiguration.isEditable) {
     <div class="stack-child code-container">
         <code class="code" [highlight]="code" [languages]="['auto', 'xml', 'javascript', 'typescript']"

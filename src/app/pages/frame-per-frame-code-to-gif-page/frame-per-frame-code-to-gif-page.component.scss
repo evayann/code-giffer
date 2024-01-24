@@ -23,66 +23,8 @@ app-code-animation-visualisation {
     grid-area: frame-list;
 }
 
-.tools-area {
-    position: fixed;
-    top: 5%;
-    left: 50%;
-    translate: -50% 0;
-
-    background: rgba(var(--secondary-rgb), 40%);
-
-    border-radius: var(--space-3);
-
-    padding: var(--padding-4);
-}
-
-.tools-bar {
-    display: flex;
-    gap: var(--space-3);
-
-    backdrop-filter: blur(5px);
-
-    & > div {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-
-        & :is(input:not(&[type="checkbox"]), select) {
-            width: 100px;
-        }
-
-        & p {
-            text-align: center;
-            margin-bottom: var(--space-2);
-        }
-    }
-
-    .export-and-save {
-        gap: var(--space-3);
-    }
-
-    .export-container {
-        // position: relative;
-    }
-}
-
-.export-type {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-
-    list-style: none;
-
-    border: 1px solid white;
-    border-radius: var(--space-3);
-    background-color: var(--primary);
-
-    margin: 0;
-    padding: var(--padding-2);
-
-    width: 100%;
-
-    & button {
-        width: 100%;
-    }
+app-menu {
+    position: absolute;
+    top: var(--space-5);
+    right: var(--space-5);
 }

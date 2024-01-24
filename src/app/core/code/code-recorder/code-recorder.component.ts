@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Dom2Gif } from '../../../model/dom-2-gif';
-import { CodeTheme } from '../../code-theme';
-import { WindowConfiguration } from '../../window/window-configuration';
-import { CodeFrame, CodeAnimation } from '../code-animation';
-import { WindowComponent } from '../../window/window.component';
+import { Dom2Gif } from '../../model/dom-2-gif';
+import { CodeTheme } from '../code-theme';
+import { WindowConfiguration } from '../window/window-configuration';
+import { CodeFrame, CodeAnimation } from '../animation/code-animation';
+import { WindowComponent } from '../window/window.component';
 
 @Component({
     selector: 'app-code-recorder',
@@ -27,7 +27,6 @@ export class CodeRecorderComponent implements AfterViewInit {
     @Output() onRecordFinish = new EventEmitter<null>();
 
     protected code = '';
-    protected codeWidth = '64ch';
     protected codeConfiguration: WindowConfiguration = {
         numberRow: 1,
         numberColumn: 64,

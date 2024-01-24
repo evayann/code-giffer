@@ -1,5 +1,5 @@
 @if (!isRecording) {
-<app-window language="auto" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
+<app-window language="auto" [code]="code" [title]="title" [theme]="theme" [windowConfiguration]="codeConfiguration"
     (codeHasChange)="updateCode($event.value)" />
 }
 @else {

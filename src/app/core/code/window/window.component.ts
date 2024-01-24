@@ -24,6 +24,7 @@ export class WindowComponent {
         this.padding = theme.padding;
         this.background = theme.background;
     }
+    @Input() title = 'Code Snippet';
 
     @Output() domHasChange = new EventEmitter<void>();
     @Output() codeHasChange = new EventEmitter<{ value: string, position: number }>();
@@ -32,7 +33,7 @@ export class WindowComponent {
     @HostBinding('style.background') background!: string;
 
     protected _theme!: CodeTheme;
-    private lastInsertionUpdateByCode = false;
+    private lastCharacterInsert?: string = undefined;
 
     protected codeTagHasChange(): void {
         this.domHasChange.next();
@@ -41,9 +42,15 @@ export class WindowComponent {
     protected onKeyDown(textArea: HTMLTextAreaElement, keyboardEvent: KeyboardEvent): void {
         const keyDownEvent = new KeyBoardEvent(keyboardEvent);
 
-        if (keyDownEvent.isTabulation) {
+        if (this.lastCharacterInsert && keyDownEvent.is(this.lastCharacterInsert)) {
+            this.moveSelection(textArea, 1);
+            keyDownEvent.preventDefault();
+            this.lastCharacterInsert = undefined;
+        }
+
+        else if (keyDownEvent.isTabulation) {
             this.insertCharacterInTextArea(textArea, '\t');
-            this.lastInsertionUpdateByCode = false;
+            this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
         }
         else if (keyDownEvent.isSimpleQuote) {
@@ -67,11 +74,11 @@ export class WindowComponent {
 
         else if (keyDownEvent.isBackspace) {
             this.onRemoveCharacter(textArea);
-            this.lastInsertionUpdateByCode = false;
+            this.lastCharacterInsert = undefined;
         }
 
         else {
-            this.lastInsertionUpdateByCode = false;
+            this.lastCharacterInsert = undefined;
         }
     }
 
@@ -84,18 +91,19 @@ export class WindowComponent {
         const textBeforeTabulation = textAreaCurrentValue.substring(0, textSelectionEnd);
         const textAfterTabulation = textAreaCurrentValue.substring(textSelectionEnd);
         textArea.value = `${textBeforeTabulation}${character}${textAfterTabulation}`;
+        console.log(textArea.value);
 
         textArea.selectionStart = textSelectionEnd;
         textArea.selectionEnd = textSelectionEnd;
-        this.lastInsertionUpdateByCode = true;
+        this.lastCharacterInsert = character;
     }
 
     private onRemoveCharacter(textArea: HTMLTextAreaElement): void {
-        if (!this.lastInsertionUpdateByCode) return;
+        if (!this.lastCharacterInsert) return;
 
         const textAreaCurrentValue = textArea.value[textArea.selectionEnd - 1];
         if (this.characterInCodeInsertionList(textAreaCurrentValue))
-            this.removeCharacterInTextArea(textArea, textArea.selectionEnd)
+            this.removeCharacterInTextArea(textArea, textArea.selectionEnd);
     }
 
     private removeCharacterInTextArea(textArea: HTMLTextAreaElement, index: number): void {
@@ -106,7 +114,11 @@ export class WindowComponent {
 
         textArea.selectionStart = textSelectionEnd;
         textArea.selectionEnd = textSelectionEnd;
-        this.lastInsertionUpdateByCode = true;
+    }
+
+    private moveSelection(textArea: HTMLTextAreaElement, positionOffset: number): void {
+        textArea.selectionStart = textArea.selectionStart + positionOffset;
+        textArea.selectionEnd = textArea.selectionEnd + positionOffset;
     }
 
     private characterInCodeInsertionList(character: string): boolean {

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { WindowComponent } from '../../../core/code/window/window.component';
-import { CodeRecorderComponent } from '../../../core/code/animation/code-recorder/code-recorder.component';
+import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeAnimation } from '../../../core/code/animation/code-animation';
 
 @Component({
@@ -16,6 +16,12 @@ import { CodeAnimation } from '../../../core/code/animation/code-animation';
 })
 export class AutoCodeEditorComponent {
     @Input({ required: true }) theme!: any;
+    @Input() set initialCode(value: { title: string, code: string }) {
+        this.title = value.title;
+        this.code = value.code;
+    }
+
+    protected title = 'Snippet title';
     protected code = '';
     protected codeAnimation!: CodeAnimation;
 

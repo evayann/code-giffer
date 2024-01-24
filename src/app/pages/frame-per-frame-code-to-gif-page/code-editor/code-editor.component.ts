@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Dom2Gif } from '../../model/dom-2-gif';
-import { CodeAnimation, CodeFrame } from '../animation/code-animation';
-import { CodeTheme } from '../code-theme';
-import { WindowConfiguration } from '../window/window-configuration';
-import { WindowComponent } from '../window/window.component';
+import { Dom2Gif } from '../../../core/model/dom-2-gif';
+import { CodeAnimation, CodeFrame } from '../../../core/code/animation/code-animation';
+import { CodeTheme } from '../../../core/code/code-theme';
+import { WindowConfiguration } from '../../../core/code/window/window-configuration';
+import { WindowComponent } from '../../../core/code/window/window.component';
 
 @Component({
 	selector: 'app-code-editor',

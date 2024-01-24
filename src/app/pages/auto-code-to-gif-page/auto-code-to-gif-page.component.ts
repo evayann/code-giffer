@@ -5,6 +5,7 @@ import { HighlightLoader } from 'ngx-highlightjs';
 import { MenuComponent } from '../../core/menu/menu.component';
 import { ThemeService } from '../../shared/services/theme.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
+import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -20,6 +21,8 @@ export class AutoCodeToGifPageComponent {
     protected menuFormGroup: FormGroup;
     protected themeNameList: string[];
 
+    protected initialCode!: { title: string, code: string };
+
     protected get theme() {
         return {
             background: this.getMenuValue('hasBackground') ? 'var(--gradient)' : 'transparent',
@@ -30,7 +33,7 @@ export class AutoCodeToGifPageComponent {
         };
     }
 
-    constructor(hljsLoader: HighlightLoader, formBuilder: FormBuilder, private themeService: ThemeService) {
+    constructor(hljsLoader: HighlightLoader, formBuilder: FormBuilder, private themeService: ThemeService, placeholderCodeService: PlaceholderCodeService) {
         hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
 
         this.themeNameList = themeService.themeNameList;
@@ -42,7 +45,9 @@ export class AutoCodeToGifPageComponent {
             hasBackground: true,
             hasPadding: true,
             isDarkMode: currentTheme.variant === "dark",
-        })
+        });
+
+        this.initialCode = placeholderCodeService.getExample('auto');
     }
 
     protected onThemeChanged(): void {

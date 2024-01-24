@@ -8,8 +8,12 @@
     </div>
     <div class="frame-card">
         <p> Frame {{$index}} </p>
-        <app-code-viewer [language]="language" [theme]="theme" [frame]="frame"
-            [dimension]="{ column: 64, row: animation.maxRow }" />
+        <app-window [language]="language" [theme]="theme" [code]="frame.code" [windowConfiguration]="{
+            numberRow: 1,
+            numberColumn: 64,
+            isEditable: true,
+            hideTextSelection: false
+        }" />
     </div>
 </div>
 }

@@ -2,57 +2,5 @@
 
 <app-code-animation-visualisation [animation]="animation" [language]="language" [theme]="theme" />
 
-<div class="tools-area tools-bar" [formGroup]="toolsForm">
-    <div>
-        <p class="label"> Language </p>
-        <select formControlName="language">
-            @for(language of languagesList; track language) {
-            <option [value]="language"> {{language}} </option>
-            }
-        </select>
-    </div>
-
-    <div>
-        <p class="label"> Loop iteration </p>
-        <input type="number" formControlName="loopIteration" />
-    </div>
-
-    <div>
-        <p class="label"> Theme </p>
-        <select formControlName="theme" (ngModelChange)="updateTheme()">
-            @for(themeName of themeNameList; track theme) {
-            <option [value]="themeName"> {{ themeName }} </option>
-            }
-        </select>
-    </div>
-
-    <div class="export-and-save">
-        <div class="export-container">
-            <button [cdkMenuTriggerFor]="exportMenu" [disabled]="!isExportable" class="primary"> Export </button>
-
-            <ng-template #exportMenu>
-                <ul class="export-type" cdkMenu>
-                    <li><button class="invisible" cdkMenuItem (cdkMenuItemTriggered)="saveAsGif()"> Gif </button></li>
-                    <li><button class="invisible" cdkMenuItem (cdkMenuItemTriggered)="saveAsVideo()"> Video </button>
-                    </li>
-                </ul>
-            </ng-template>
-        </div>
-        <button class="secondary" (click)="addCurrentFrame()"> Add Frame </button>
-    </div>
-
-    <div>
-        <p class="label"> Background </p>
-        <input type="checkbox" formControlName="hasBackground" />
-    </div>
-
-    <div>
-        <p class="label"> Dark mode </p>
-        <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="updateTheme()" />
-    </div>
-
-    <div>
-        <p class="label"> Padding </p>
-        <input type="checkbox" formControlName="hasPadding" />
-    </div>
-</div>
+<app-menu [formGroup]="menuFormGroup" [languageNameList]="['auto', 'ts', 'html']" [themeNameList]="themeNameList"
+    (themeChanged)="onThemeChanged()" />

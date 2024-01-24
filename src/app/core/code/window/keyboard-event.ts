@@ -20,5 +20,9 @@ export class KeyBoardEvent {
 
     constructor(private keyboardEvent: KeyboardEvent) { }
 
+    is(character: string): boolean {
+        return this.key === character;
+    }
+
     preventDefault(): void { this.keyboardEvent.preventDefault(); }
 }
