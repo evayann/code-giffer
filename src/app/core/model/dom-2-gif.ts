@@ -3,6 +3,7 @@ import domtoimage from 'dom-to-image';
 
 import { Animation } from '../code/animation/animation';
 import { Gif } from './gif';
+import { Frame } from './frame';
 
 export type Dom2GifGenerationProperties<Frame> = {
     animation: Animation<Frame>,
@@ -73,7 +74,7 @@ export class Dom2Gif<Frame> {
     private saveFrame(): void {
         const frameSubscription = from(domtoimage.toPixelData(this.dom))
             .subscribe((pixelList) => {
-                this.gif.addFrame(pixelList);
+                this.gif.addFrame(new Frame(pixelList));
                 this.loadNextFrame();
 
                 frameSubscription.unsubscribe();

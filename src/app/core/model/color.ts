@@ -1,4 +1,8 @@
 export class Color {
+    static from(color: string | [number, number, number]): Color {
+        return new Color(color);
+    }
+
     constructor(private color: string | [number, number, number]) { }
 
     toRgb(threshold: number = 1): { r: number, g: number, b: number } {

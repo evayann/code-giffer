@@ -1,5 +1,6 @@
 import { GifWriter } from "omggif";
 import { Color } from "./color";
+import { Frame } from "./frame";
 
 type GifAnimation = {
     width: number;
@@ -10,8 +11,6 @@ type GifAnimation = {
 type FrameOptions = {
     delayInSecondes: number
 };
-
-type PixelList = Uint8ClampedArray | number[];
 
 export class Gif {
     private buffer: Uint8Array;
@@ -30,33 +29,31 @@ export class Gif {
         this.writer = new GifWriter(this.buffer, width, height, { loop: undefined })
     }
 
-    addFrame(pixelList: PixelList, frameOptions?: FrameOptions): void {
-        const numberOfCanal = 4;
+    addFrame(frame: Frame, frameOptions?: FrameOptions): void {
+        const paletteList = frame.paletteIndex;
+        const pixelPaletteIndexList = frame.pixelList;
+        // const numberOfCanal = 4;
 
-        const pixelPaletteIndexList = [];
-        const paletteList = [];
+        // const pixelPaletteIndexList = [];
+        // const paletteList = [];
 
-        for (let index = 0; index < this.width * this.height; index++) {
-            const color = this.extractRGBFromPixels(pixelList, index * numberOfCanal);
-            const uint8Color = color.toUint8();
+        // for (let index = 0; index < this.width * this.height; index++) {
+        //     const color = frame.getRGBFromPixels(index * numberOfCanal);
+        //     const uint8Color = color.toUint8();
 
-            const indexOfColorInPaletteList = paletteList.indexOf(uint8Color);
-            if (indexOfColorInPaletteList === -1) {
-                pixelPaletteIndexList.push(paletteList.length);
-                paletteList.push(uint8Color);
-            } else {
-                pixelPaletteIndexList.push(indexOfColorInPaletteList);
-            }
-        }
+        //     const indexOfColorInPaletteList = paletteList.indexOf(uint8Color);
+        //     if (indexOfColorInPaletteList === -1) {
+        //         pixelPaletteIndexList.push(paletteList.length);
+        //         paletteList.push(uint8Color);
+        //     } else {
+        //         pixelPaletteIndexList.push(indexOfColorInPaletteList);
+        //     }
+        // }
 
-        paletteList.length = this.paletteSize(paletteList);
+        // paletteList.length = this.paletteSize(paletteList);
 
         const options = { palette: paletteList, delay: Math.round((frameOptions?.delayInSecondes ?? 1) * 100) };
         this.writer.addFrame(0, 0, this.width, this.height, pixelPaletteIndexList, options);
-    }
-
-    private extractRGBFromPixels(pixelList: PixelList, pixelIndex: number): Color {
-        return new Color(pixelList.slice(pixelIndex, pixelIndex + 3) as [number, number, number]);
     }
 
     private paletteSize(paletteList: number[]): number {

@@ -20,19 +20,24 @@ import { WindowComponent } from '../window/window.component';
 export class CodeRecorderComponent implements AfterViewInit {
     @ViewChild('codeContainer', { read: ElementRef }) codeContainer!: ElementRef<HTMLDivElement>;
 
-    @Input({ required: true }) codeAnimation!: CodeAnimation;
     @Input({ required: true }) language!: string;
     @Input({ required: true }) theme!: CodeTheme;
+    @Input({ required: true })
+    set codeAnimation(codeAnimation: CodeAnimation) {
+        this._codeAnimation = codeAnimation;
+        this.codeConfiguration = {
+            numberRow: codeAnimation.nbMaxRow,
+            numberColumn: 64,
+            isEditable: true,
+            hideTextSelection: true
+        }
+    }
 
     @Output() onRecordFinish = new EventEmitter<null>();
 
     protected code = '';
-    protected codeConfiguration: WindowConfiguration = {
-        numberRow: 1,
-        numberColumn: 64,
-        isEditable: true,
-        hideTextSelection: false
-    };
+    protected codeConfiguration!: WindowConfiguration;
+    private _codeAnimation!: CodeAnimation;
     private codeChangeFromAnimation$ = new Subject<void>();
 
     constructor(private changeDetectorReference: ChangeDetectorRef) { }
@@ -41,36 +46,23 @@ export class CodeRecorderComponent implements AfterViewInit {
         this.saveCodeAnimation();
     }
 
-    protected codeHasChange(codeEvent: { value: string, position: number }): void {
-        if (this.codeAnimation.hasStart) return;
-
-        this.code = codeEvent.value;
-        this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(this.code);
-    }
-
     protected domHasChange(): void {
-        if (!this.codeAnimation.hasStart) return;
+        if (!this._codeAnimation.hasStart) return;
 
         this.codeChangeFromAnimation$.next();
     }
 
     protected saveCodeAnimation(): void {
-        if (this.codeAnimation.hasNoFrame) return;
+        if (this._codeAnimation.hasNoFrame) return;
 
-        console.log(this.codeContainer, this.codeContainer.nativeElement)
         Dom2Gif.generate({
-            animation: this.codeAnimation,
+            animation: this._codeAnimation,
             width: this.codeContainer.nativeElement.clientWidth,
             height: this.codeContainer.nativeElement.clientHeight,
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
             frameLoaded: this.codeChangeFromAnimation$.asObservable(),
 
-            onStart: () => {
-                this.codeConfiguration.hideTextSelection = true;
-                this.codeConfiguration.numberRow = this.codeAnimation.nbMaxRow;
-                this.changeDetectorReference.detectChanges()
-            },
             loadFrame: (frame: CodeFrame) => {
                 if (this.isAlreadyLoad(frame)) {
                     this.codeChangeFromAnimation$.next();

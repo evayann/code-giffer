@@ -13,3 +13,9 @@
 
     background-color: black;
 }
+
+.animation-controller {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--padding-3);
+}

@@ -24,6 +24,7 @@
     "highlight.js": "11.9.0",
     "ngx-highlightjs": "10.0.0",
     "omggif": "1.0.10",
+    "rgbquant": "1.1.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

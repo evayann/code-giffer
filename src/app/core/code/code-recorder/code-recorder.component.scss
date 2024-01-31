@@ -2,7 +2,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+
+    color: var(--text-background);
+    background-color: var(--background);
 
     width: 100%;
+
+    z-index: 1000;
 }

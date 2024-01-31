@@ -64,6 +64,10 @@ export class FramePerFrameCodeToGifPageComponent {
         };
     }
 
+    protected onDeleteAnimationKey(indexToDelete: number): void {
+        this.animation.frameList
+    }
+
     protected onThemeChanged(): void {
         this.themeService.loadTheme({
             name: this.getMenuValue('theme'),

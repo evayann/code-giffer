@@ -47,7 +47,7 @@ export class AutoCodeToGifPageComponent {
             isDarkMode: currentTheme.variant === "dark",
         });
 
-        this.initialCode = placeholderCodeService.getExample('auto');
+        this.initialCode = placeholderCodeService.getRandomExample('auto');
     }
 
     protected onThemeChanged(): void {

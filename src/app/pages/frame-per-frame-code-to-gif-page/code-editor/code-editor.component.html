@@ -7,7 +7,7 @@
 </div>
 
 @if (!codeAnimation.hasStart) {
-<div>
+<div class="animation-controller">
     <button class="secondary" (click)="addFrameToAnimation()"> Add frame </button>
     <button class="primary" [disabled]="codeAnimation.hasNoFrame" (click)="saveCodeAnimation()"> Save </button>
 </div>

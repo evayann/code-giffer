@@ -68,9 +68,6 @@ export class WindowComponent {
         else if (keyDownEvent.isOpenBracket) {
             this.insertCharacterInTextArea(textArea, '}');
         }
-        else if (keyDownEvent.isOpenChevron) {
-            this.insertCharacterInTextArea(textArea, '>');
-        }
 
         else if (keyDownEvent.isBackspace) {
             this.onRemoveCharacter(textArea);
@@ -122,6 +119,6 @@ export class WindowComponent {
     }
 
     private characterInCodeInsertionList(character: string): boolean {
-        return ['\'', '"', '(', '[', '{', '<'].includes(character);
+        return ['\'', '"', '(', '[', '{'].includes(character);
     }
 }
