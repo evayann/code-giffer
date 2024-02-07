@@ -1,6 +1,6 @@
 <div class="stack-child code-editor">
-    <app-window #codeContainer [language]="language" [code]="code" [theme]="theme"
-        [windowConfiguration]="codeConfiguration" (domHasChange)="domHasChange()" />
+    <app-window #codeContainer [title]="title" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
+        (domHasChange)="domHasChange()" />
 
     <p class="spinner"> Render frames </p>
 </div>

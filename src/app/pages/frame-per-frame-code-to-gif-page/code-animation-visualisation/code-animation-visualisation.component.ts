@@ -14,7 +14,6 @@ import { WindowComponent } from '../../../core/code/window/window.component';
 })
 export class CodeAnimationVisualisationComponent {
     @Input({ required: true }) animation!: any;
-    @Input() language!: string;
     @Input() theme!: any;
     @Output() onDelete = new EventEmitter<number>();
     @Output() onMove = new EventEmitter<{ oldPosition: number; newPosition: number }>();

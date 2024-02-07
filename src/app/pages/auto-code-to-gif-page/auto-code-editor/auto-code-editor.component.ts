@@ -15,6 +15,7 @@ import { CodeAnimation } from '../../../core/code/animation/code-animation';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutoCodeEditorComponent {
+    @Input({ required: true }) delayInMs!: number;
     @Input({ required: true }) theme!: any;
     @Input() set initialCode(value: { title: string, code: string }) {
         this.title = value.title;

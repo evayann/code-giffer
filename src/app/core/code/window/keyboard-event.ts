@@ -1,4 +1,6 @@
 export class KeyBoardEvent {
+    get shiftPress(): boolean { return this.keyboardEvent.shiftKey; }
+
     get isTabulation(): boolean { return this.key === 'Tab'; }
     get isSimpleQuote(): boolean { return this.key === '\''; }
     get isDoubleQuote(): boolean { return this.key === '\"'; }

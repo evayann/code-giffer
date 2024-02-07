@@ -1,9 +1,10 @@
 @if (!isRecording) {
-<app-window language="auto" [code]="code" [title]="title" [theme]="theme" [windowConfiguration]="codeConfiguration"
+<app-window [code]="code" [(title)]="title" [theme]="theme" [windowConfiguration]="codeConfiguration"
     (codeHasChange)="updateCode($event.value)" />
 }
 @else {
-<app-code-recorder language="auto" [theme]="theme" [codeAnimation]="codeAnimation" (onRecordFinish)="finishRecord()" />
+<app-code-recorder [delayInMs]="delayInMs" [title]="title" [theme]="theme" [codeAnimation]="codeAnimation"
+    (onRecordFinish)="finishRecord()" />
 }
 
 <button (click)="startRecord()"> Animate my snippet ! </button>

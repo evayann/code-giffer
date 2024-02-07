@@ -6,6 +6,7 @@ import { MenuComponent } from '../../core/menu/menu.component';
 import { ThemeService } from '../../shared/services/theme.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
+import { MenuForm } from '../../core/menu/menu.model';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -33,13 +34,17 @@ export class AutoCodeToGifPageComponent {
         };
     }
 
+    protected get delayInMs(): number {
+        return this.getMenuValue('intervalBetweenFrameInMs');
+    }
+
     constructor(hljsLoader: HighlightLoader, formBuilder: FormBuilder, private themeService: ThemeService, placeholderCodeService: PlaceholderCodeService) {
         hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
 
         this.themeNameList = themeService.themeNameList;
         const currentTheme = themeService.currentTheme;
-        this.menuFormGroup = formBuilder.group<any>({
-            language: 'auto',
+        this.menuFormGroup = formBuilder.group<MenuForm>({
+            intervalBetweenFrameInMs: 100,
             theme: currentTheme.name,
             loopIteration: 0,
             hasBackground: true,

@@ -1,7 +1,5 @@
-<app-code-editor #codeEditor [language]="language" [theme]="theme" (animation)="loadAnimation($event)" />
+<app-code-editor #codeEditor [theme]="theme" [delayInMs]="delayInMs" (animation)="loadAnimation($event)" />
 
-<app-code-animation-visualisation [animation]="animation" [language]="language" [theme]="theme"
-    (onDelete)="onDeleteAnimationKey($event)" />
+<app-code-animation-visualisation [animation]="animation" [theme]="theme" (onDelete)="onDeleteAnimationKey($event)" />
 
-<app-menu [formGroup]="menuFormGroup" [languageNameList]="['auto', 'ts', 'html']" [themeNameList]="themeNameList"
-    (themeChanged)="onThemeChanged()" />
+<app-menu [menuForm]="menuFormGroup" [themeNameList]="themeNameList" (themeChanged)="onThemeChanged()" />

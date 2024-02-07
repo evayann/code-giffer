@@ -1,10 +1,7 @@
-<ng-container [formGroup]="formGroup">
-    <label class="label"> Language
-        <select formControlName="language">
-            @for(language of languageNameList; track language) {
-            <option [value]="language"> {{language}} </option>
-            }
-        </select>
+<ng-container [formGroup]="menuForm">
+    <label class="label"> Interval between frame
+        <input type="number" formControlName="intervalBetweenFrameInMs" />
+
     </label>
 
     <label class="label"> Loop iteration

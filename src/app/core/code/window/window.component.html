@@ -1,9 +1,8 @@
 <div class="window" [ngStyle]="{ width: '64ch' }">
-    <app-title-bar [theme]="_theme" [title]="title" />
+    <app-title-bar [theme]="_theme" [title]="title" (titleChange)="titleChange.emit($event)" />
     @if(windowConfiguration.isEditable) {
     <div class="stack-child code-container">
-        <code class="code" [highlight]="code" [languages]="['auto', 'xml', 'javascript', 'typescript']"
-            [lineNumbers]="false" (hasChange)="codeTagHasChange()"></code>
+        <code class="code" [highlight]="code" (hasChange)="codeTagHasChange()"></code>
 
         <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="windowConfiguration.numberRow"
             [cols]="windowConfiguration.numberColumn" (keydown)="onKeyDown(textArea, $event)"
@@ -13,7 +12,6 @@
     </div>
     }
     @else {
-    <code class="code" [highlight]="code" [languages]="['auto', 'xml', 'javascript', 'typescript']"
-        [lineNumbers]="false"></code>
+    <code class="code" [highlight]="code"></code>
     }
 </div>

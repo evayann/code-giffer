@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CodeTheme } from '../../code-theme';
 import { CommonModule } from '@angular/common';
 
@@ -13,4 +13,7 @@ import { CommonModule } from '@angular/common';
 export class TitleBarComponent {
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true }) title!: string;
+
+    @Output() titleChange = new EventEmitter<string>();
+    console = console;
 }

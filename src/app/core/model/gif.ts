@@ -1,5 +1,4 @@
 import { GifWriter } from "omggif";
-import { Color } from "./color";
 import { Frame } from "./frame";
 
 type GifAnimation = {
@@ -8,8 +7,8 @@ type GifAnimation = {
     numberOfFrames: number;
 };
 
-type FrameOptions = {
-    delayInSecondes: number
+export type FrameOptions = {
+    delayInMs: number
 };
 
 export class Gif {
@@ -32,36 +31,7 @@ export class Gif {
     addFrame(frame: Frame, frameOptions?: FrameOptions): void {
         const paletteList = frame.paletteIndex;
         const pixelPaletteIndexList = frame.pixelList;
-        // const numberOfCanal = 4;
-
-        // const pixelPaletteIndexList = [];
-        // const paletteList = [];
-
-        // for (let index = 0; index < this.width * this.height; index++) {
-        //     const color = frame.getRGBFromPixels(index * numberOfCanal);
-        //     const uint8Color = color.toUint8();
-
-        //     const indexOfColorInPaletteList = paletteList.indexOf(uint8Color);
-        //     if (indexOfColorInPaletteList === -1) {
-        //         pixelPaletteIndexList.push(paletteList.length);
-        //         paletteList.push(uint8Color);
-        //     } else {
-        //         pixelPaletteIndexList.push(indexOfColorInPaletteList);
-        //     }
-        // }
-
-        // paletteList.length = this.paletteSize(paletteList);
-
-        const options = { palette: paletteList, delay: Math.round((frameOptions?.delayInSecondes ?? 1) * 100) };
+        const options = { palette: paletteList, delay: (frameOptions?.delayInMs ?? 100) / 10 };
         this.writer.addFrame(0, 0, this.width, this.height, pixelPaletteIndexList, options);
-    }
-
-    private paletteSize(paletteList: number[]): number {
-        let powOf2 = 1;
-
-        while (powOf2 < paletteList.length) powOf2 <<= 1;
-        if (paletteList.length > 255) console.log('Gif can\'t have more than 256 colors in palette');
-
-        return powOf2;
     }
 }

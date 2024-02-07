@@ -2,20 +2,22 @@ import { Observable, Subscription, from } from 'rxjs';
 import domtoimage from 'dom-to-image';
 
 import { Animation } from '../code/animation/animation';
-import { Gif } from './gif';
+import { FrameOptions, Gif } from './gif';
 import { Frame } from './frame';
 
 export type Dom2GifGenerationProperties<Frame> = {
-    animation: Animation<Frame>,
-    width: number,
-    height: number,
-    dom: HTMLElement,
-    frameLoaded: Observable<void>,
-    scaleFactor?: number,
+    animation: Animation<Frame>;
+    width: number;
+    height: number;
+    dom: HTMLElement;
+    frameLoaded: Observable<void>;
+    scaleFactor?: number;
+
+    frameOptions: FrameOptions;
 
     onStart?: () => void;
-    onFinish?: () => void,
-    loadFrame: (frame: Frame) => void,
+    onFinish?: () => void;
+    loadFrame: (frame: Frame) => void;
 }
 
 export class Dom2Gif<Frame> {
@@ -47,7 +49,7 @@ export class Dom2Gif<Frame> {
             height: dom2gifProperties.height,
             numberOfFrames: dom2gifProperties.animation.numberOfFrame
         });
-        this.nextFrameLoadedSubscription = dom2gifProperties.frameLoaded.subscribe(() => this.saveFrame());
+        this.nextFrameLoadedSubscription = dom2gifProperties.frameLoaded.subscribe(() => this.saveFrame(dom2gifProperties.frameOptions));
     }
 
     private saveAnimation(): void {
@@ -71,10 +73,10 @@ export class Dom2Gif<Frame> {
         this.loadFrame(nextFrame);
     }
 
-    private saveFrame(): void {
+    private saveFrame(frameOptions: FrameOptions): void {
         const frameSubscription = from(domtoimage.toPixelData(this.dom))
             .subscribe((pixelList) => {
-                this.gif.addFrame(new Frame(pixelList));
+                this.gif.addFrame(new Frame(pixelList), frameOptions);
                 this.loadNextFrame();
 
                 frameSubscription.unsubscribe();

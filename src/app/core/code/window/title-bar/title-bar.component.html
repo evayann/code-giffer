@@ -4,4 +4,6 @@
     <div class="window-action window-maximize"> </div>
 </div>
 
-<h2 contenteditable="true" class="window-title" [ngStyle]="{color: theme.titleColor}"> {{title}} </h2>
+<h2 contenteditable="true" class="window-title" [ngStyle]="{color: theme.titleColor}"
+    (input)="titleChange.emit($any($event.target).innerText)">
+    {{title}} </h2>

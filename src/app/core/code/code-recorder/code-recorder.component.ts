@@ -20,7 +20,8 @@ import { WindowComponent } from '../window/window.component';
 export class CodeRecorderComponent implements AfterViewInit {
     @ViewChild('codeContainer', { read: ElementRef }) codeContainer!: ElementRef<HTMLDivElement>;
 
-    @Input({ required: true }) language!: string;
+    @Input() title!: string;
+    @Input() delayInMs: number = 100;
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true })
     set codeAnimation(codeAnimation: CodeAnimation) {
@@ -62,6 +63,10 @@ export class CodeRecorderComponent implements AfterViewInit {
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
             frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+
+            frameOptions: {
+                delayInMs: this.delayInMs
+            },
 
             loadFrame: (frame: CodeFrame) => {
                 if (this.isAlreadyLoad(frame)) {

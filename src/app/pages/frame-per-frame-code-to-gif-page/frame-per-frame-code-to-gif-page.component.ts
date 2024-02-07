@@ -8,6 +8,7 @@ import { MenuComponent } from '../../core/menu/menu.component';
 import { ThemeService } from '../../shared/services/theme.service';
 import { CodeAnimationVisualisationComponent } from './code-animation-visualisation/code-animation-visualisation.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
+import { MenuForm } from '../../core/menu/menu.model';
 
 
 @Component({
@@ -34,8 +35,8 @@ export class FramePerFrameCodeToGifPageComponent {
         };
     }
 
-    protected get language(): string {
-        return this.getMenuValue('language');
+    protected get delayInMs(): number {
+        return this.getMenuValue('intervalBetweenFrameInMs');
     }
 
     protected get isExportable(): boolean {
@@ -47,8 +48,8 @@ export class FramePerFrameCodeToGifPageComponent {
 
         this.themeNameList = themeService.themeNameList;
         const currentTheme = themeService.currentTheme;
-        this.menuFormGroup = formBuilder.group<any>({
-            language: 'auto',
+        this.menuFormGroup = formBuilder.group<MenuForm>({
+            intervalBetweenFrameInMs: 100,
             theme: currentTheme.name,
             loopIteration: 0,
             hasBackground: true,

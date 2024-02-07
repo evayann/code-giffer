@@ -16,7 +16,6 @@ import { KeyBoardEvent } from './keyboard-event';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WindowComponent {
-    @Input({ required: true }) language!: string;
     @Input({ required: true }) code!: string;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
     @Input({ required: true }) set theme(theme: CodeTheme) {
@@ -27,6 +26,7 @@ export class WindowComponent {
     @Input() title = 'Code Snippet';
 
     @Output() domHasChange = new EventEmitter<void>();
+    @Output() titleChange = new EventEmitter<string>();
     @Output() codeHasChange = new EventEmitter<{ value: string, position: number }>();
 
     @HostBinding('style.padding') padding!: string;
@@ -44,13 +44,18 @@ export class WindowComponent {
 
         if (this.lastCharacterInsert && keyDownEvent.is(this.lastCharacterInsert)) {
             this.moveSelection(textArea, 1);
-            keyDownEvent.preventDefault();
             this.lastCharacterInsert = undefined;
+            keyDownEvent.preventDefault();
         }
 
         else if (keyDownEvent.isTabulation) {
-            this.insertCharacterInTextArea(textArea, '\t');
-            this.lastCharacterInsert = undefined;
+            if (keyDownEvent.shiftPress) {
+                this.onRemoveCharacter(textArea);
+            }
+            else {
+                this.insertCharacterInTextArea(textArea, '\t');
+            }
+            // this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
         }
         else if (keyDownEvent.isSimpleQuote) {
@@ -88,7 +93,6 @@ export class WindowComponent {
         const textBeforeTabulation = textAreaCurrentValue.substring(0, textSelectionEnd);
         const textAfterTabulation = textAreaCurrentValue.substring(textSelectionEnd);
         textArea.value = `${textBeforeTabulation}${character}${textAfterTabulation}`;
-        console.log(textArea.value);
 
         textArea.selectionStart = textSelectionEnd;
         textArea.selectionEnd = textSelectionEnd;

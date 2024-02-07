@@ -1,7 +1,8 @@
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MenuFormGroup } from './menu.model';
 
 @Component({
     selector: 'app-menu',
@@ -14,9 +15,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MenuComponent {
-    @Input({ required: true }) formGroup!: FormGroup;
+    @Input({ required: true }) menuForm!: MenuFormGroup;
     @Input({ required: true }) themeNameList!: string[];
-    @Input({ required: true }) languageNameList!: string[];
     @Output() themeChanged = new EventEmitter<null>();
 
     protected onThemeChange(): void {

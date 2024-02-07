@@ -22,8 +22,8 @@ export class CodeEditorComponent {
 		if (this.code !== '') return;
 		this.code = code;
 	}
-	@Input({ required: true }) language!: string;
 	@Input({ required: true }) theme!: CodeTheme;
+	@Input() delayInMs = 100;
 	@Output() animation = new EventEmitter<{ frameList: readonly CodeFrame[]; maxRow: number }>();
 
 	protected code = '';
@@ -76,6 +76,10 @@ export class CodeEditorComponent {
 			dom: this.codeContainer.nativeElement,
 			scaleFactor: 2,
 			frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+
+			frameOptions: {
+				delayInMs: this.delayInMs
+			},
 
 			onStart: () => {
 				this.codeConfiguration.hideTextSelection = true;

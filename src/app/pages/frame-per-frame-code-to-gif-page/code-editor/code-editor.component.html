@@ -1,5 +1,5 @@
 <div class="stack-child code-editor">
-    <app-window [language]="language" [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
+    <app-window [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
         (codeHasChange)="codeHasChange($event)" (domHasChange)="domHasChange()" />
     @if (codeAnimation.hasStart) {
     <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>

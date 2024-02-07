@@ -1,3 +1,2 @@
-<app-auto-code-editor [theme]="theme" [initialCode]="initialCode" />
-<app-menu [formGroup]="menuFormGroup" [languageNameList]="['auto', 'ts', 'html']" [themeNameList]="themeNameList"
-    (themeChanged)="onThemeChanged()" />
+<app-auto-code-editor [delayInMs]="delayInMs" [theme]="theme" [initialCode]="initialCode" />
+<app-menu [menuForm]="menuFormGroup" [themeNameList]="themeNameList" (themeChanged)="onThemeChanged()" />
