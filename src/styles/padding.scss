@@ -1,8 +1,9 @@
-@use './functions';
+@use "./functions";
 
-$padding-size-list: 2px, 4px, 8px, 16px, 32px;
+$size-list: 2px, 4px, 8px, 16px, 32px;
 
 :root {
-    @include functions.createProperties($padding-size-list, space);
-    @include functions.createProperties($padding-size-list, padding);
+    @include functions.createProperties($size-list, space);
+    @include functions.createProperties($size-list, padding);
+    @include functions.createProperties($size-list, border-radius);
 }

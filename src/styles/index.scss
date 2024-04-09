@@ -1,11 +1,14 @@
-@import "./padding";
+@import "./functions";
+
 @import "./reset";
 @import "./theme";
+@import "./padding";
+
+@import "./font/chillax";
+
 @import "./display";
 @import "./button";
 @import "./text";
-@import "./functions";
 @import "./select";
 @import "./input";
-@import "./chillax";
 @import "./link";

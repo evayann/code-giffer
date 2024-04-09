@@ -1,11 +1,75 @@
-input {
-    color: var(--text-primary);
-    background-color: var(--primary);
-    border-radius: var(--space-2);
-    border: 1px solid gray;
+input[type="checkbox"] {
+    appearance: none;
+
+    --checkbox-background: var(--background);
+    --checkbox-foreground: var(--text-background);
+
+    cursor: pointer;
+
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--checkbox-foreground);
+    border-radius: var(--border-radius-2);
+
+    width: 1rem;
+    height: 1rem;
+
+    &:checked {
+        background-repeat: no-repeat;
+        animation: checkmark var(--animation-input, 0.2s) ease-out;
+        background-color: var(--background);
+        background-image: linear-gradient(
+                -45deg,
+                transparent 65%,
+                var(--checkbox-background) 65.99%
+            ),
+            linear-gradient(
+                45deg,
+                transparent 75%,
+                var(--checkbox-background) 75.99%
+            ),
+            linear-gradient(
+                -45deg,
+                var(--checkbox-background) 40%,
+                transparent 40.99%
+            ),
+            linear-gradient(
+                45deg,
+                var(--checkbox-background) 30%,
+                var(--checkbox-foreground) 30.99%,
+                var(--checkbox-foreground) 40%,
+                transparent 40.99%
+            ),
+            linear-gradient(
+                -45deg,
+                var(--checkbox-foreground) 50%,
+                var(--checkbox-background) 50.99%
+            );
+    }
 }
 
-input[type="checkbox"] {
-    accent-color: var(--primary);
-    cursor: pointer;
+input[type="checkbox"].primary {
+    --checkbox-background: var(--primary);
+    --checkbox-foreground: var(--text-primary);
+}
+
+input:not([type="checkbox"]) {
+    appearance: none;
+
+    padding-left: 1rem;
+
+    font-size: 1rem;
+    line-height: 2;
+    line-height: 1.5rem;
+    border-radius: var(--rounded-btn, 0.5rem);
+    border-width: 1px;
+    border-color: transparent;
+    border-style: solid;
+
+    color: var(--text-background);
+    background-color: var(--background);
+}
+
+input.primary {
+    border-color: var(--primary);
 }

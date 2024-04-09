@@ -1,2 +1,3 @@
-<app-auto-code-editor [delayInMs]="delayInMs" [theme]="theme" [initialCode]="initialCode" />
+<app-auto-code-editor [delayInMs]="delayInMs" [theme]="theme" [initialCode]="initialCode"
+    (codeHasChange)="onUpdateUrl($event)" />
 <app-menu [menuForm]="menuFormGroup" [themeNameList]="themeNameList" (themeChanged)="onThemeChanged()" />

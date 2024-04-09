@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { WindowComponent } from '../../../core/code/window/window.component';
 import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeAnimation } from '../../../core/code/animation/code-animation';
@@ -15,6 +15,7 @@ import { CodeAnimation } from '../../../core/code/animation/code-animation';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutoCodeEditorComponent {
+    @Output() codeHasChange = new EventEmitter<string>();
     @Input({ required: true }) delayInMs!: number;
     @Input({ required: true }) theme!: any;
     @Input() set initialCode(value: { title: string, code: string }) {
@@ -37,6 +38,7 @@ export class AutoCodeEditorComponent {
 
     protected updateCode(code: string): void {
         this.code = code;
+        this.codeHasChange.emit(code);
     }
 
     protected startRecord(): void {

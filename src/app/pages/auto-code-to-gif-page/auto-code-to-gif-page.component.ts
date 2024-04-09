@@ -7,13 +7,12 @@ import { ThemeService } from '../../shared/services/theme.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 import { MenuForm } from '../../core/menu/menu.model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
     standalone: true,
-    imports: [
-        CommonModule, AutoCodeEditorComponent, MenuComponent
-    ],
+    imports: [CommonModule, AutoCodeEditorComponent, MenuComponent],
     templateUrl: './auto-code-to-gif-page.component.html',
     styleUrl: './auto-code-to-gif-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,15 +21,17 @@ export class AutoCodeToGifPageComponent {
     protected menuFormGroup: FormGroup;
     protected themeNameList: string[];
 
-    protected initialCode!: { title: string, code: string };
+    protected initialCode!: { title: string; code: string };
 
     protected get theme() {
         return {
-            background: this.getMenuValue('hasBackground') ? 'var(--gradient)' : 'transparent',
+            background: this.getMenuValue('hasBackground')
+                ? 'var(--gradient)'
+                : 'transparent',
             padding: this.getMenuValue('hasPadding') ? 'var(--padding-5)' : '0',
             codeSyntaxThemeName: 'androidstudio',
             titleColor: 'white',
-            caretColor: 'white'
+            caretColor: 'white',
         };
     }
 
@@ -38,8 +39,16 @@ export class AutoCodeToGifPageComponent {
         return this.getMenuValue('intervalBetweenFrameInMs');
     }
 
-    constructor(hljsLoader: HighlightLoader, formBuilder: FormBuilder, private themeService: ThemeService, placeholderCodeService: PlaceholderCodeService) {
-        hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
+    constructor(
+        hljsLoader: HighlightLoader,
+        formBuilder: FormBuilder,
+        private themeService: ThemeService,
+        placeholderCodeService: PlaceholderCodeService,
+        route: ActivatedRoute
+    ) {
+        hljsLoader.setTheme(
+            `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
+        );
 
         this.themeNameList = themeService.themeNameList;
         const currentTheme = themeService.currentTheme;
@@ -49,17 +58,23 @@ export class AutoCodeToGifPageComponent {
             loopIteration: 0,
             hasBackground: true,
             hasPadding: true,
-            isDarkMode: currentTheme.variant === "dark",
+            isDarkMode: currentTheme.variant === 'dark',
         });
 
-        this.initialCode = placeholderCodeService.getRandomExample('auto');
+        const title = route.snapshot.queryParamMap.get('title')
+        const code = route.snapshot.queryParamMap.get('code')
+        this.initialCode = (title && code) ? { title, code } : placeholderCodeService.getRandomExample('auto');
+    }
+
+    protected onUpdateUrl(code: string): void {
+        window.history.replaceState({}, '', `/auto?title=test&code=${code}`);
     }
 
     protected onThemeChanged(): void {
         this.themeService.loadTheme({
             name: this.getMenuValue('theme'),
-            variant: this.getMenuValue('isDarkMode') ? 'dark' : 'light'
-        })
+            variant: this.getMenuValue('isDarkMode') ? 'dark' : 'light',
+        });
     }
 
     private getMenuValue<T = unknown>(key: any): T {

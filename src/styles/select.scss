@@ -1,5 +1,34 @@
 select {
-    color: var(--text-primary);
-    background-color: var(--primary);
-    border-radius: var(--space-2);
+    display: inline-flex;
+    cursor: pointer;
+
+    user-select: none;
+    appearance: none;
+
+    padding-left: 1rem;
+    padding-right: 2rem;
+
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    line-height: 2;
+
+    border-radius: var(--rounded-btn, 0.5rem);
+    border-width: 1px;
+    border-color: transparent;
+
+    background-color: var(--background);
+
+    background-image: linear-gradient(45deg, transparent 50%, currentColor 50%),
+        linear-gradient(135deg, currentColor 50%, transparent 50%);
+    background-position:
+        calc(100% - 20px) calc(1px + 50%),
+        calc(100% - 16.1px) calc(1px + 50%);
+    background-size:
+        4px 4px,
+        4px 4px;
+    background-repeat: no-repeat;
+}
+
+select.primary {
+    border-color: var(--primary);
 }

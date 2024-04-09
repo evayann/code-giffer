@@ -1,17 +1,17 @@
 <ng-container [formGroup]="menuForm">
     <label class="label">
         <span> Interval between frame </span>
-        <input type="number" formControlName="intervalBetweenFrameInMs" />
+        <input type="number" formControlName="intervalBetweenFrameInMs" class="primary" />
     </label>
 
     <label class="label">
         <span> Loop iteration </span>
-        <input type="number" formControlName="loopIteration" />
+        <input type="number" formControlName="loopIteration" class="primary" />
     </label>
 
     <label class="label">
         <span> Theme </span>
-        <select formControlName="theme" (ngModelChange)="onThemeChange()">
+        <select formControlName="theme" class="primary" (ngModelChange)="onThemeChange()">
             @for(themeName of themeNameList; track themeName) {
             <option [value]="themeName"> {{ themeName }} </option>
             }
@@ -23,18 +23,22 @@
     <ng-template #styleMenu>
         <ul class="style-menu" cdkMenu>
             <li>
-                <label class="label"> Background
-                    <input type="checkbox" formControlName="hasBackground" />
+                <label class="label">
+                    Background
+                    <input type="checkbox" formControlName="hasBackground" class="primary" />
                 </label>
             </li>
             <li>
-                <label class="label"> Dark mode
-                    <input type="checkbox" formControlName="isDarkMode" (ngModelChange)="onThemeChange()" />
+                <label class="label">
+                    Dark mode
+                    <input type="checkbox" formControlName="isDarkMode" class="primary"
+                        (ngModelChange)="onThemeChange()" />
                 </label>
             </li>
             <li>
-                <label class="label"> Padding
-                    <input type="checkbox" formControlName="hasPadding" />
+                <label class="label">
+                    Padding
+                    <input type="checkbox" formControlName="hasPadding" class="primary" />
                 </label>
             </li>
         </ul>

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { LogoComponent } from '../../shared/icons/logo.component';
 
 @Component({
-    selector: 'app-footer',
+    selector: 'footer[app]',
     standalone: true,
     imports: [
         CommonModule, LogoComponent

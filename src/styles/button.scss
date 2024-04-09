@@ -5,10 +5,10 @@ button,
     color: var(--_btn-color);
     background-color: var(--_btn-bg);
     border: var(--btn-border-width) solid var(--btn-border-color);
-    border-radius: var(--space-3);
+    border-radius: var(--border-radius-3);
     font-weight: var(--btn-font-weight);
 
-    padding: var(--space-3);
+    padding: var(--padding-3);
 
     transition:
         all 0.3s ease-in-out,
