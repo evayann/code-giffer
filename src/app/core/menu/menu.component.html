@@ -1,14 +1,16 @@
 <ng-container [formGroup]="menuForm">
-    <label class="label"> Interval between frame
+    <label class="label">
+        <span> Interval between frame </span>
         <input type="number" formControlName="intervalBetweenFrameInMs" />
-
     </label>
 
-    <label class="label"> Loop iteration
+    <label class="label">
+        <span> Loop iteration </span>
         <input type="number" formControlName="loopIteration" />
     </label>
 
-    <label class="label"> Theme
+    <label class="label">
+        <span> Theme </span>
         <select formControlName="theme" (ngModelChange)="onThemeChange()">
             @for(themeName of themeNameList; track themeName) {
             <option [value]="themeName"> {{ themeName }} </option>

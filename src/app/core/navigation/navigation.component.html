@@ -1,8 +1,8 @@
 <p class="label"> Animation mode </p>
-<ul>
+<ul class="route-list" [ngStyle]="{'--count': routeList.length, '--active': currentRouteIndexInList()}">
     @for(route of routeList; track route) {
     <li>
-        <a class="button secondary" [routerLink]="[route]" [ngClass]="{disabled: isCurrentUrl(route)}">
+        <a class="route" [routerLink]="[route]" [ngClass]="{disabled: isCurrentUrl(route)}">
             {{route}}
         </a>
     </li>

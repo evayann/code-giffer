@@ -17,4 +17,8 @@ export class NavigationComponent {
     protected isCurrentUrl(url: string): boolean {
         return this.currentUrl?.includes(url) ?? false;
     }
+
+    protected currentRouteIndexInList(): number {
+        return this.routeList.findIndex((route) => (this.currentUrl ?? '').includes(route)) ?? 1;
+    }
 }

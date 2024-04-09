@@ -4,15 +4,79 @@
     backdrop-filter: blur(5px);
 
     padding: var(--space-3);
+
+    --radius: 16px;
+    --border: 4px;
+    --height: 48px;
+    --speed: 0.25s;
+
+    --ease: linear(
+        0,
+        0.1641 3.52%,
+        0.311 7.18%,
+        0.4413 10.99%,
+        0.5553 14.96%,
+        0.6539 19.12%,
+        0.738 23.5%,
+        0.8086 28.15%,
+        0.8662 33.12%,
+        0.9078 37.92%,
+        0.9405 43.12%,
+        0.965 48.84%,
+        0.9821 55.28%,
+        0.992 61.97%,
+        0.9976 70.09%,
+        1
+    );
 }
 
-ul {
-    display: flex;
-    gap: var(--space-1);
+.route-list {
+    position: relative;
+
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+
+    gap: var(--space-3);
+    height: var(--height);
 
     list-style-type: none;
 
-    padding: 0;
+    background-color: var(--secondary);
+    border-radius: var(--radius);
+    border: var(--border) solid var(--secondary);
+
+    padding: 0 2px;
+
+    &::after {
+        content: "";
+
+        position: absolute;
+        pointer-events: none;
+        width: calc(100% / var(--count));
+        height: 100%;
+
+        background: hsl(0 0% 100%);
+        border-radius: calc(var(--radius) - var(--border));
+        mix-blend-mode: difference;
+        translate: calc(var(--active, 0) * 100%) 0;
+        transition: translate, outline-color;
+        transition-duration: var(--speed);
+        transition-timing-function: var(--ease, ease);
+        outline: 2px solid transparent;
+    }
+}
+
+.route {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+
+    width: 100%;
+    height: 100%;
 }
 
 .disabled {

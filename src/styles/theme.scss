@@ -27,22 +27,22 @@
 @include create-theme(
     "blue-dark",
     (
-        primary: #3880ff,
-        secondary: #3dc2ff,
+        primary: hsl(218, 100%, 40%),
+        secondary: hsl(218, 100%, 20%),
     ),
-    #455b84,
-    #3880ff,
+    hsl(218, 10%, 15%),
+    hsl(218, 100%, 61%),
     "linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))"
 );
 
 @include create-theme(
     "blue-light",
     (
-        primary: #5667ad,
-        secondary: #919fdb,
+        primary: hsl(218, 35%, 70%),
+        secondary: hsl(218, 51%, 80%),
     ),
-    #d1d1f4,
-    #5667ad,
+    hsl(218, 60%, 90%),
+    hsl(218, 35%, 51%),
     "linear-gradient(140deg, rgb(142 199 251), rgb(51 91 237))"
 );
 

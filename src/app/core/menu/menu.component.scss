@@ -13,6 +13,10 @@
         flex-direction: column;
         justify-content: center;
         max-width: 90px;
+
+        & > span {
+            margin-top: auto;
+        }
     }
 }
 
