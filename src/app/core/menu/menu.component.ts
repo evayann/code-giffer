@@ -17,9 +17,9 @@ import { MenuFormGroup } from './menu.model';
 export class MenuComponent {
     @Input({ required: true }) menuForm!: MenuFormGroup;
     @Input({ required: true }) themeNameList!: string[];
-    @Output() themeChanged = new EventEmitter<null>();
+    @Output() themeChange = new EventEmitter<null>();
 
     protected onThemeChange(): void {
-        this.themeChanged.emit(null);
+        this.themeChange.emit(null);
     }
 }

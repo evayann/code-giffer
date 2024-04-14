@@ -2,8 +2,9 @@
     display: grid;
 
     grid-template-columns: 1fr;
-    grid-template-rows: 9fr 1fr;
+    grid-template-rows: 1fr 9fr 1fr;
     grid-template-areas:
+        "header"
         "page"
         "footer";
 
@@ -25,10 +26,22 @@ app-footer {
     grid-area: footer;
 }
 
-app-navigation {
-    position: absolute;
-    top: var(--space-5);
-    left: var(--space-5);
+header {
+    grid-area: header;
+
+    position: sticky;
+    top: 0;
+
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    justify-items: center;
+
+    padding: var(--space-5) 0;
 
     z-index: 1;
+}
+
+app-menu {
+    grid-column: 2;
 }

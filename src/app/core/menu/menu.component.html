@@ -35,10 +35,16 @@
                         (ngModelChange)="onThemeChange()" />
                 </label>
             </li>
-            <li>
+            <li class="select-menu">
                 <label class="label">
                     Padding
-                    <input type="checkbox" formControlName="hasPadding" class="primary" />
+                    <!-- <input type="checkbox" formControlName="hasPadding" class="primary" /> -->
+                    <select class="primary">
+                        <option value="none">No</option>
+                        <option value="small">Small</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
                 </label>
             </li>
         </ul>

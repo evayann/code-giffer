@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Input as RouterInput } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { HighlightLoader } from 'ngx-highlightjs';
 import { MenuComponent } from '../../core/menu/menu.component';
-import { ThemeService } from '../../shared/services/theme.service';
-import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
-import { MenuForm } from '../../core/menu/menu.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
+import { Hash } from '../../shared/hash';
+
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -18,9 +18,24 @@ import { ActivatedRoute, Router } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AutoCodeToGifPageComponent {
-    protected menuFormGroup: FormGroup;
-    protected themeNameList: string[];
+    @RouterInput() set title(title: string) {
+        this._codeTitle = title;
+        this.loadUrlCode();
+    }
 
+    @RouterInput() set code(code: string) {
+        this._codeContent = Hash.uncrypt(code);
+        this.loadUrlCode();
+    }
+
+    @Input({ required: true }) set menuForm(menuForm: FormGroup) {
+        this._menuForm = menuForm;
+        menuForm?.valueChanges.subscribe(() => this.changeDetectorRef.detectChanges())
+    };
+
+    private _codeTitle?: string;
+    private _codeContent?: string;
+    private _menuForm?: FormGroup;
     protected initialCode!: { title: string; code: string };
 
     protected get theme() {
@@ -41,43 +56,27 @@ export class AutoCodeToGifPageComponent {
 
     constructor(
         hljsLoader: HighlightLoader,
-        formBuilder: FormBuilder,
-        private themeService: ThemeService,
         placeholderCodeService: PlaceholderCodeService,
-        route: ActivatedRoute
+        route: ActivatedRoute,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         hljsLoader.setTheme(
             `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
         );
+        this.initialCode = placeholderCodeService.getRandomExample('auto');
+    }
 
-        this.themeNameList = themeService.themeNameList;
-        const currentTheme = themeService.currentTheme;
-        this.menuFormGroup = formBuilder.group<MenuForm>({
-            intervalBetweenFrameInMs: 100,
-            theme: currentTheme.name,
-            loopIteration: 0,
-            hasBackground: true,
-            hasPadding: true,
-            isDarkMode: currentTheme.variant === 'dark',
-        });
-
-        const title = route.snapshot.queryParamMap.get('title')
-        const code = route.snapshot.queryParamMap.get('code')
-        this.initialCode = (title && code) ? { title, code } : placeholderCodeService.getRandomExample('auto');
+    private loadUrlCode(): void {
+        if (!this._codeTitle || !this._codeContent) return;
+        this.initialCode = { title: this._codeTitle, code: this._codeContent };
     }
 
     protected onUpdateUrl(code: string): void {
-        window.history.replaceState({}, '', `/auto?title=test&code=${code}`);
-    }
-
-    protected onThemeChanged(): void {
-        this.themeService.loadTheme({
-            name: this.getMenuValue('theme'),
-            variant: this.getMenuValue('isDarkMode') ? 'dark' : 'light',
-        });
+        console.log(code)
+        window.history.replaceState({}, '', `/auto?title=test&code=${Hash.crypt(code)}`);
     }
 
     private getMenuValue<T = unknown>(key: any): T {
-        return this.menuFormGroup.get(key)?.value;
+        return this._menuForm?.get(key)?.value;
     }
 }

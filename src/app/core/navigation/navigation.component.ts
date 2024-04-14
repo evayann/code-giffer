@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'app-navigation',
+    selector: 'nav[app]',
     standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './navigation.component.html',
