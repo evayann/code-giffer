@@ -7,7 +7,7 @@ import { ThemeService } from './shared/services/theme.service';
 import { Subscription, filter } from 'rxjs';
 import { MenuComponent } from './core/menu/menu.component';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MenuForm } from './core/menu/menu.model';
+import { MenuForm, MenuFormGroup } from './core/menu/menu.model';
 
 @Component({
 	selector: 'app-root',
@@ -18,7 +18,7 @@ import { MenuForm } from './core/menu/menu.model';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent implements OnDestroy {
-	protected menuForm: FormGroup<any>;
+	protected menuForm: MenuFormGroup;
 	protected currentUrl?: string;
 	private routeSubscription: Subscription;
 
@@ -31,7 +31,8 @@ export class AppComponent implements OnDestroy {
 			theme: currentTheme.name,
 			loopIteration: 0,
 			hasBackground: true,
-			hasPadding: true,
+			roundCorner: 'medium',
+			padding: 'medium',
 			isDarkMode: currentTheme.variant === 'dark',
 		});
 

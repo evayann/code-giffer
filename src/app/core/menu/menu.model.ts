@@ -5,7 +5,8 @@ export interface MenuForm {
     theme: string;
     loopIteration: number;
     hasBackground: boolean;
-    hasPadding: boolean;
+    roundCorner: 'no' | 'medium' | 'large';
+    padding: 'no' | 'small' | 'medium' | 'large';
     isDarkMode: boolean;
 }
 

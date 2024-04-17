@@ -48,7 +48,7 @@
 
     padding: 0 2px;
 
-    &::after {
+    &::before {
         content: "";
 
         position: absolute;
@@ -56,9 +56,9 @@
         width: calc(100% / var(--count));
         height: 100%;
 
-        background: hsl(0 0% 100%);
+        background: var(--background);
+
         border-radius: calc(var(--border-radius) - var(--border));
-        mix-blend-mode: difference;
         translate: calc(var(--active, 0) * 100%) 0;
         transition: translate, outline-color;
         transition-duration: var(--speed);
@@ -81,4 +81,6 @@
 
 .disabled {
     cursor: default;
+    position: relative;
+    color: var(--text-background);
 }

@@ -18,7 +18,13 @@
         </select>
     </label>
 
-    <button [cdkMenuTriggerFor]="styleMenu" class="primary"> Style </button>
+    <button [cdkMenuTriggerFor]="styleMenu" class="primary">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+            <path
+                d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+        </svg>
+    </button>
 
     <ng-template #styleMenu>
         <ul class="style-menu" cdkMenu>
@@ -37,10 +43,19 @@
             </li>
             <li class="select-menu">
                 <label class="label">
+                    Round corner
+                    <select formControlName="roundCorner" class="primary">
+                        <option value="no">No</option>
+                        <option value="medium">Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </label>
+            </li>
+            <li class="select-menu">
+                <label class="label">
                     Padding
-                    <!-- <input type="checkbox" formControlName="hasPadding" class="primary" /> -->
-                    <select class="primary">
-                        <option value="none">No</option>
+                    <select formControlName="padding" class="primary">
+                        <option value="no">No</option>
                         <option value="small">Small</option>
                         <option value="medium">Medium</option>
                         <option value="large">Large</option>

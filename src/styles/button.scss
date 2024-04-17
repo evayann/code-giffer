@@ -17,7 +17,7 @@ button,
     --btn-color: var(--text-background);
     --_btn-color: var(--btn-color);
 
-    --btn-bg: transparent;
+    --btn-bg: var(--background);
     --_btn-bg: var(--btn-bg);
 
     --btn-border-width: 1px;
@@ -37,17 +37,14 @@ button,
     }
 
     &.primary {
-        --btn-color: var(--text-primary);
-        --btn-bg: var(--primary);
+        --btn-color: var(--primary);
     }
 
     &.secondary {
-        --btn-color: var(--text-secondary);
-        --btn-bg: var(--secondary);
+        --btn-color: var(--secondary);
     }
 
     &.invisible {
-        --btn-bg: transparent;
         --btn-border-width: 0;
     }
 }

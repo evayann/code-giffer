@@ -15,5 +15,4 @@ export class TitleBarComponent {
     @Input({ required: true }) title!: string;
 
     @Output() titleChange = new EventEmitter<string>();
-    console = console;
 }

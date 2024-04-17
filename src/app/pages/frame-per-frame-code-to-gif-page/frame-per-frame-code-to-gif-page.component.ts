@@ -8,7 +8,7 @@ import { MenuComponent } from '../../core/menu/menu.component';
 import { ThemeService } from '../../shared/services/theme.service';
 import { CodeAnimationVisualisationComponent } from './code-animation-visualisation/code-animation-visualisation.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
-import { MenuForm } from '../../core/menu/menu.model';
+import { MenuForm, MenuFormGroup } from '../../core/menu/menu.model';
 
 
 @Component({
@@ -22,13 +22,14 @@ import { MenuForm } from '../../core/menu/menu.model';
 export class FramePerFrameCodeToGifPageComponent {
     protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
 
-    protected menuFormGroup: FormGroup;
+    protected menuFormGroup: MenuFormGroup;
     protected themeNameList: string[];
 
     protected get theme() {
         return {
             background: this.getMenuValue('hasBackground') ? 'var(--gradient)' : 'transparent',
-            padding: this.getMenuValue('hasPadding') ? 'var(--padding-5)' : '0',
+            padding: this.getMenuValue('padding') ? 'var(--padding-5)' : '0',
+            borderRadius: this.getMenuValue('roundCorner') ? 'var(--border-radius-4)' : '0',
             codeSyntaxThemeName: 'androidstudio',
             titleColor: 'white',
             caretColor: 'white'
@@ -53,8 +54,9 @@ export class FramePerFrameCodeToGifPageComponent {
             theme: currentTheme.name,
             loopIteration: 0,
             hasBackground: true,
-            hasPadding: true,
-            isDarkMode: currentTheme.variant === "dark",
+            roundCorner: 'medium',
+            padding: 'small',
+            isDarkMode: currentTheme.variant === 'dark',
         })
     }
 

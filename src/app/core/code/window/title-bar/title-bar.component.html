@@ -1,9 +1,15 @@
 <div class="window-state">
-    <div class="window-action window-close"> </div>
-    <div class="window-action window-minimize"> </div>
-    <div class="window-action window-maximize"> </div>
+    <div class="window-action window-close"></div>
+    <div class="window-action window-minimize"></div>
+    <div class="window-action window-maximize"></div>
 </div>
 
-<h2 contenteditable="true" class="window-title" [ngStyle]="{color: theme.titleColor}"
-    (input)="titleChange.emit($any($event.target).innerText)">
-    {{title}} </h2>
+<h2
+    #snippetTitle
+    contenteditable="true"
+    class="window-title"
+    [ngStyle]="{ color: theme.titleColor }"
+    (focusout)="titleChange.emit(snippetTitle.innerText)"
+>
+    {{ title }}
+</h2>

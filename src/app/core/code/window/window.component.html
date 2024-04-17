@@ -1,4 +1,4 @@
-<div class="window" [ngStyle]="{ width: '64ch' }">
+<div class="window" [ngStyle]="{ width: '64ch', 'border-radius': _theme.borderRadius }">
     <app-title-bar [theme]="_theme" [title]="title" (titleChange)="titleChange.emit($event)" />
     @if(windowConfiguration.isEditable) {
     <div class="stack-child code-container">
