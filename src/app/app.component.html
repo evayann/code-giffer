@@ -1,14 +1,18 @@
-<header>
-    <nav app [currentUrl]="currentUrl"></nav>
-    <app-menu
-        [themeNameList]="themeService.themeNameList"
-        [menuForm]="menuForm"
-        (themeChange)="onThemeChange()"
-    />
-</header>
+@if (isLoading$ | async) {
+    <app-initial-loading />
+} @else {
+    <header>
+        <nav app [currentUrl]="currentUrl"></nav>
+        <app-menu
+            [themeNameList]="themeService.themeNameList"
+            [menuForm]="menuForm"
+            (themeChange)="onThemeChange()"
+        />
+    </header>
 
-<div class="page">
-    <router-outlet (activate)="onOutletComponentActivate($event)" />
-</div>
+    <div class="page">
+        <router-outlet (activate)="onOutletComponentActivate($event)" />
+    </div>
 
-<footer app></footer>
+    <footer app></footer>
+}

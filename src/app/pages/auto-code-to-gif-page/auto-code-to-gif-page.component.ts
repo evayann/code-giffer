@@ -1,12 +1,12 @@
-import { CommonModule, Location } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Input as RouterInput } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { compressToBase64, decompressFromBase64 } from 'lz-string';
 import { HighlightLoader } from 'ngx-highlightjs';
 import { MenuComponent } from '../../core/menu/menu.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
-import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
-import { compressToBase64, decompressFromBase64 } from 'lz-string';
 import { UrlService } from '../../shared/services/url.service';
+import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -72,7 +72,7 @@ export class AutoCodeToGifPageComponent implements OnInit {
     ngOnInit(): void {
         if (!this.title || !this.code) {
             this.initialCode = this.placeholderCodeService.getRandomExample('auto');
-            return
+            return;
         };
         this.initialCode = { title: this.title, code: this.code };
     }

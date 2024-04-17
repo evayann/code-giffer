@@ -18,6 +18,12 @@
     background-image: url("../assets/noise.svg");
 }
 
+:host:has(app-initial-loading) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .page {
     grid-area: page;
 }
