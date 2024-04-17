@@ -1,11 +1,12 @@
 import { CommonModule, Location } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, Input as RouterInput } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, Input as RouterInput } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { HighlightLoader } from 'ngx-highlightjs';
 import { MenuComponent } from '../../core/menu/menu.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
 import { compressToBase64, decompressFromBase64 } from 'lz-string';
+import { UrlService } from '../../shared/services/url.service';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -15,24 +16,15 @@ import { compressToBase64, decompressFromBase64 } from 'lz-string';
     styleUrl: './auto-code-to-gif-page.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AutoCodeToGifPageComponent {
-    @RouterInput() set title(title: string) {
-        this._codeTitle = title;
-        this.loadUrlCode();
-    }
-
-    @RouterInput() set code(code: string) {
-        this._codeContent = decompressFromBase64(code);
-        this.loadUrlCode();
-    }
+export class AutoCodeToGifPageComponent implements OnInit {
+    @RouterInput({ transform: (base64: string) => decompressFromBase64(base64) }) title!: string;
+    @RouterInput({ transform: (base64: string) => decompressFromBase64(base64) }) code!: string;
 
     @Input({ required: true }) set menuForm(menuForm: FormGroup) {
         this._menuForm = menuForm;
-        menuForm?.valueChanges.subscribe(() => this.changeDetectorRef.detectChanges())
+        menuForm?.valueChanges.subscribe(() => this.changeDetectorRef.detectChanges());
     };
 
-    private _codeTitle?: string;
-    private _codeContent?: string;
     private _menuForm?: FormGroup;
     protected initialCode!: { title: string; code: string };
 
@@ -68,32 +60,29 @@ export class AutoCodeToGifPageComponent {
 
     constructor(
         hljsLoader: HighlightLoader,
-        placeholderCodeService: PlaceholderCodeService,
+        private placeholderCodeService: PlaceholderCodeService,
         private changeDetectorRef: ChangeDetectorRef,
-        private location: Location
+        private urlService: UrlService
     ) {
         hljsLoader.setTheme(
             `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
         );
-        this.initialCode = placeholderCodeService.getRandomExample('auto');
     }
 
-    private loadUrlCode(): void {
-        if (!this._codeTitle || !this._codeContent) return;
-        this.initialCode = { title: this._codeTitle, code: this._codeContent };
+    ngOnInit(): void {
+        if (!this.title || !this.code) {
+            this.initialCode = this.placeholderCodeService.getRandomExample('auto');
+            return
+        };
+        this.initialCode = { title: this.title, code: this.code };
     }
 
-    protected onUpdateUrl(code: string): void {
-        // window.history.replaceState({}, '', `/auto?title=test&code=${Hash.crypt(code)}`);
-        // this.location.replaceState('/auto', )
-        const path = this.location.path();
-        const queriesString = path.substring(path.indexOf('?') + 1);
-        const queries: Record<string, string> = queriesString.split('&').reduce((acc, query) => {
-            const [key, value] = query.split('=');
-            return { ...acc, [key]: value };
-        }, {});
-        this.location.replaceState('auto', `title=${queries['title']}&code=${compressToBase64(code)}`)
-        // console.log(this.location.path(), this.location.replaceState('test'));
+    protected updateCodeInUrl(code: string): void {
+        this.urlService.updateQuery('code', compressToBase64(code));
+    }
+
+    protected updateTitleInUrl(title: string): void {
+        this.urlService.updateQuery('title', compressToBase64(title));
     }
 
     private getMenuValue<T = unknown>(key: any): T {

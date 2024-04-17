@@ -1,10 +1,20 @@
 @if (!isRecording) {
-<app-window [code]="code" [(title)]="title" [theme]="theme" [windowConfiguration]="codeConfiguration"
-    (codeHasChange)="updateCode($event.value)" />
-}
-@else {
-<app-code-recorder [delayInMs]="delayInMs" [title]="title" [theme]="theme" [codeAnimation]="codeAnimation"
-    (onRecordFinish)="finishRecord()" />
+    <app-window
+        [code]="code"
+        [(title)]="title"
+        [theme]="theme"
+        [windowConfiguration]="codeConfiguration"
+        (codeHasChange)="updateCode($event.value)"
+        (titleChange)="updateTitle($event)"
+    />
+} @else {
+    <app-code-recorder
+        [delayInMs]="delayInMs"
+        [title]="title"
+        [theme]="theme"
+        [codeAnimation]="codeAnimation"
+        (onRecordFinish)="finishRecord()"
+    />
 }
 
-<button (click)="startRecord()"> Animate my snippet ! </button>
+<button (click)="startRecord()">Animate my snippet !</button>

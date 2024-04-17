@@ -1,6 +1,10 @@
 <header>
     <nav app [currentUrl]="currentUrl"></nav>
-    <app-menu [themeNameList]="themeService.themeNameList" [menuForm]="menuForm" (themeChange)="onThemeChange()" />
+    <app-menu
+        [themeNameList]="themeService.themeNameList"
+        [menuForm]="menuForm"
+        (themeChange)="onThemeChange()"
+    />
 </header>
 
 <div class="page">

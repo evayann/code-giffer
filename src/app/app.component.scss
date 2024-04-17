@@ -40,8 +40,14 @@ header {
     padding: var(--space-5) 0;
 
     z-index: 1;
+
+    & > * {
+        height: 100%;
+    }
 }
 
-app-menu {
-    grid-column: 2;
+nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

@@ -15,3 +15,7 @@
 *::selection {
     background-color: rgba(var(--primary-rgb), 30%);
 }
+
+* {
+    box-sizing: border-box;
+}

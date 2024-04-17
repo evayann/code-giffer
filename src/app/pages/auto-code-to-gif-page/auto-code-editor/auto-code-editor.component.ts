@@ -16,6 +16,7 @@ import { CodeAnimation } from '../../../core/code/animation/code-animation';
 })
 export class AutoCodeEditorComponent {
     @Output() codeHasChange = new EventEmitter<string>();
+    @Output() titleHasChange = new EventEmitter<string>();
     @Input({ required: true }) delayInMs!: number;
     @Input({ required: true }) theme!: any;
     @Input() set initialCode(value: { title: string, code: string }) {
@@ -39,6 +40,10 @@ export class AutoCodeEditorComponent {
     protected updateCode(code: string): void {
         this.code = code;
         this.codeHasChange.emit(code);
+    }
+
+    protected updateTitle(title: string): void {
+        this.titleHasChange.emit(title);
     }
 
     protected startRecord(): void {

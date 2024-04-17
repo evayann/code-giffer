@@ -1,2 +1,7 @@
-<app-auto-code-editor [delayInMs]="delayInMs" [theme]="theme" [initialCode]="initialCode"
-    (codeHasChange)="onUpdateUrl($event)" />
+<app-auto-code-editor
+    [delayInMs]="delayInMs"
+    [theme]="theme"
+    [initialCode]="initialCode"
+    (codeHasChange)="updateCodeInUrl($event)"
+    (titleHasChange)="updateTitleInUrl($event)"
+/>
