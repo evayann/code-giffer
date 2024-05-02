@@ -1,17 +1,35 @@
-<div class="window" [ngStyle]="{ width: '64ch', 'border-radius': _theme.borderRadius }">
-    <app-title-bar [theme]="_theme" [title]="title" (titleChange)="titleChange.emit($event)" />
-    @if(windowConfiguration.isEditable) {
-    <div class="stack-child code-container">
-        <code class="code" [highlight]="code" (hasChange)="codeTagHasChange()"></code>
+<div
+    class="window"
+    [ngStyle]="{ width: '64ch', 'border-radius': _theme.borderRadius }"
+>
+    <app-title-bar
+        [theme]="_theme"
+        [title]="title"
+        (titleChange)="titleChange.emit($event)"
+    />
+    @if (windowConfiguration.isEditable) {
+        <div class="stack-child code-container">
+            <code
+                class="code"
+                [highlight]="code"
+                (hasChange)="codeTagHasChange()"
+                (highlighted)="onCodeHighlight($event)"
+            ></code>
 
-        <textarea #textArea class="textarea-code textarea-fixed p-1" [rows]="windowConfiguration.numberRow"
-            [cols]="windowConfiguration.numberColumn" (keydown)="onKeyDown(textArea, $event)"
-            (input)="onCodeModify(textArea)" [ngStyle]="{'caret-color': _theme.caretColor}">{{code}}</textarea>
+            <textarea
+                #textArea
+                class="textarea-code textarea-fixed p-1"
+                [rows]="windowConfiguration.numberRow"
+                [cols]="windowConfiguration.numberColumn"
+                (keydown)="onKeyDown(textArea, $event)"
+                (input)="onCodeModify(textArea)"
+                [ngStyle]="{ 'caret-color': _theme.caretColor }"
+                >{{ code }}</textarea
+            >
 
-        <!-- <span class="caret"></span> -->
-    </div>
-    }
-    @else {
-    <code class="code" [highlight]="code"></code>
+            <!-- <span class="caret"></span> -->
+        </div>
+    } @else {
+        <code class="code code-preview" [highlight]="code"></code>
     }
 </div>

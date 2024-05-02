@@ -1,6 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
-import { Highlight } from 'ngx-highlightjs';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    HostBinding,
+    Input,
+    Output,
+} from '@angular/core';
+import { Highlight, HighlightAutoResult } from 'ngx-highlightjs';
 import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
 import { CodeTheme } from '../code-theme';
 import { TitleBarComponent } from './title-bar/title-bar.component';
@@ -27,7 +34,10 @@ export class WindowComponent {
 
     @Output() domHasChange = new EventEmitter<void>();
     @Output() titleChange = new EventEmitter<string>();
-    @Output() codeHasChange = new EventEmitter<{ value: string, position: number }>();
+    @Output() codeHasChange = new EventEmitter<{
+        value: string;
+        position: number;
+    }>();
 
     @HostBinding('style.padding') padding!: string;
     @HostBinding('style.background') background!: string;
@@ -39,59 +49,69 @@ export class WindowComponent {
         this.domHasChange.next();
     }
 
-    protected onKeyDown(textArea: HTMLTextAreaElement, keyboardEvent: KeyboardEvent): void {
+    protected onKeyDown(
+        textArea: HTMLTextAreaElement,
+        keyboardEvent: KeyboardEvent,
+    ): void {
         const keyDownEvent = new KeyBoardEvent(keyboardEvent);
 
-        if (this.lastCharacterInsert && keyDownEvent.is(this.lastCharacterInsert)) {
+        if (
+            this.lastCharacterInsert &&
+            keyDownEvent.is(this.lastCharacterInsert)
+        ) {
             this.moveSelection(textArea, 1);
             this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
-        }
-
-        else if (keyDownEvent.isTabulation) {
+        } else if (keyDownEvent.isTabulation) {
             if (keyDownEvent.shiftPress) {
                 this.onRemoveCharacter(textArea);
-            }
-            else {
+            } else {
                 this.insertCharacterInTextArea(textArea, '\t');
             }
             // this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
-        }
-        else if (keyDownEvent.isSimpleQuote) {
-            this.insertCharacterInTextArea(textArea, '\'');
-        }
-        else if (keyDownEvent.isDoubleQuote) {
-            this.insertCharacterInTextArea(textArea, '\"');
-        }
-        else if (keyDownEvent.isOpenParenthesis) {
+        } else if (keyDownEvent.isSimpleQuote) {
+            this.insertCharacterInTextArea(textArea, "'");
+        } else if (keyDownEvent.isDoubleQuote) {
+            this.insertCharacterInTextArea(textArea, '"');
+        } else if (keyDownEvent.isOpenParenthesis) {
             this.insertCharacterInTextArea(textArea, ')');
-        }
-        else if (keyDownEvent.isOpenCurlyBracket) {
+        } else if (keyDownEvent.isOpenCurlyBracket) {
             this.insertCharacterInTextArea(textArea, '}');
-        }
-        else if (keyDownEvent.isOpenBracket) {
+        } else if (keyDownEvent.isOpenBracket) {
             this.insertCharacterInTextArea(textArea, '}');
-        }
-
-        else if (keyDownEvent.isBackspace) {
+        } else if (keyDownEvent.isBackspace) {
             this.onRemoveCharacter(textArea);
             this.lastCharacterInsert = undefined;
-        }
-
-        else {
+        } else {
             this.lastCharacterInsert = undefined;
         }
     }
 
     protected onCodeModify(textArea: HTMLTextAreaElement): void {
-        this.codeHasChange.emit({ value: textArea.value, position: textArea.selectionEnd });
+        this.codeHasChange.emit({
+            value: textArea.value,
+            position: textArea.selectionEnd,
+        });
     }
 
-    private insertCharacterInTextArea(textArea: HTMLTextAreaElement, character: string): void {
-        const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } = textArea;
-        const textBeforeTabulation = textAreaCurrentValue.substring(0, textSelectionEnd);
-        const textAfterTabulation = textAreaCurrentValue.substring(textSelectionEnd);
+    protected onCodeHighlight(highlightAutoResult: HighlightAutoResult) {
+        if (!highlightAutoResult.language) return;
+        console.log(highlightAutoResult.language);
+    }
+
+    private insertCharacterInTextArea(
+        textArea: HTMLTextAreaElement,
+        character: string,
+    ): void {
+        const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } =
+            textArea;
+        const textBeforeTabulation = textAreaCurrentValue.substring(
+            0,
+            textSelectionEnd,
+        );
+        const textAfterTabulation =
+            textAreaCurrentValue.substring(textSelectionEnd);
         textArea.value = `${textBeforeTabulation}${character}${textAfterTabulation}`;
 
         textArea.selectionStart = textSelectionEnd;
@@ -107,8 +127,12 @@ export class WindowComponent {
             this.removeCharacterInTextArea(textArea, textArea.selectionEnd);
     }
 
-    private removeCharacterInTextArea(textArea: HTMLTextAreaElement, index: number): void {
-        const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } = textArea;
+    private removeCharacterInTextArea(
+        textArea: HTMLTextAreaElement,
+        index: number,
+    ): void {
+        const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } =
+            textArea;
         const textBeforeTabulation = textAreaCurrentValue.substring(0, index);
         const textAfterTabulation = textAreaCurrentValue.substring(index + 1);
         textArea.value = `${textBeforeTabulation}${textAfterTabulation}`;
@@ -117,12 +141,15 @@ export class WindowComponent {
         textArea.selectionEnd = textSelectionEnd;
     }
 
-    private moveSelection(textArea: HTMLTextAreaElement, positionOffset: number): void {
+    private moveSelection(
+        textArea: HTMLTextAreaElement,
+        positionOffset: number,
+    ): void {
         textArea.selectionStart = textArea.selectionStart + positionOffset;
         textArea.selectionEnd = textArea.selectionEnd + positionOffset;
     }
 
     private characterInCodeInsertionList(character: string): boolean {
-        return ['\'', '"', '(', '[', '{'].includes(character);
+        return ["'", '"', '(', '[', '{'].includes(character);
     }
 }

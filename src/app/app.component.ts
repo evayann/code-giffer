@@ -5,13 +5,12 @@ import {
     Component,
     OnDestroy,
 } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { Observable, Subscription, filter } from 'rxjs';
 import { FooterComponent } from './core/footer/footer.component';
 import { InitialLoadingComponent } from './core/initial-loading/initial-loading.component';
+import { MenuFormGroup } from './core/menu/menu-form-group';
 import { MenuComponent } from './core/menu/menu.component';
-import { MenuForm, MenuFormGroup } from './core/menu/menu.model';
 import { NavigationComponent } from './core/navigation/navigation.component';
 import { LoadingStateService } from './shared/services/loading-state.service';
 import { ThemeService } from './shared/services/theme.service';
@@ -41,22 +40,13 @@ export class AppComponent implements OnDestroy {
         protected themeService: ThemeService,
         loadingStateService: LoadingStateService,
         router: Router,
-        formBuilder: FormBuilder,
         changeDectectorRef: ChangeDetectorRef,
     ) {
         this.isLoading$ = loadingStateService.isLoading$;
         themeService.loadDefaultTheme();
         const currentTheme = themeService.currentTheme;
 
-        this.menuForm = formBuilder.group<MenuForm>({
-            intervalBetweenFrameInMs: 100,
-            theme: currentTheme.name,
-            loopIteration: 0,
-            hasBackground: true,
-            roundCorner: 'medium',
-            padding: 'medium',
-            isDarkMode: currentTheme.variant === 'dark',
-        });
+        this.menuForm = new MenuFormGroup(currentTheme);
 
         this.routeSubscription = router.events
             .pipe(
@@ -66,7 +56,7 @@ export class AppComponent implements OnDestroy {
                 ),
             )
             .subscribe((event) => {
-                this.currentUrl = event.url;
+                this.currentUrl = event.urlAfterRedirects;
                 changeDectectorRef.detectChanges();
             });
     }
@@ -81,12 +71,8 @@ export class AppComponent implements OnDestroy {
 
     protected onThemeChange(): void {
         this.themeService.loadTheme({
-            name: this.getMenuValue('theme'),
-            variant: this.getMenuValue('isDarkMode') ? 'dark' : 'light',
+            name: this.menuForm.themeName,
+            variant: this.menuForm.variant,
         });
-    }
-
-    private getMenuValue<T = unknown>(key: any): T {
-        return this.menuForm.get(key)?.value;
     }
 }

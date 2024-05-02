@@ -1,84 +1,109 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    Input,
+    Input as RouterInput,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 
 import { HighlightLoader } from 'ngx-highlightjs';
+import { Subscription } from 'rxjs';
 import { CodeFrame } from '../../core/code/animation/code-animation';
-import { MenuComponent } from '../../core/menu/menu.component';
-import { ThemeService } from '../../shared/services/theme.service';
+import { MenuFormGroup } from '../../core/menu/menu-form-group';
 import { CodeAnimationVisualisationComponent } from './code-animation-visualisation/code-animation-visualisation.component';
 import { CodeEditorComponent } from './code-editor/code-editor.component';
-import { MenuForm, MenuFormGroup } from '../../core/menu/menu.model';
-
+import { UrlService } from '../../shared/services/url.service';
+import { compressToBase64, decompressFromBase64 } from 'lz-string';
 
 @Component({
     selector: 'app-frame-per-frame-code-to-gif-page',
     standalone: true,
-    imports: [CommonModule, ReactiveFormsModule, CodeEditorComponent, CodeAnimationVisualisationComponent, MenuComponent],
+    imports: [
+        CommonModule,
+        CodeEditorComponent,
+        CodeAnimationVisualisationComponent,
+    ],
     templateUrl: './frame-per-frame-code-to-gif-page.component.html',
     styleUrls: ['./frame-per-frame-code-to-gif-page.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FramePerFrameCodeToGifPageComponent {
-    protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = { frameList: [], maxRow: 0 };
+export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
+    @RouterInput({
+        transform: (base64: string) => decompressFromBase64(base64),
+    })
+    title!: string;
+    @RouterInput({
+        transform: (base64: string) => decompressFromBase64(base64),
+    })
+    code!: string;
 
-    protected menuFormGroup: MenuFormGroup;
-    protected themeNameList: string[];
-
-    protected get theme() {
-        return {
-            background: this.getMenuValue('hasBackground') ? 'var(--gradient)' : 'transparent',
-            padding: this.getMenuValue('padding') ? 'var(--padding-5)' : '0',
-            borderRadius: this.getMenuValue('roundCorner') ? 'var(--border-radius-4)' : '0',
-            codeSyntaxThemeName: 'androidstudio',
-            titleColor: 'white',
-            caretColor: 'white'
-        };
+    @Input({ required: true }) set menuForm(menuForm: MenuFormGroup) {
+        this.menuFormGroup = menuForm;
+        this.subscriptions.add(
+            menuForm?.valueChanges.subscribe(() =>
+                this.changeDetectorRef.detectChanges(),
+            ),
+        );
     }
 
-    protected get delayInMs(): number {
-        return this.getMenuValue('intervalBetweenFrameInMs');
-    }
+    protected animation: { frameList: readonly CodeFrame[]; maxRow: number } = {
+        frameList: [],
+        maxRow: 0,
+    };
+
+    protected menuFormGroup!: MenuFormGroup;
+    protected initialCode!: { title: string; code: string };
+    private subscriptions = new Subscription();
 
     protected get isExportable(): boolean {
         return this.animation.frameList.length !== 0;
     }
 
-    constructor(hljsLoader: HighlightLoader, formBuilder: FormBuilder, private themeService: ThemeService) {
-        hljsLoader.setTheme(`//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`);
-
-        this.themeNameList = themeService.themeNameList;
-        const currentTheme = themeService.currentTheme;
-        this.menuFormGroup = formBuilder.group<MenuForm>({
-            intervalBetweenFrameInMs: 100,
-            theme: currentTheme.name,
-            loopIteration: 0,
-            hasBackground: true,
-            roundCorner: 'medium',
-            padding: 'small',
-            isDarkMode: currentTheme.variant === 'dark',
-        })
+    constructor(
+        hljsLoader: HighlightLoader,
+        private changeDetectorRef: ChangeDetectorRef,
+        private urlService: UrlService,
+    ) {
+        hljsLoader.setTheme(
+            `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
+        );
     }
 
-    protected loadAnimation(animation: { frameList: readonly CodeFrame[]; maxRow: number }): void {
+    ngOnInit(): void {
+        if (!this.title || !this.code) {
+            this.initialCode = { code: '', title: 'Title' };
+            //     this.placeholderCodeService.getRandomExample('auto');
+            return;
+        }
+        this.initialCode = { title: this.title, code: this.code };
+    }
+
+    ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+    }
+
+    protected loadAnimation(animation: {
+        frameList: readonly CodeFrame[];
+        maxRow: number;
+    }): void {
         this.animation = {
             frameList: [...animation.frameList],
-            maxRow: animation.maxRow
+            maxRow: animation.maxRow,
         };
     }
 
     protected onDeleteAnimationKey(indexToDelete: number): void {
-        this.animation.frameList
+        this.animation.frameList;
     }
 
-    protected onThemeChanged(): void {
-        this.themeService.loadTheme({
-            name: this.getMenuValue('theme'),
-            variant: this.getMenuValue('isDarkMode') ? 'dark' : 'light'
-        })
+    protected updateCodeInUrl(code: string): void {
+        this.urlService.updateQuery('code', compressToBase64(code));
     }
 
-    private getMenuValue<T = unknown>(key: any): T {
-        return this.menuFormGroup.get(key)?.value;
+    protected updateTitleInUrl(title: string): void {
+        this.urlService.updateQuery('title', compressToBase64(title));
     }
 }

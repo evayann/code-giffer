@@ -1,112 +1,144 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { Dom2Gif } from '../../../core/model/dom-2-gif';
-import { CodeAnimation, CodeFrame } from '../../../core/code/animation/code-animation';
+import {
+    CodeAnimation,
+    CodeFrame,
+} from '../../../core/code/animation/code-animation';
 import { CodeTheme } from '../../../core/code/code-theme';
 import { WindowConfiguration } from '../../../core/code/window/window-configuration';
 import { WindowComponent } from '../../../core/code/window/window.component';
 
 @Component({
-	selector: 'app-code-editor',
-	standalone: true,
-	imports: [CommonModule, WindowComponent],
-	templateUrl: './code-editor.component.html',
-	styleUrl: './code-editor.component.scss',
-	changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-code-editor',
+    standalone: true,
+    imports: [CommonModule, WindowComponent],
+    templateUrl: './code-editor.component.html',
+    styleUrl: './code-editor.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeEditorComponent {
-	@ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
+    @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
 
-	@Input() set initialCode(code: string) {
-		if (this.code !== '') return;
-		this.code = code;
-	}
-	@Input({ required: true }) theme!: CodeTheme;
-	@Input() delayInMs = 100;
-	@Output() animation = new EventEmitter<{ frameList: readonly CodeFrame[]; maxRow: number }>();
+    @Input({ required: true }) set initialCode(value: {
+        title: string;
+        code: string;
+    }) {
+        this.title = value.title;
+        this.code = value.code;
+    }
+    @Input({ required: true }) theme!: CodeTheme;
+    @Input() delayInMs = 100;
 
-	protected code = '';
-	protected codeWidth = '64ch';
-	protected codeConfiguration: WindowConfiguration = {
-		numberRow: 1,
-		numberColumn: 64,
-		isEditable: true,
-		hideTextSelection: false
-	};
-	protected codeAnimation = new CodeAnimation();
+    @Output() codeHasChange = new EventEmitter<string>();
+    @Output() titleHasChange = new EventEmitter<string>();
+    @Output() animation = new EventEmitter<{
+        frameList: readonly CodeFrame[];
+        maxRow: number;
+    }>();
 
-	private codeChangeFromAnimation$ = new Subject<void>();
+    protected title!: string;
+    protected code!: string;
+    protected codeWidth = '64ch';
+    protected codeConfiguration: WindowConfiguration = {
+        numberRow: 1,
+        numberColumn: 64,
+        isEditable: true,
+        hideTextSelection: false,
+    };
+    protected codeAnimation = new CodeAnimation();
 
-	constructor(private changeDetectorReference: ChangeDetectorRef) { }
+    private codeChangeFromAnimation$ = new Subject<void>();
 
-	deleteFrame(index: number): void {
-		this.codeAnimation.removeFrame(index);
-		this.emitCodeAnimationInformation();
-	}
+    constructor(private changeDetectorReference: ChangeDetectorRef) {}
 
-	protected codeHasChange(codeEvent: { value: string, position: number }): void {
-		if (this.codeAnimation.hasStart) return;
+    deleteFrame(index: number): void {
+        this.codeAnimation.removeFrame(index);
+        this.emitCodeAnimationInformation();
+    }
 
-		this.code = codeEvent.value;
-		this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(this.code);
-	}
+    protected updateCode(code: string): void {
+        if (this.codeAnimation.hasStart) return;
 
-	protected domHasChange(): void {
-		if (!this.codeAnimation.hasStart) return;
+        this.code = code;
+        this.codeHasChange.emit(code);
+        this.codeConfiguration.numberRow = CodeAnimation.nbRowForCode(
+            this.code,
+        );
+    }
 
-		this.codeChangeFromAnimation$.next();
-	}
+    protected domHasChange(): void {
+        if (!this.codeAnimation.hasStart) return;
 
-	protected addFrameToAnimation(): void {
-		this.codeAnimation.addFrame({
-			code: this.code,
-			caretPosition: 0
-		});
-		this.emitCodeAnimationInformation();
-	}
+        this.codeChangeFromAnimation$.next();
+    }
 
-	protected saveCodeAnimation(): void {
-		if (this.codeAnimation.hasNoFrame) return;
+    protected addFrameToAnimation(): void {
+        this.codeAnimation.addFrame({
+            code: this.code,
+            caretPosition: 0,
+        });
+        this.emitCodeAnimationInformation();
+    }
 
-		Dom2Gif.generate({
-			animation: this.codeAnimation,
-			width: this.codeContainer.nativeElement.clientWidth,
-			height: this.codeContainer.nativeElement.clientHeight,
-			dom: this.codeContainer.nativeElement,
-			scaleFactor: 2,
-			frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+    protected saveCodeAnimation(): void {
+        if (this.codeAnimation.hasNoFrame) return;
 
-			frameOptions: {
-				delayInMs: this.delayInMs
-			},
+        Dom2Gif.generate({
+            animation: this.codeAnimation,
+            width: this.codeContainer.nativeElement.clientWidth,
+            height: this.codeContainer.nativeElement.clientHeight,
+            dom: this.codeContainer.nativeElement,
+            scaleFactor: 2,
+            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
 
-			onStart: () => {
-				this.codeConfiguration.hideTextSelection = true;
-				this.codeConfiguration.numberRow = this.codeAnimation.nbMaxRow;
-				this.changeDetectorReference.detectChanges()
-			},
-			loadFrame: (frame: CodeFrame) => {
-				if (this.isAlreadyLoad(frame)) {
-					this.codeChangeFromAnimation$.next();
-					return;
-				}
+            frameOptions: {
+                delayInMs: this.delayInMs,
+            },
 
-				this.code = frame.code;
-				this.changeDetectorReference.detectChanges();
-			},
-			onFinish: () => {
-				this.codeConfiguration.hideTextSelection = false;
-				this.changeDetectorReference.detectChanges();
-			}
-		});
-	}
+            onStart: () => {
+                this.codeConfiguration.hideTextSelection = true;
+                this.codeConfiguration.numberRow = this.codeAnimation.nbMaxRow;
+                this.changeDetectorReference.detectChanges();
+            },
+            loadFrame: (frame: CodeFrame) => {
+                if (this.isAlreadyLoad(frame)) {
+                    this.codeChangeFromAnimation$.next();
+                    return;
+                }
 
-	private isAlreadyLoad(frame: CodeFrame): boolean {
-		return this.code === frame.code;
-	}
+                this.code = frame.code;
+                this.changeDetectorReference.detectChanges();
+            },
+            onFinish: () => {
+                this.codeConfiguration.hideTextSelection = false;
+                this.changeDetectorReference.detectChanges();
+            },
+        });
+    }
 
-	private emitCodeAnimationInformation(): void {
-		this.animation.emit({ frameList: this.codeAnimation.frameList, maxRow: this.codeAnimation.nbMaxRow });
-	}
+    protected updateTitle(title: string): void {
+        this.titleHasChange.emit(title);
+    }
+
+    private isAlreadyLoad(frame: CodeFrame): boolean {
+        return this.code === frame.code;
+    }
+
+    private emitCodeAnimationInformation(): void {
+        this.animation.emit({
+            frameList: this.codeAnimation.frameList,
+            maxRow: this.codeAnimation.nbMaxRow,
+        });
+    }
 }

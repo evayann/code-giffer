@@ -1,22 +1,28 @@
-@for(frame of animation.frameList; track frame) {
-<div class="frame">
-    <div class="frame-actions">
-        <button aria-label="Move frame" class="secondary icon"> ... </button>
-        <button aria-label="Delete frame" class="secondary icon" (click)="onDeleteFrame($index)">
-            X
-        </button>
+@for (frame of animation.frameList; track frame) {
+    <div class="frame">
+        <div class="frame-actions">
+            <button
+                aria-label="Delete frame"
+                class="secondary icon"
+                (click)="onDeleteFrame($index)"
+            >
+                X
+            </button>
+        </div>
+        <div class="frame-card">
+            <p>Frame {{ $index }}</p>
+            <app-window
+                [theme]="theme"
+                [code]="frame.code"
+                [windowConfiguration]="{
+                    numberRow: 1,
+                    numberColumn: 64,
+                    isEditable: false,
+                    hideTextSelection: false
+                }"
+            />
+        </div>
     </div>
-    <div class="frame-card">
-        <p> Frame {{$index}} </p>
-        <app-window [theme]="theme" [code]="frame.code" [windowConfiguration]="{
-            numberRow: 1,
-            numberColumn: 64,
-            isEditable: true,
-            hideTextSelection: false
-        }" />
-    </div>
-</div>
-}
-@empty {
-<p class="xl"> No frame yet ! Try something :) </p>
+} @empty {
+    <p class="xl">No frame yet ! Try something :)</p>
 }

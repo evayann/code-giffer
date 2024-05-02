@@ -47,3 +47,13 @@
         resize: none;
     }
 }
+
+:has(code[ng-reflect-line-numbers="true"]) textarea {
+    padding-left: calc(
+        var(--code-size) + var(--code-space) + var(--border-size)
+    );
+}
+
+.code-preview {
+    width: 100%;
+}

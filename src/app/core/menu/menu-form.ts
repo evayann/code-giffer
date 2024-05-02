@@ -1,15 +1,11 @@
-import { FormGroup, ɵElement } from "@angular/forms";
+import { ThemeName } from '../../shared/services/theme.service';
 
-export interface MenuForm {
+export type MenuForm = {
     intervalBetweenFrameInMs: number;
-    theme: string;
+    theme: ThemeName;
     loopIteration: number;
     hasBackground: boolean;
     roundCorner: 'no' | 'medium' | 'large';
     padding: 'no' | 'small' | 'medium' | 'large';
     isDarkMode: boolean;
-}
-
-export type MenuFormGroup = FormGroup<{
-    [K in keyof MenuForm]: ɵElement<MenuForm[K], null>;
-}>
+};

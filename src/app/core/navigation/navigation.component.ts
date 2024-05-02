@@ -19,6 +19,9 @@ export class NavigationComponent {
     }
 
     protected currentRouteIndexInList(): number {
-        return this.routeList.findIndex((route) => (this.currentUrl ?? '').includes(route)) ?? 1;
+        const currentRouteIndex = this.routeList.findIndex((route) =>
+            (this.currentUrl ?? '').includes(route),
+        );
+        return currentRouteIndex !== -1 ? currentRouteIndex : 0;
     }
 }

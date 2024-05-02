@@ -1,6 +1,6 @@
 <app-auto-code-editor
-    [delayInMs]="delayInMs"
-    [theme]="theme"
+    [delayInMs]="_menuForm.delayInMs"
+    [theme]="_menuForm.theme"
     [initialCode]="initialCode"
     (codeHasChange)="updateCodeInUrl($event)"
     (titleHasChange)="updateTitleInUrl($event)"

@@ -3,22 +3,17 @@ import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
 
-import {
-  HighlightOptions,
-  HIGHLIGHT_OPTIONS,
-} from 'ngx-highlightjs';
+import { HighlightOptions, HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideRouter(
-      routes,
-      withComponentInputBinding()
-    ),
-    {
-      provide: HIGHLIGHT_OPTIONS,
-      useValue: <HighlightOptions>{
-        fullLibraryLoader: () => import('highlight.js')
-      },
-    },
-  ],
+    providers: [
+        provideRouter(routes, withComponentInputBinding()),
+        {
+            provide: HIGHLIGHT_OPTIONS,
+            useValue: <HighlightOptions>{
+                fullLibraryLoader: () => import('highlight.js'),
+                lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+            },
+        },
+    ],
 };

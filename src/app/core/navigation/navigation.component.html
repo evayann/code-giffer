@@ -1,10 +1,20 @@
-<p class="label"> Animation mode </p>
-<ul class="route-list" [ngStyle]="{'--count': routeList.length, '--active': currentRouteIndexInList()}">
-    @for(route of routeList; track route) {
-    <li>
-        <a class="route" [routerLink]="[route]" [ngClass]="{disabled: isCurrentUrl(route)}">
-            {{route}}
-        </a>
-    </li>
+<p class="label">Animation mode</p>
+<ul
+    class="route-list"
+    [ngStyle]="{
+        '--count': routeList.length,
+        '--active': currentRouteIndexInList()
+    }"
+>
+    @for (route of routeList; track route) {
+        <li>
+            <a
+                class="route"
+                [routerLink]="[route]"
+                [ngClass]="{ disabled: isCurrentUrl(route) }"
+            >
+                {{ route }}
+            </a>
+        </li>
     }
 </ul>

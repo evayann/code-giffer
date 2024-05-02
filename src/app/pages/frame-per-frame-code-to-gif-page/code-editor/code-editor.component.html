@@ -1,14 +1,29 @@
 <div class="stack-child code-editor">
-    <app-window [code]="code" [theme]="theme" [windowConfiguration]="codeConfiguration"
-        (codeHasChange)="codeHasChange($event)" (domHasChange)="domHasChange()" />
+    <app-window
+        [code]="code"
+        [title]="title"
+        [theme]="theme"
+        [windowConfiguration]="codeConfiguration"
+        (domHasChange)="domHasChange()"
+        (codeHasChange)="updateCode($event.value)"
+        (titleChange)="updateTitle($event)"
+    />
     @if (codeAnimation.hasStart) {
-    <p class="spinner" [ngStyle]="{ width: codeWidth }"> Render Gif </p>
+        <p class="spinner" [ngStyle]="{ width: codeWidth }">Render Gif</p>
     }
 </div>
 
 @if (!codeAnimation.hasStart) {
-<div class="animation-controller">
-    <button class="secondary" (click)="addFrameToAnimation()"> Add frame </button>
-    <button class="primary" [disabled]="codeAnimation.hasNoFrame" (click)="saveCodeAnimation()"> Save </button>
-</div>
+    <div class="animation-controller">
+        <button class="secondary" (click)="addFrameToAnimation()">
+            Add frame
+        </button>
+        <button
+            class="primary"
+            [disabled]="codeAnimation.hasNoFrame"
+            (click)="saveCodeAnimation()"
+        >
+            Save
+        </button>
+    </div>
 }

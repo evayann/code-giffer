@@ -1,4 +1,4 @@
-*:not(code *) {
+*:not(code *, dialog) {
     font-family: "Chillax-Regular";
     color: var(--text-background);
 
