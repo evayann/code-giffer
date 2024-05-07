@@ -1,7 +1,11 @@
 <ng-container [formGroup]="menuForm">
     <label class="label">
         <span> Interval between frame </span>
-        <input type="number" formControlName="intervalBetweenFrameInMs" class="primary" />
+        <input
+            type="number"
+            formControlName="intervalBetweenFrameInMs"
+            class="primary"
+        />
     </label>
 
     <label class="label">
@@ -11,18 +15,29 @@
 
     <label class="label">
         <span> Theme </span>
-        <select formControlName="theme" class="primary" (ngModelChange)="onThemeChange()">
-            @for(themeName of themeNameList; track themeName) {
-            <option [value]="themeName"> {{ themeName }} </option>
+        <select
+            formControlName="theme"
+            class="primary"
+            (ngModelChange)="onThemeChange()"
+        >
+            @for (themeName of themeNameList; track themeName) {
+                <option [value]="themeName">{{ themeName }}</option>
             }
         </select>
     </label>
 
     <button [cdkMenuTriggerFor]="styleMenu" class="primary">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-            class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-three-dots-vertical"
+            viewBox="0 0 16 16"
+        >
             <path
-                d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
+                d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"
+            />
         </svg>
     </button>
 
@@ -31,14 +46,22 @@
             <li>
                 <label class="label">
                     Background
-                    <input type="checkbox" formControlName="hasBackground" class="primary" />
+                    <input
+                        type="checkbox"
+                        formControlName="hasBackground"
+                        class="primary"
+                    />
                 </label>
             </li>
             <li>
                 <label class="label">
                     Dark mode
-                    <input type="checkbox" formControlName="isDarkMode" class="primary"
-                        (ngModelChange)="onThemeChange()" />
+                    <input
+                        type="checkbox"
+                        formControlName="isDarkMode"
+                        class="primary"
+                        (ngModelChange)="onThemeChange()"
+                    />
                 </label>
             </li>
             <li class="select-menu">

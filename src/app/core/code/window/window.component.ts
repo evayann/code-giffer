@@ -42,6 +42,12 @@ export class WindowComponent {
     @HostBinding('style.padding') padding!: string;
     @HostBinding('style.background') background!: string;
 
+    protected get codeRows(): number {
+        return (
+            this.windowConfiguration.numberRow ?? this.code.split('\n').length
+        );
+    }
+
     protected _theme!: CodeTheme;
     private lastCharacterInsert?: string = undefined;
 
@@ -64,9 +70,9 @@ export class WindowComponent {
             keyDownEvent.preventDefault();
         } else if (keyDownEvent.isTabulation) {
             if (keyDownEvent.shiftPress) {
-                this.onRemoveCharacter(textArea);
+                this.onRemoveTabulationOnCurrentLine(textArea);
             } else {
-                this.insertCharacterInTextArea(textArea, '\t');
+                this.insertCharacterInTextArea(textArea, '\t', 1);
             }
             // this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
@@ -103,20 +109,23 @@ export class WindowComponent {
     private insertCharacterInTextArea(
         textArea: HTMLTextAreaElement,
         character: string,
+        offset = 0,
     ): void {
         const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } =
             textArea;
-        const textBeforeTabulation = textAreaCurrentValue.substring(
+        const textBeforeCharacterToInsert = textAreaCurrentValue.substring(
             0,
             textSelectionEnd,
         );
-        const textAfterTabulation =
+        const textAfterCharacterToInsert =
             textAreaCurrentValue.substring(textSelectionEnd);
-        textArea.value = `${textBeforeTabulation}${character}${textAfterTabulation}`;
+        textArea.value = `${textBeforeCharacterToInsert}${character}${textAfterCharacterToInsert}`;
 
-        textArea.selectionStart = textSelectionEnd;
-        textArea.selectionEnd = textSelectionEnd;
+        textArea.selectionStart = textSelectionEnd + offset;
+        textArea.selectionEnd = textSelectionEnd + offset;
         this.lastCharacterInsert = character;
+
+        this.code = textArea.value;
     }
 
     private onRemoveCharacter(textArea: HTMLTextAreaElement): void {
@@ -125,6 +134,8 @@ export class WindowComponent {
         const textAreaCurrentValue = textArea.value[textArea.selectionEnd - 1];
         if (this.characterInCodeInsertionList(textAreaCurrentValue))
             this.removeCharacterInTextArea(textArea, textArea.selectionEnd);
+
+        this.code = textArea.value;
     }
 
     private removeCharacterInTextArea(
@@ -139,6 +150,33 @@ export class WindowComponent {
 
         textArea.selectionStart = textSelectionEnd;
         textArea.selectionEnd = textSelectionEnd;
+    }
+
+    private onRemoveTabulationOnCurrentLine(
+        textArea: HTMLTextAreaElement,
+    ): void {
+        const { value: textAreaCurrentValue, selectionEnd: textSelectionEnd } =
+            textArea;
+        const textAreaRowList = textAreaCurrentValue.split('\n');
+        const cursorLine = textAreaCurrentValue
+            .substring(0, textSelectionEnd)
+            .split('\n').length;
+        const hasTabulationOnLine =
+            textAreaRowList[cursorLine - 1].includes('\t');
+
+        if (!hasTabulationOnLine) return;
+
+        textAreaRowList[cursorLine - 1] = textAreaRowList[
+            cursorLine - 1
+        ].replace('\t', '');
+
+        textArea.value = textAreaRowList.join('\n');
+        const movementOffset =
+            textArea.value[textSelectionEnd - 1] === '\n' ? 0 : 1;
+        console.log(movementOffset);
+        textArea.selectionStart = textSelectionEnd - movementOffset;
+        textArea.selectionEnd = textSelectionEnd - movementOffset;
+        this.code = textArea.value;
     }
 
     private moveSelection(

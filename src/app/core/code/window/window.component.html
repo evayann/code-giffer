@@ -18,16 +18,14 @@
 
             <textarea
                 #textArea
-                class="textarea-code textarea-fixed p-1"
-                [rows]="windowConfiguration.numberRow"
+                class="textarea-code textarea-fixed"
+                [rows]="codeRows"
                 [cols]="windowConfiguration.numberColumn"
                 (keydown)="onKeyDown(textArea, $event)"
                 (input)="onCodeModify(textArea)"
                 [ngStyle]="{ 'caret-color': _theme.caretColor }"
                 >{{ code }}</textarea
             >
-
-            <!-- <span class="caret"></span> -->
         </div>
     } @else {
         <code class="code code-preview" [highlight]="code"></code>

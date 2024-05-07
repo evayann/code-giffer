@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    EventEmitter,
+    Input,
+    Output,
+} from '@angular/core';
 import { WindowComponent } from '../../../core/code/window/window.component';
 import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeAnimation } from '../../../core/code/animation/code-animation';
@@ -7,9 +13,7 @@ import { CodeAnimation } from '../../../core/code/animation/code-animation';
 @Component({
     selector: 'app-auto-code-editor',
     standalone: true,
-    imports: [
-        CommonModule, WindowComponent, CodeRecorderComponent
-    ],
+    imports: [CommonModule, WindowComponent, CodeRecorderComponent],
     templateUrl: './auto-code-editor.component.html',
     styleUrl: './auto-code-editor.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,7 +23,7 @@ export class AutoCodeEditorComponent {
     @Output() titleHasChange = new EventEmitter<string>();
     @Input({ required: true }) delayInMs!: number;
     @Input({ required: true }) theme!: any;
-    @Input() set initialCode(value: { title: string, code: string }) {
+    @Input() set initialCode(value: { title: string; code: string }) {
         this.title = value.title;
         this.code = value.code;
     }
@@ -31,10 +35,9 @@ export class AutoCodeEditorComponent {
     protected isRecording = false;
 
     codeConfiguration = {
-        numberRow: 1,
         numberColumn: 64,
         isEditable: true,
-        hideTextSelection: false
+        hideTextSelection: false,
     };
 
     protected updateCode(code: string): void {

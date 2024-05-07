@@ -1,6 +1,6 @@
 export type WindowConfiguration = {
-    isEditable: boolean,
-    numberRow: number;
+    isEditable: boolean;
+    numberRow?: number;
     numberColumn: number;
     hideTextSelection: boolean;
 };
