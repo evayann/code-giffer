@@ -10,12 +10,13 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { DialogComponent } from './dialog.component';
-import { InitialLoadingComponent } from '../../../core/initial-loading/initial-loading.component';
 
 @Injectable({
     providedIn: 'root',
 })
 export class DialogService {
+    private currentDialog?: ComponentRef<DialogComponent>;
+
     constructor(
         @Inject(DOCUMENT) private document: Document,
         private applicationRef: ApplicationRef,
@@ -23,11 +24,7 @@ export class DialogService {
         private environmentInjector: EnvironmentInjector,
     ) {}
 
-    test(): void {
-        this.openModal(InitialLoadingComponent);
-    }
-
-    openModal<T>(componentType: Type<T>): void {
+    openDialog<T>(componentType: Type<T>): ComponentRef<T> {
         const environmentInjector =
             this.injector.get(EnvironmentInjector, null) ??
             this.environmentInjector;
@@ -39,7 +36,15 @@ export class DialogService {
             environmentInjector,
             projectableNodes: [componentRef.location.nativeElement.childNodes],
         });
+
+        this.currentDialog = dialogRef;
         this.applicationRef.attachView(dialogRef.hostView);
         this.document.body.appendChild(dialogRef.location.nativeElement);
+
+        return componentRef;
+    }
+
+    closeCurrentDialog(): void {
+        this.currentDialog?.instance.closeDialog();
     }
 }

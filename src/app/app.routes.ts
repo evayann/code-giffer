@@ -1,8 +1,8 @@
 import { inject } from '@angular/core';
-import { CanActivateFn, CanDeactivateFn, Routes } from '@angular/router';
+import { CanActivateFn, Routes } from '@angular/router';
 import { Observable, map, timer } from 'rxjs';
+import { askUserConfirmationBeforeLeaveFramePerFrame } from './pages/frame-per-frame-code-to-gif-page/can-deactivate/can-deactivate';
 import { LoadingStateService } from './shared/services/loading-state.service';
-import { DialogService } from './shared/services/dialog/dialog.service';
 
 export const loadGuard: CanActivateFn = (): Observable<boolean> | boolean => {
     const loadingStateService = inject(LoadingStateService);
@@ -16,17 +16,6 @@ export const loadGuard: CanActivateFn = (): Observable<boolean> | boolean => {
         );
     }
     return true;
-};
-
-export const askUserConfirmation: <T extends any>(
-    message: string,
-) => CanDeactivateFn<T> = () => {
-    return (): Observable<boolean> | boolean => {
-        const dialogService = inject(DialogService);
-        console.log('test');
-        dialogService.test();
-        return false;
-    };
 };
 
 export const routes: Routes = [
@@ -48,7 +37,7 @@ export const routes: Routes = [
             },
             {
                 path: 'frame-per-frame',
-                canDeactivate: [askUserConfirmation('')],
+                canDeactivate: [askUserConfirmationBeforeLeaveFramePerFrame()],
                 loadComponent: () =>
                     import(
                         './pages/frame-per-frame-code-to-gif-page/frame-per-frame-code-to-gif-page.component'

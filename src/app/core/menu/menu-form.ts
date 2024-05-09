@@ -7,5 +7,6 @@ export type MenuForm = {
     hasBackground: boolean;
     roundCorner: 'no' | 'medium' | 'large';
     padding: 'no' | 'small' | 'medium' | 'large';
+    tabSize: number;
     isDarkMode: boolean;
 };

@@ -3,6 +3,7 @@ export type CodeTheme = {
     padding: string;
     borderRadius: string;
     codeSyntaxThemeName: string;
+    tabSize: number;
     titleColor: string;
     caretColor: string;
 };

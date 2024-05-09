@@ -26,7 +26,8 @@ export class MenuFormGroup extends FormGroup<{
             padding: this.paddings[this.getMenuValue('padding')],
             borderRadius: this.borderRadius[this.getMenuValue('roundCorner')],
             codeSyntaxThemeName: 'androidstudio',
-            titleColor: 'white',
+            tabSize: this.getMenuValue('tabSize'),
+            titleColor: 'var(--text-primary)',
             caretColor: 'white',
         };
     }
@@ -54,6 +55,7 @@ export class MenuFormGroup extends FormGroup<{
             hasBackground: new FormControl(true),
             roundCorner: new FormControl('medium'),
             padding: new FormControl('medium'),
+            tabSize: new FormControl(4, [Validators.min(2)]),
             isDarkMode: new FormControl(currentTheme.variant === 'dark'),
         });
     }

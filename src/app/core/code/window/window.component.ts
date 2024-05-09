@@ -27,6 +27,7 @@ export class WindowComponent {
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
     @Input({ required: true }) set theme(theme: CodeTheme) {
         this._theme = theme;
+        this.tabSize = theme.tabSize;
         this.padding = theme.padding;
         this.background = theme.background;
     }
@@ -40,6 +41,7 @@ export class WindowComponent {
     }>();
 
     @HostBinding('style.padding') padding!: string;
+    @HostBinding('style.tab-size') tabSize!: number;
     @HostBinding('style.background') background!: string;
 
     protected get codeRows(): number {
@@ -74,7 +76,6 @@ export class WindowComponent {
             } else {
                 this.insertCharacterInTextArea(textArea, '\t', 1);
             }
-            // this.lastCharacterInsert = undefined;
             keyDownEvent.preventDefault();
         } else if (keyDownEvent.isSimpleQuote) {
             this.insertCharacterInTextArea(textArea, "'");
@@ -126,6 +127,7 @@ export class WindowComponent {
         this.lastCharacterInsert = character;
 
         this.code = textArea.value;
+        this.onCodeModify(textArea);
     }
 
     private onRemoveCharacter(textArea: HTMLTextAreaElement): void {
@@ -136,6 +138,7 @@ export class WindowComponent {
             this.removeCharacterInTextArea(textArea, textArea.selectionEnd);
 
         this.code = textArea.value;
+        this.onCodeModify(textArea);
     }
 
     private removeCharacterInTextArea(
@@ -173,10 +176,12 @@ export class WindowComponent {
         textArea.value = textAreaRowList.join('\n');
         const movementOffset =
             textArea.value[textSelectionEnd - 1] === '\n' ? 0 : 1;
-        console.log(movementOffset);
+
         textArea.selectionStart = textSelectionEnd - movementOffset;
         textArea.selectionEnd = textSelectionEnd - movementOffset;
+
         this.code = textArea.value;
+        this.onCodeModify(textArea);
     }
 
     private moveSelection(
@@ -188,6 +193,6 @@ export class WindowComponent {
     }
 
     private characterInCodeInsertionList(character: string): boolean {
-        return ["'", '"', '(', '[', '{'].includes(character);
+        return ["'", '"', '(', '[', '{', '\t'].includes(character);
     }
 }
