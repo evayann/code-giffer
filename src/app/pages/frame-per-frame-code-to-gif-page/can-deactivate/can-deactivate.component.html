@@ -1,3 +1,11 @@
+<header>
+    <h2>Warning</h2>
+    <button aria-label="close" (click)="onStay()">X</button>
+</header>
+
 <p>If you quit this page, you will lose all your frame already created</p>
-<button class="primary" (click)="onStay()">Stay</button>
-<button class="primary-outline" (click)="onQuit()">Quit</button>
+
+<footer>
+    <button class="primary" (click)="onStay()">Stay</button>
+    <button class="primary" (click)="onQuit()">Quit</button>
+</footer>

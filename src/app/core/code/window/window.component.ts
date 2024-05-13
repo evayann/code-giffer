@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
+    ChangeDetectorRef,
     Component,
     EventEmitter,
     HostBinding,
@@ -10,9 +11,9 @@ import {
 import { Highlight, HighlightAutoResult } from 'ngx-highlightjs';
 import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
 import { CodeTheme } from '../code-theme';
+import { KeyBoardEvent } from './keyboard-event';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { WindowConfiguration } from './window-configuration';
-import { KeyBoardEvent } from './keyboard-event';
 
 @Component({
     selector: 'app-window',
@@ -23,6 +24,8 @@ import { KeyBoardEvent } from './keyboard-event';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WindowComponent {
+    private static defaultTitle = 'Default Title';
+
     @Input({ required: true }) code!: string;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
     @Input({ required: true }) set theme(theme: CodeTheme) {
@@ -31,7 +34,7 @@ export class WindowComponent {
         this.padding = theme.padding;
         this.background = theme.background;
     }
-    @Input() title = 'Code Snippet';
+    @Input() title = WindowComponent.defaultTitle;
 
     @Output() domHasChange = new EventEmitter<void>();
     @Output() titleChange = new EventEmitter<string>();
@@ -51,7 +54,15 @@ export class WindowComponent {
     }
 
     protected _theme!: CodeTheme;
+
     private lastCharacterInsert?: string = undefined;
+
+    protected updateTitle(title: string): void {
+        if (title === '') {
+            this.title = title = WindowComponent.defaultTitle;
+        }
+        this.titleChange.emit(title);
+    }
 
     protected codeTagHasChange(): void {
         this.domHasChange.next();

@@ -60,11 +60,13 @@ export class AutoCodeToGifPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        if (!this.title || !this.code) {
+        if (this.title === '' && this.code === '') {
             this.initialCode =
                 this.placeholderCodeService.getRandomExample('auto');
-            this.updateCodeInUrl(this.initialCode.code);
-            this.updateTitleInUrl(this.initialCode.title);
+            this.urlService.updateQuery({
+                code: compressToBase64(this.initialCode.code),
+                title: compressToBase64(this.initialCode.title),
+            });
             return;
         }
         this.initialCode = { title: this.title, code: this.code };
@@ -75,10 +77,10 @@ export class AutoCodeToGifPageComponent implements OnInit, OnDestroy {
     }
 
     protected updateCodeInUrl(code: string): void {
-        this.urlService.updateQuery('code', compressToBase64(code));
+        this.urlService.updateQuery({ code: compressToBase64(code) });
     }
 
     protected updateTitleInUrl(title: string): void {
-        this.urlService.updateQuery('title', compressToBase64(title));
+        this.urlService.updateQuery({ title: compressToBase64(title) });
     }
 }

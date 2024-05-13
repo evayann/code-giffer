@@ -9,7 +9,7 @@
     contenteditable="true"
     class="window-title"
     [ngStyle]="{ color: theme.titleColor }"
-    (focusout)="titleChange.emit(snippetTitle.innerText)"
+    (input)="titleChange.emit(snippetTitle.innerText)"
 >
     {{ title }}
 </h2>

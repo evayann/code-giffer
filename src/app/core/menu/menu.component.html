@@ -5,12 +5,19 @@
             type="number"
             formControlName="intervalBetweenFrameInMs"
             class="primary"
+            [min]="menuForm.minFrame"
+            [max]="menuForm.maxFrame"
         />
     </label>
 
     <label class="label">
         <span> Loop iteration </span>
-        <input type="number" formControlName="loopIteration" class="primary" />
+        <input
+            type="number"
+            formControlName="loopIteration"
+            class="primary"
+            [min]="menuForm.minLoopIteration"
+        />
     </label>
 
     <label class="label">
@@ -71,6 +78,7 @@
                         type="number"
                         formControlName="tabSize"
                         class="primary"
+                        [min]="menuForm.minTabSize"
                     />
                 </label>
             </li>

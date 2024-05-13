@@ -1,7 +1,7 @@
 @if (!isRecording) {
     <app-window
         [code]="code"
-        [(title)]="title"
+        [title]="title"
         [theme]="theme"
         [windowConfiguration]="codeConfiguration"
         (codeHasChange)="updateCode($event.value)"

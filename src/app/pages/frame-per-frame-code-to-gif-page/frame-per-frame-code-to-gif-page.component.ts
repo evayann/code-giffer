@@ -17,6 +17,7 @@ import { CodeAnimationVisualisationComponent } from './code-animation-visualisat
 import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { UrlService } from '../../shared/services/url.service';
 import { compressToBase64, decompressFromBase64 } from 'lz-string';
+import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 
 @Component({
     selector: 'app-frame-per-frame-code-to-gif-page',
@@ -64,6 +65,7 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
 
     constructor(
         hljsLoader: HighlightLoader,
+        private placeholderCodeService: PlaceholderCodeService,
         private changeDetectorRef: ChangeDetectorRef,
         private urlService: UrlService,
     ) {
@@ -73,9 +75,13 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
-        if (!this.title || !this.code) {
-            this.initialCode = { code: '', title: 'Title' };
-            //     this.placeholderCodeService.getRandomExample('auto');
+        if (this.title === '' && this.code === '') {
+            this.initialCode =
+                this.placeholderCodeService.getRandomExample('auto');
+            this.urlService.updateQuery({
+                code: compressToBase64(this.initialCode.code),
+                title: compressToBase64(this.initialCode.title),
+            });
             return;
         }
         this.initialCode = { title: this.title, code: this.code };
@@ -100,10 +106,10 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
     }
 
     protected updateCodeInUrl(code: string): void {
-        this.urlService.updateQuery('code', compressToBase64(code));
+        this.urlService.updateQuery({ code: compressToBase64(code) });
     }
 
     protected updateTitleInUrl(title: string): void {
-        this.urlService.updateQuery('title', compressToBase64(title));
+        this.urlService.updateQuery({ title: compressToBase64(title) });
     }
 }

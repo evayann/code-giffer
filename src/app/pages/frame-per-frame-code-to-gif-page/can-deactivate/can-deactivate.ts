@@ -12,6 +12,6 @@ export const askUserConfirmationBeforeLeaveFramePerFrame: <
         const canDeactivateComponent = dialogService.openDialog(
             CanDeactivateComponent,
         );
-        return canDeactivateComponent.instance.result.pipe(tap(console.log));
+        return canDeactivateComponent.instance.result;
     };
 };

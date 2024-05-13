@@ -1,10 +1,15 @@
 import { FormControl, FormGroup, Validators, ɵElement } from '@angular/forms';
-import { MenuForm } from './menu-form';
 import { Theme } from '../../shared/services/theme.service';
+import { MenuForm } from './menu-form';
 
 export class MenuFormGroup extends FormGroup<{
     [K in keyof MenuForm]: ɵElement<MenuForm[K], null>;
 }> {
+    static readonly MIN_FRAME = 1;
+    static readonly MAX_FRAME = 100_000;
+    static readonly MIN_TAB_SIZE = 2;
+    static readonly MIN_LOOP_ITERATION = 0;
+
     private paddings: Record<MenuForm['padding'], string> = {
         no: '0',
         small: 'var(--padding-4)',
@@ -27,7 +32,7 @@ export class MenuFormGroup extends FormGroup<{
             borderRadius: this.borderRadius[this.getMenuValue('roundCorner')],
             codeSyntaxThemeName: 'androidstudio',
             tabSize: this.getMenuValue('tabSize'),
-            titleColor: 'var(--text-primary)',
+            titleColor: 'white',
             caretColor: 'white',
         };
     }
@@ -44,18 +49,35 @@ export class MenuFormGroup extends FormGroup<{
         return this.getMenuValue('intervalBetweenFrameInMs');
     }
 
+    get minFrame(): number {
+        return MenuFormGroup.MIN_FRAME;
+    }
+    get maxFrame(): number {
+        return MenuFormGroup.MAX_FRAME;
+    }
+    get minTabSize(): number {
+        return MenuFormGroup.MIN_TAB_SIZE;
+    }
+    get minLoopIteration(): number {
+        return MenuFormGroup.MIN_LOOP_ITERATION;
+    }
+
     constructor(currentTheme: Theme) {
         super({
             intervalBetweenFrameInMs: new FormControl(100, [
-                Validators.min(1),
-                Validators.max(100_000),
+                Validators.min(MenuFormGroup.MIN_FRAME),
+                Validators.max(MenuFormGroup.MAX_FRAME),
             ]),
             theme: new FormControl(currentTheme.name),
-            loopIteration: new FormControl(0, [Validators.min(0)]),
+            loopIteration: new FormControl(0, [
+                Validators.min(MenuFormGroup.MIN_LOOP_ITERATION),
+            ]),
             hasBackground: new FormControl(true),
             roundCorner: new FormControl('medium'),
             padding: new FormControl('medium'),
-            tabSize: new FormControl(4, [Validators.min(2)]),
+            tabSize: new FormControl(4, [
+                Validators.min(MenuFormGroup.MIN_TAB_SIZE),
+            ]),
             isDarkMode: new FormControl(currentTheme.variant === 'dark'),
         });
     }
