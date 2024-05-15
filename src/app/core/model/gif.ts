@@ -1,5 +1,5 @@
-import { GifWriter } from "omggif";
-import { Frame } from "./frame";
+import { GifWriter } from 'omggif';
+import { Frame } from './frame';
 
 type GifAnimation = {
     width: number;
@@ -8,7 +8,7 @@ type GifAnimation = {
 };
 
 export type FrameOptions = {
-    delayInMs: number
+    delayInMs: number;
 };
 
 export class Gif {
@@ -18,20 +18,34 @@ export class Gif {
     private width: number;
 
     get asBlob(): Blob {
-        return new Blob([this.buffer.subarray(0, this.writer.end())], { type: 'image/gif' });
+        return new Blob([this.buffer.subarray(0, this.writer.end())], {
+            type: 'image/gif',
+        });
     }
 
     constructor({ width, height, numberOfFrames }: GifAnimation) {
         this.width = width;
         this.height = height;
         this.buffer = new Uint8Array(width * height * numberOfFrames);
-        this.writer = new GifWriter(this.buffer, width, height, { loop: undefined })
+        this.writer = new GifWriter(this.buffer, width, height, {
+            loop: undefined,
+        });
     }
 
     addFrame(frame: Frame, frameOptions?: FrameOptions): void {
         const paletteList = frame.paletteIndex;
         const pixelPaletteIndexList = frame.pixelList;
-        const options = { palette: paletteList, delay: (frameOptions?.delayInMs ?? 100) / 10 };
-        this.writer.addFrame(0, 0, this.width, this.height, pixelPaletteIndexList, options);
+        const options = {
+            palette: paletteList,
+            delay: (frameOptions?.delayInMs ?? 100) / 10,
+        };
+        this.writer.addFrame(
+            0,
+            0,
+            this.width,
+            this.height,
+            pixelPaletteIndexList,
+            options,
+        );
     }
 }

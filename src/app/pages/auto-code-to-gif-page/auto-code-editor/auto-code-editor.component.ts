@@ -50,7 +50,7 @@ export class AutoCodeEditorComponent {
     }
 
     protected startRecord(): void {
-        this.codeAnimation = CodeAnimation.fromCode(this.code);
+        this.codeAnimation = CodeAnimation.fromCode(this.title, this.code);
         this.isRecording = true;
     }
 

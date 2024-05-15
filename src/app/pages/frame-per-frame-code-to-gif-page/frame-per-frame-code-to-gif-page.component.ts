@@ -59,8 +59,8 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
     protected initialCode!: { title: string; code: string };
     private subscriptions = new Subscription();
 
-    protected get isExportable(): boolean {
-        return this.animation.frameList.length !== 0;
+    get hasFrame(): boolean {
+        return this.animation.frameList.length > 0;
     }
 
     constructor(
@@ -101,8 +101,11 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
         };
     }
 
-    protected onDeleteAnimationKey(indexToDelete: number): void {
-        this.animation.frameList;
+    protected onDeleteAnimationKey(
+        codeEditorComponent: CodeEditorComponent,
+        indexToDelete: number,
+    ): void {
+        codeEditorComponent.deleteFrame(indexToDelete);
     }
 
     protected updateCodeInUrl(code: string): void {

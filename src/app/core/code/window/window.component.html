@@ -5,6 +5,7 @@
     <app-title-bar
         [theme]="_theme"
         [title]="title"
+        [editable]="windowConfiguration.isEditable"
         (titleChange)="updateTitle($event)"
     />
     @if (windowConfiguration.isEditable) {

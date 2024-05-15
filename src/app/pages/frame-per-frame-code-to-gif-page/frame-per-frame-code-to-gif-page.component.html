@@ -1,4 +1,5 @@
 <app-code-editor
+    #codeEditor
     [theme]="menuFormGroup.theme"
     [initialCode]="initialCode"
     [delayInMs]="menuFormGroup.delayInMs"
@@ -7,8 +8,10 @@
     (titleHasChange)="updateTitleInUrl($event)"
 />
 
-<app-code-animation-visualisation
-    [animation]="animation"
-    [theme]="menuFormGroup.theme"
-    (onDelete)="onDeleteAnimationKey($event)"
-/>
+@if (!codeEditor.isRecording) {
+    <app-code-animation-visualisation
+        [animation]="animation"
+        [theme]="menuFormGroup.theme"
+        (onDelete)="onDeleteAnimationKey(codeEditor, $event)"
+    />
+}

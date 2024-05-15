@@ -6,7 +6,7 @@
 
 <h2
     #snippetTitle
-    contenteditable="true"
+    [attr.contenteditable]="editable"
     class="window-title"
     [ngStyle]="{ color: theme.titleColor }"
     (input)="titleChange.emit(snippetTitle.innerText)"

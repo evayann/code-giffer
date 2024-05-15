@@ -18,11 +18,12 @@ import {
 import { CodeTheme } from '../../../core/code/code-theme';
 import { WindowConfiguration } from '../../../core/code/window/window-configuration';
 import { WindowComponent } from '../../../core/code/window/window.component';
+import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 
 @Component({
     selector: 'app-code-editor',
     standalone: true,
-    imports: [CommonModule, WindowComponent],
+    imports: [CommonModule, WindowComponent, CodeRecorderComponent],
     templateUrl: './code-editor.component.html',
     styleUrl: './code-editor.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +47,8 @@ export class CodeEditorComponent {
         frameList: readonly CodeFrame[];
         maxRow: number;
     }>();
+
+    isRecording = false;
 
     protected title!: string;
     protected code!: string;
@@ -85,6 +88,7 @@ export class CodeEditorComponent {
 
     protected addFrameToAnimation(): void {
         this.codeAnimation.addFrame({
+            title: this.title,
             code: this.code,
             caretPosition: 0,
         });
@@ -93,46 +97,15 @@ export class CodeEditorComponent {
 
     protected saveCodeAnimation(): void {
         if (this.codeAnimation.hasNoFrame) return;
+        this.isRecording = true;
+    }
 
-        Dom2Gif.generate({
-            animation: this.codeAnimation,
-            width: this.codeContainer.nativeElement.clientWidth,
-            height: this.codeContainer.nativeElement.clientHeight,
-            dom: this.codeContainer.nativeElement,
-            scaleFactor: 2,
-            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
-
-            frameOptions: {
-                delayInMs: this.delayInMs,
-            },
-
-            onStart: () => {
-                this.codeConfiguration.hideTextSelection = true;
-                this.codeConfiguration.numberRow = this.codeAnimation.nbMaxRow;
-                this.changeDetectorReference.detectChanges();
-            },
-            loadFrame: (frame: CodeFrame) => {
-                if (this.isAlreadyLoad(frame)) {
-                    this.codeChangeFromAnimation$.next();
-                    return;
-                }
-
-                this.code = frame.code;
-                this.changeDetectorReference.detectChanges();
-            },
-            onFinish: () => {
-                this.codeConfiguration.hideTextSelection = false;
-                this.changeDetectorReference.detectChanges();
-            },
-        });
+    protected finishRecord(): void {
+        this.isRecording = false;
     }
 
     protected updateTitle(title: string): void {
         this.titleHasChange.emit(title);
-    }
-
-    private isAlreadyLoad(frame: CodeFrame): boolean {
-        return this.code === frame.code;
     }
 
     private emitCodeAnimationInformation(): void {

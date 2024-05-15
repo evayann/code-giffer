@@ -1,20 +1,25 @@
-import { Animation } from "./animation";
+import { Animation } from './animation';
 
 export type CodeFrame = {
+    title: string;
     code: string;
     caretPosition: number;
 };
 
 export class CodeAnimation extends Animation<CodeFrame> {
     get nbMaxRow(): number {
-        return Math.max(...this._frameList.map(frame => CodeAnimation.nbRowForCode(frame.code)));
+        return Math.max(
+            ...this._frameList.map((frame) =>
+                CodeAnimation.nbRowForCode(frame.code),
+            ),
+        );
     }
 
     static nbRowForCode(code: string): number {
         let rowCounter = 1;
         let characterOnCurrentLine = 0;
 
-        code.split('').forEach(character => {
+        code.split('').forEach((character) => {
             if (character === '\n') {
                 rowCounter++;
                 characterOnCurrentLine = 0;
@@ -31,15 +36,19 @@ export class CodeAnimation extends Animation<CodeFrame> {
         return rowCounter;
     }
 
-    static fromCode(codeString: string): CodeAnimation {
+    static fromCode(title: string, code: string): CodeAnimation {
         const codeAnimation = new CodeAnimation();
 
         let currentCode = '';
-        codeAnimation.addFrame({ code: currentCode, caretPosition: 0 });
+        codeAnimation.addFrame({ title, code: currentCode, caretPosition: 0 });
 
-        for (let index = 0; index < codeString.length; index++) {
-            currentCode += codeString.charAt(index);
-            codeAnimation.addFrame({ code: currentCode, caretPosition: index + 1 });
+        for (let index = 0; index < code.length; index++) {
+            currentCode += code.charAt(index);
+            codeAnimation.addFrame({
+                title,
+                code: currentCode,
+                caretPosition: index + 1,
+            });
         }
 
         return codeAnimation;
