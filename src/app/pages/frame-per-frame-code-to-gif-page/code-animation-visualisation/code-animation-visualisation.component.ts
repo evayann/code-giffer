@@ -17,6 +17,7 @@ import { WindowComponent } from '../../../core/code/window/window.component';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeAnimationVisualisationComponent {
+    @Input({ required: true }) languageSelected?: string;
     @Input({ required: true }) animation!: any;
     @Input({ required: true }) theme!: any;
     @Output() onDelete = new EventEmitter<number>();

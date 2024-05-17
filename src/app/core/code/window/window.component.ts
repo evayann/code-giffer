@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
+    AfterViewInit,
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     EventEmitter,
     HostBinding,
@@ -9,13 +9,13 @@ import {
     Output,
     ViewChild,
 } from '@angular/core';
-import { Highlight, HighlightAutoResult, HighlightJS } from 'ngx-highlightjs';
+import { Highlight, HighlightAutoResult } from 'ngx-highlightjs';
 import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
+import { languageList } from '../../menu/language';
 import { CodeTheme } from '../code-theme';
 import { KeyBoardEvent } from './keyboard-event';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { WindowConfiguration } from './window-configuration';
-import { languageList } from '../../menu/language';
 
 @Component({
     selector: 'app-window',
@@ -25,28 +25,15 @@ import { languageList } from '../../menu/language';
     styleUrls: ['./window.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WindowComponent {
+export class WindowComponent implements AfterViewInit {
     private static defaultTitle = 'Default Title';
 
-    @ViewChild(Highlight) highlight?: Highlight;
+    @ViewChild(Highlight) highlight!: Highlight;
 
     @Input() set language(language: string | undefined) {
+        this._language = language;
         if (!this.highlight) return;
-
-        this.highlight.languages = language
-            ? [language]
-            : Array.from(languageList);
-        // Force a reload of highligh js if language change
-        this.highlight.ngOnChanges({
-            code: {
-                previousValue: '',
-                currentValue: this.code,
-                firstChange: false,
-                isFirstChange() {
-                    return this.firstChange;
-                },
-            },
-        });
+        this.updateHighlighLanguage();
     }
     @Input({ required: true }) code!: string;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
@@ -78,7 +65,12 @@ export class WindowComponent {
 
     protected _theme!: CodeTheme;
 
+    private _language?: string;
     private lastCharacterInsert?: string = undefined;
+
+    ngAfterViewInit(): void {
+        this.updateHighlighLanguage();
+    }
 
     protected updateTitle(title: string): void {
         if (title === '') {
@@ -228,5 +220,22 @@ export class WindowComponent {
 
     private characterInCodeInsertionList(character: string): boolean {
         return ["'", '"', '(', '[', '{', '\t'].includes(character);
+    }
+
+    private updateHighlighLanguage() {
+        this.highlight.languages = this._language
+            ? [this._language]
+            : Array.from(languageList);
+        // Force a reload of highligh js if language change
+        this.highlight.ngOnChanges({
+            code: {
+                previousValue: '',
+                currentValue: this.code,
+                firstChange: false,
+                isFirstChange() {
+                    return this.firstChange;
+                },
+            },
+        });
     }
 }
