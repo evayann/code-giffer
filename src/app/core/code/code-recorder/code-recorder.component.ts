@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectionStrategy,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    EventEmitter,
+    Input,
+    Output,
+    ViewChild,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { Dom2Gif } from '../../model/dom-2-gif';
 import { CodeTheme } from '../code-theme';
@@ -10,17 +20,17 @@ import { WindowComponent } from '../window/window.component';
 @Component({
     selector: 'app-code-recorder',
     standalone: true,
-    imports: [
-        CommonModule, WindowComponent
-    ],
+    imports: [CommonModule, WindowComponent],
     templateUrl: './code-recorder.component.html',
     styleUrl: './code-recorder.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeRecorderComponent implements AfterViewInit {
-    @ViewChild('codeContainer', { read: ElementRef }) codeContainer!: ElementRef<HTMLDivElement>;
+    @ViewChild('codeContainer', { read: ElementRef })
+    codeContainer!: ElementRef<HTMLDivElement>;
 
     @Input() title!: string;
+    @Input() language?: string;
     @Input() delayInMs: number = 100;
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true })
@@ -30,8 +40,8 @@ export class CodeRecorderComponent implements AfterViewInit {
             numberRow: codeAnimation.nbMaxRow,
             numberColumn: 64,
             isEditable: true,
-            hideTextSelection: true
-        }
+            hideTextSelection: true,
+        };
     }
 
     @Output() onRecordFinish = new EventEmitter<null>();
@@ -41,7 +51,7 @@ export class CodeRecorderComponent implements AfterViewInit {
     private _codeAnimation!: CodeAnimation;
     private codeChangeFromAnimation$ = new Subject<void>();
 
-    constructor(private changeDetectorReference: ChangeDetectorRef) { }
+    constructor(private changeDetectorReference: ChangeDetectorRef) {}
 
     ngAfterViewInit(): void {
         this.saveCodeAnimation();
@@ -65,7 +75,7 @@ export class CodeRecorderComponent implements AfterViewInit {
             frameLoaded: this.codeChangeFromAnimation$.asObservable(),
 
             frameOptions: {
-                delayInMs: this.delayInMs
+                delayInMs: this.delayInMs,
             },
 
             loadFrame: (frame: CodeFrame) => {
@@ -81,7 +91,7 @@ export class CodeRecorderComponent implements AfterViewInit {
                 this.codeConfiguration.hideTextSelection = false;
                 this.changeDetectorReference.detectChanges();
                 this.onRecordFinish.emit(null);
-            }
+            },
         });
     }
 

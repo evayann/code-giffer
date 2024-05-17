@@ -39,6 +39,7 @@ export class CodeEditorComponent {
         this.code = value.code;
     }
     @Input({ required: true }) theme!: CodeTheme;
+    @Input({ required: true }) languageSelected?: string;
     @Input() delayInMs = 100;
 
     @Output() codeHasChange = new EventEmitter<string>();
@@ -52,6 +53,7 @@ export class CodeEditorComponent {
 
     protected title!: string;
     protected code!: string;
+    protected language?: string;
     protected codeWidth = '64ch';
     protected codeConfiguration: WindowConfiguration = {
         numberRow: 1,
@@ -106,6 +108,10 @@ export class CodeEditorComponent {
 
     protected updateTitle(title: string): void {
         this.titleHasChange.emit(title);
+    }
+
+    protected updateLanguage(language: string): void {
+        this.language = language;
     }
 
     private emitCodeAnimationInformation(): void {

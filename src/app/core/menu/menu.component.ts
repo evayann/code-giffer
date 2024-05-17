@@ -8,6 +8,7 @@ import {
     Output,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { languageList } from './language';
 import { MenuFormGroup } from './menu-form-group';
 
 @Component({
@@ -28,6 +29,8 @@ export class MenuComponent {
     @Input({ required: true }) menuForm!: MenuFormGroup;
     @Input({ required: true }) themeNameList!: string[];
     @Output() themeChange = new EventEmitter<null>();
+
+    protected languageList = languageList;
 
     protected onThemeChange(): void {
         this.themeChange.emit(null);

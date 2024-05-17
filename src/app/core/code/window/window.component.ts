@@ -7,13 +7,15 @@ import {
     HostBinding,
     Input,
     Output,
+    ViewChild,
 } from '@angular/core';
-import { Highlight, HighlightAutoResult } from 'ngx-highlightjs';
+import { Highlight, HighlightAutoResult, HighlightJS } from 'ngx-highlightjs';
 import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
 import { CodeTheme } from '../code-theme';
 import { KeyBoardEvent } from './keyboard-event';
 import { TitleBarComponent } from './title-bar/title-bar.component';
 import { WindowConfiguration } from './window-configuration';
+import { languageList } from '../../menu/language';
 
 @Component({
     selector: 'app-window',
@@ -26,6 +28,26 @@ import { WindowConfiguration } from './window-configuration';
 export class WindowComponent {
     private static defaultTitle = 'Default Title';
 
+    @ViewChild(Highlight) highlight?: Highlight;
+
+    @Input() set language(language: string | undefined) {
+        if (!this.highlight) return;
+
+        this.highlight.languages = language
+            ? [language]
+            : Array.from(languageList);
+        // Force a reload of highligh js if language change
+        this.highlight.ngOnChanges({
+            code: {
+                previousValue: '',
+                currentValue: this.code,
+                firstChange: false,
+                isFirstChange() {
+                    return this.firstChange;
+                },
+            },
+        });
+    }
     @Input({ required: true }) code!: string;
     @Input({ required: true }) windowConfiguration!: WindowConfiguration;
     @Input({ required: true }) set theme(theme: CodeTheme) {
@@ -36,6 +58,7 @@ export class WindowComponent {
     }
     @Input() title = WindowComponent.defaultTitle;
 
+    @Output() languageDetected = new EventEmitter<string>();
     @Output() domHasChange = new EventEmitter<void>();
     @Output() titleChange = new EventEmitter<string>();
     @Output() codeHasChange = new EventEmitter<{
@@ -115,7 +138,7 @@ export class WindowComponent {
 
     protected onCodeHighlight(highlightAutoResult: HighlightAutoResult) {
         if (!highlightAutoResult.language) return;
-        console.log(highlightAutoResult.language);
+        this.languageDetected.emit(highlightAutoResult.language);
     }
 
     private insertCharacterInTextArea(

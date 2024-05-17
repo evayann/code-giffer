@@ -3,7 +3,8 @@
 
 *:not(code, code *):not(
         .cdk-overlay-connected-position-bounding-box,
-        .no-animation
+        .no-animation,
+        .no-animation *
     ) {
     transition-property: color, background, background-color, padding,
         border-radius, border-color;

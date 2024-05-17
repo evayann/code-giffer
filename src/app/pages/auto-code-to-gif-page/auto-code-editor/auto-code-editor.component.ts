@@ -9,6 +9,7 @@ import {
 import { WindowComponent } from '../../../core/code/window/window.component';
 import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeAnimation } from '../../../core/code/animation/code-animation';
+import { Language } from '../../../core/menu/language';
 
 @Component({
     selector: 'app-auto-code-editor',
@@ -23,6 +24,7 @@ export class AutoCodeEditorComponent {
     @Output() titleHasChange = new EventEmitter<string>();
     @Input({ required: true }) delayInMs!: number;
     @Input({ required: true }) theme!: any;
+    @Input({ required: true }) languageSelected: Language | undefined;
     @Input() set initialCode(value: { title: string; code: string }) {
         this.title = value.title;
         this.code = value.code;
@@ -30,11 +32,12 @@ export class AutoCodeEditorComponent {
 
     protected title = 'Snippet title';
     protected code = '';
+    protected language?: string;
     protected codeAnimation!: CodeAnimation;
 
     protected isRecording = false;
 
-    codeConfiguration = {
+    protected codeConfiguration = {
         numberColumn: 64,
         isEditable: true,
         hideTextSelection: false,
@@ -47,6 +50,10 @@ export class AutoCodeEditorComponent {
 
     protected updateTitle(title: string): void {
         this.titleHasChange.emit(title);
+    }
+
+    protected updateLanguage(language: string): void {
+        this.language = language;
     }
 
     protected startRecord(): void {

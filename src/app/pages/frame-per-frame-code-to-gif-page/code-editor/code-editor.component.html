@@ -3,15 +3,18 @@
         [code]="code"
         [title]="title"
         [theme]="theme"
+        [language]="languageSelected"
         [windowConfiguration]="codeConfiguration"
         (codeHasChange)="updateCode($event.value)"
         (titleChange)="updateTitle($event)"
+        (languageDetected)="updateLanguage($event)"
     />
 } @else {
     <app-code-recorder
         [delayInMs]="delayInMs"
         [title]="title"
         [theme]="theme"
+        [language]="languageSelected ?? language"
         [codeAnimation]="codeAnimation"
         (onRecordFinish)="finishRecord()"
     />

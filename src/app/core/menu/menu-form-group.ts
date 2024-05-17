@@ -1,6 +1,7 @@
 import { FormControl, FormGroup, Validators, ɵElement } from '@angular/forms';
 import { Theme } from '../../shared/services/theme.service';
 import { MenuForm } from './menu-form';
+import { Language } from './language';
 
 export class MenuFormGroup extends FormGroup<{
     [K in keyof MenuForm]: ɵElement<MenuForm[K], null>;
@@ -35,6 +36,11 @@ export class MenuFormGroup extends FormGroup<{
             titleColor: 'white',
             caretColor: 'white',
         };
+    }
+
+    get language(): Language | undefined {
+        const selectedLanguage = this.getMenuValue('language');
+        return selectedLanguage === 'auto' ? undefined : selectedLanguage;
     }
 
     get themeName(): MenuForm['theme'] {
@@ -72,6 +78,7 @@ export class MenuFormGroup extends FormGroup<{
             loopIteration: new FormControl(0, [
                 Validators.min(MenuFormGroup.MIN_LOOP_ITERATION),
             ]),
+            language: new FormControl('auto'),
             hasBackground: new FormControl(true),
             roundCorner: new FormControl('medium'),
             padding: new FormControl('medium'),
