@@ -27,7 +27,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets/**"
+              "src/assets/**",
+              {
+                "glob": "**/*",
+                "input": "./node_modules/highlight.js/styles",
+                "output": "./highlight.js"
+              },
             ],
             "styles": [
               "src/styles.scss"

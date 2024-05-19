@@ -1,14 +1,14 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
-export type ThemeName = 'blue' | 'green';
+const themeList = ['blue', 'green', 'red', 'rainbow'] as const;
+export type ThemeName = (typeof themeList)[number];
 export type ThemeVariant = 'light' | 'dark';
 
-export type Theme = { name: ThemeName, variant: ThemeVariant };
-
+export type Theme = { name: ThemeName; variant: ThemeVariant };
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ThemeService {
     private themeInLocalStorageKey = 'previous-theme';
@@ -20,12 +20,12 @@ export class ThemeService {
     get currentTheme(): Theme {
         return {
             name: this.themeName,
-            variant: this.themeVariant
+            variant: this.themeVariant,
         };
     }
 
     get themeNameList(): ThemeName[] {
-        return ['blue', 'green'];
+        return Array.from(themeList);
     }
 
     constructor(@Inject(DOCUMENT) document: Document) {
@@ -50,7 +50,10 @@ export class ThemeService {
     }
 
     private saveCurrentTheme(): void {
-        const currentTheme = { name: this.themeName, variant: this.themeVariant };
+        const currentTheme = {
+            name: this.themeName,
+            variant: this.themeVariant,
+        };
         const themeString = JSON.stringify(currentTheme);
         localStorage.setItem(this.themeInLocalStorageKey, themeString);
     }
@@ -64,6 +67,9 @@ export class ThemeService {
     }
 
     private reloadTheme(): void {
-        this.htmlTag?.setAttribute('theme', `${this.themeName}-${this.themeVariant}`);
+        this.htmlTag?.setAttribute(
+            'theme',
+            `${this.themeName}-${this.themeVariant}`,
+        );
     }
 }

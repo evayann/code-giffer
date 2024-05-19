@@ -24,7 +24,6 @@
                 [cols]="windowConfiguration.numberColumn"
                 (keydown)="onKeyDown(textArea, $event)"
                 (input)="onCodeModify(textArea)"
-                [ngStyle]="{ 'caret-color': _theme.caretColor }"
                 >{{ code }}</textarea
             >
         </div>

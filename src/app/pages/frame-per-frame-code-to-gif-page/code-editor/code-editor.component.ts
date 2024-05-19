@@ -65,8 +65,6 @@ export class CodeEditorComponent {
 
     private codeChangeFromAnimation$ = new Subject<void>();
 
-    constructor(private changeDetectorReference: ChangeDetectorRef) {}
-
     deleteFrame(index: number): void {
         this.codeAnimation.removeFrame(index);
         this.emitCodeAnimationInformation();

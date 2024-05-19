@@ -18,6 +18,7 @@ import { CodeEditorComponent } from './code-editor/code-editor.component';
 import { UrlService } from '../../shared/services/url.service';
 import { compressToBase64, decompressFromBase64 } from 'lz-string';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
+import { CodeEditorThemeService } from '../../shared/services/code-editor-theme.service';
 
 @Component({
     selector: 'app-frame-per-frame-code-to-gif-page',
@@ -64,17 +65,16 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
     }
 
     constructor(
-        hljsLoader: HighlightLoader,
+        private hljsLoader: HighlightLoader,
         private placeholderCodeService: PlaceholderCodeService,
         private changeDetectorRef: ChangeDetectorRef,
+        private codeEditorThemeService: CodeEditorThemeService,
         private urlService: UrlService,
-    ) {
-        hljsLoader.setTheme(
-            `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
-        );
-    }
+    ) {}
 
     ngOnInit(): void {
+        this.updateEditorTheme();
+
         if (this.title === '' && this.code === '') {
             this.initialCode =
                 this.placeholderCodeService.getRandomExample('auto');
@@ -114,5 +114,14 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
 
     protected updateTitleInUrl(title: string): void {
         this.urlService.updateQuery({ title: compressToBase64(title) });
+    }
+
+    private updateEditorTheme(): void {
+        this.hljsLoader.setTheme(
+            this.codeEditorThemeService.editorOf(
+                this.menuFormGroup.themeName,
+                this.menuFormGroup.variant,
+            ),
+        );
     }
 }

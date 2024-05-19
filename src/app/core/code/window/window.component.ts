@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { Highlight, HighlightAutoResult } from 'ngx-highlightjs';
 import { HasChangeDirective } from '../../../shared/directives/has-change.directive';
-import { languageList } from '../../menu/language';
+import { languageList } from '../../model/language';
 import { CodeTheme } from '../code-theme';
 import { KeyBoardEvent } from './keyboard-event';
 import { TitleBarComponent } from './title-bar/title-bar.component';

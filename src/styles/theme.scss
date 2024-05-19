@@ -67,3 +67,47 @@
     #54ab63,
     "linear-gradient(140deg, #74D680, #378B29)"
 );
+
+@include create-theme(
+    "red-light",
+    (
+        primary: hsl(0, 76%, 52%),
+        secondary: hsl(0, 76%, 77%),
+    ),
+    hsl(0, 73%, 96%),
+    hsl(0, 64%, 51%),
+    "linear-gradient(140deg, hsl(0, 76%, 92%), hsl(0, 76%, 72%))"
+);
+
+@include create-theme(
+    "red-dark",
+    (
+        primary: hsl(0, 76%, 42%),
+        secondary: hsl(0, 76%, 27%),
+    ),
+    hsl(0, 73%, 9%),
+    hsl(0, 64%, 44%),
+    "linear-gradient(140deg, hsl(0, 86%, 38%), hsl(0, 76%, 52%))"
+);
+
+@include create-theme(
+    "rainbow-light",
+    (
+        primary: hsl(291, 64%, 61%),
+        secondary: hsl(291, 64%, 81%),
+    ),
+    hsl(291, 73%, 96%),
+    hsl(291, 64%, 51%),
+    "linear-gradient(45deg, #f9ccff 0%, #e6bbf9 11%, #9ec6f9 32%, #55e6ee 60%, #91f5d1 74%, #f9ffbf 98%)"
+);
+
+@include create-theme(
+    "rainbow-dark",
+    (
+        primary: hsl(291, 74%, 41%),
+        secondary: hsl(291, 74%, 31%),
+    ),
+    hsl(291, 73%, 9%),
+    hsl(291, 64%, 31%),
+    "linear-gradient(-45deg, #652487 0%, #443ac3 35%, #0174b7 68%, #04988e 100%)"
+);

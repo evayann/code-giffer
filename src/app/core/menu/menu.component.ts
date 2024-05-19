@@ -8,7 +8,7 @@ import {
     Output,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { languageList } from './language';
+import { languageList } from '../model/language';
 import { MenuFormGroup } from './menu-form-group';
 
 @Component({

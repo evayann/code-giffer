@@ -1,5 +1,5 @@
 import { ThemeName } from '../../shared/services/theme.service';
-import { Language } from './language';
+import { Language } from '../model/language';
 
 export type MenuForm = {
     intervalBetweenFrameInMs: number;

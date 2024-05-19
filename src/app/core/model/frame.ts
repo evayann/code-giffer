@@ -1,5 +1,5 @@
-import { Color } from "./color";
-import RgbQuant from "rgbquant";
+import { Color } from './color';
+import RgbQuant from 'rgbquant';
 
 export type PixelList = Uint8ClampedArray | number[];
 
@@ -8,7 +8,16 @@ export class Frame {
     private _pixelList: PixelList;
 
     get paletteIndex(): number[] {
-        return this.rgbQuantizer.palette(true).map(rgb => Color.from(rgb).toUint8());
+        const palette = this.rgbQuantizer
+            .palette(true)
+            .map((rgb) => Color.from(rgb).toUint8());
+
+        palette.length = Math.min(
+            Math.floor(Math.ceil(palette.length)) ** 2,
+            256,
+        );
+
+        return palette;
     }
 
     get pixelList(): number[] {
@@ -17,7 +26,11 @@ export class Frame {
     }
 
     constructor(pixelList: PixelList, colorPaletteSize = 256) {
-        this.rgbQuantizer = new RgbQuant({ colors: colorPaletteSize, useCache: true, cacheFreq: 20 });
+        this.rgbQuantizer = new RgbQuant({
+            colors: colorPaletteSize,
+            useCache: true,
+            cacheFreq: 20,
+        });
         this.rgbQuantizer.sample(pixelList);
         this._pixelList = pixelList;
     }

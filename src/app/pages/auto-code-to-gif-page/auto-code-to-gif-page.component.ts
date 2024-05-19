@@ -16,6 +16,7 @@ import { MenuComponent } from '../../core/menu/menu.component';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 import { UrlService } from '../../shared/services/url.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
+import { CodeEditorThemeService } from '../../shared/services/code-editor-theme.service';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',
@@ -37,10 +38,12 @@ export class AutoCodeToGifPageComponent implements OnInit, OnDestroy {
 
     @Input({ required: true }) set menuForm(menuForm: MenuFormGroup) {
         this._menuForm = menuForm;
+
         this.subscriptions.add(
-            menuForm?.valueChanges.subscribe(() =>
-                this.changeDetectorRef.detectChanges(),
-            ),
+            menuForm?.valueChanges.subscribe(() => {
+                this.updateEditorTheme();
+                this.changeDetectorRef.detectChanges();
+            }),
         );
     }
 
@@ -49,17 +52,16 @@ export class AutoCodeToGifPageComponent implements OnInit, OnDestroy {
     protected initialCode!: { title: string; code: string };
 
     constructor(
-        hljsLoader: HighlightLoader,
+        private hljsLoader: HighlightLoader,
         private placeholderCodeService: PlaceholderCodeService,
         private changeDetectorRef: ChangeDetectorRef,
+        private codeEditorThemeService: CodeEditorThemeService,
         private urlService: UrlService,
-    ) {
-        hljsLoader.setTheme(
-            `//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/androidstudio.min.css`,
-        );
-    }
+    ) {}
 
     ngOnInit(): void {
+        this.updateEditorTheme();
+
         if (this.title === '' && this.code === '') {
             this.initialCode =
                 this.placeholderCodeService.getRandomExample('auto');
@@ -82,5 +84,14 @@ export class AutoCodeToGifPageComponent implements OnInit, OnDestroy {
 
     protected updateTitleInUrl(title: string): void {
         this.urlService.updateQuery({ title: compressToBase64(title) });
+    }
+
+    private updateEditorTheme(): void {
+        this.hljsLoader.setTheme(
+            this.codeEditorThemeService.editorOf(
+                this._menuForm.themeName,
+                this._menuForm.variant,
+            ),
+        );
     }
 }

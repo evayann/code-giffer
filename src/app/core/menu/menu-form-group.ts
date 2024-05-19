@@ -1,7 +1,7 @@
 import { FormControl, FormGroup, Validators, ɵElement } from '@angular/forms';
 import { Theme } from '../../shared/services/theme.service';
 import { MenuForm } from './menu-form';
-import { Language } from './language';
+import { Language } from '../model/language';
 
 export class MenuFormGroup extends FormGroup<{
     [K in keyof MenuForm]: ɵElement<MenuForm[K], null>;

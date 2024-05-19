@@ -9,7 +9,7 @@ import {
 import { WindowComponent } from '../../../core/code/window/window.component';
 import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeAnimation } from '../../../core/code/animation/code-animation';
-import { Language } from '../../../core/menu/language';
+import { Language } from '../../../core/model/language';
 
 @Component({
     selector: 'app-auto-code-editor',
@@ -58,6 +58,7 @@ export class AutoCodeEditorComponent {
 
     protected startRecord(): void {
         this.codeAnimation = CodeAnimation.fromCode(this.title, this.code);
+        console.log(this.codeAnimation);
         this.isRecording = true;
     }
 

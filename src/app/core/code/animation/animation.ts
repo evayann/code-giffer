@@ -33,7 +33,8 @@ export abstract class Animation<Frame> {
     }
 
     nextFrame(): Frame | undefined {
-        if (this.currentFrameIndex === undefined) throw new Error('Can\'t get next frame');
+        if (this.currentFrameIndex === undefined)
+            throw new Error("Can't get next frame");
 
         const newFrameNumber = this.currentFrameIndex + 1;
 
@@ -56,6 +57,6 @@ export abstract class Animation<Frame> {
     }
 
     copy(): this {
-        return new (<any>this.constructor);
+        return new (<any>this.constructor)();
     }
 }

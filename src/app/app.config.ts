@@ -13,6 +13,7 @@ export const appConfig: ApplicationConfig = {
             useValue: <HighlightOptions>{
                 fullLibraryLoader: () => import('highlight.js'),
                 lineNumbersLoader: () => import('ngx-highlightjs/line-numbers'),
+                themePath: './highlight.js/styles/github.css',
             },
         },
     ],
