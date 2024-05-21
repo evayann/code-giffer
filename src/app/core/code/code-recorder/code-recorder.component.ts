@@ -88,6 +88,7 @@ export class CodeRecorderComponent implements AfterViewInit {
 
                 this.progression$.next(this._codeAnimation.progression);
 
+                this.title = frame.title;
                 this.code = frame.code;
                 this.changeDetectorReference.detectChanges();
             },
@@ -100,6 +101,6 @@ export class CodeRecorderComponent implements AfterViewInit {
     }
 
     private isAlreadyLoad(frame: CodeFrame): boolean {
-        return this.code === frame.code;
+        return this.code === frame.code && this.title === frame.title;
     }
 }

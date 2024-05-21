@@ -29,13 +29,12 @@ import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-rec
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CodeEditorComponent {
-    @ViewChild('codeContainer') codeContainer!: ElementRef<HTMLDivElement>;
-
     @Input({ required: true }) set initialCode(value: {
         title: string;
         code: string;
     }) {
         this.title = value.title;
+        this.animationTitle = value.title;
         this.code = value.code;
     }
     @Input({ required: true }) theme!: CodeTheme;
@@ -62,6 +61,7 @@ export class CodeEditorComponent {
         hideTextSelection: false,
     };
     protected codeAnimation = new CodeAnimation();
+    private animationTitle!: string;
 
     private codeChangeFromAnimation$ = new Subject<void>();
 
@@ -88,7 +88,7 @@ export class CodeEditorComponent {
 
     protected addFrameToAnimation(): void {
         this.codeAnimation.addFrame({
-            title: this.title,
+            title: this.animationTitle,
             code: this.code,
             caretPosition: 0,
         });
@@ -106,6 +106,7 @@ export class CodeEditorComponent {
 
     protected updateTitle(title: string): void {
         this.titleHasChange.emit(title);
+        this.animationTitle = title;
     }
 
     protected updateLanguage(language: string): void {

@@ -20,4 +20,6 @@
     />
 }
 
-<button (click)="startRecord()">Animate my snippet !</button>
+@if (!isRecording) {
+    <button (click)="startRecord()">Animate my snippet !</button>
+}
