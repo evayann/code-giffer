@@ -45,9 +45,10 @@ export class FramePerFrameCodeToGifPageComponent implements OnInit, OnDestroy {
     @Input({ required: true }) set menuForm(menuForm: MenuFormGroup) {
         this.menuFormGroup = menuForm;
         this.subscriptions.add(
-            menuForm?.valueChanges.subscribe(() =>
-                this.changeDetectorRef.detectChanges(),
-            ),
+            menuForm?.valueChanges.subscribe(() => {
+                this.updateEditorTheme();
+                this.changeDetectorRef.detectChanges();
+            }),
         );
     }
 
