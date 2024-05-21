@@ -24,6 +24,10 @@ export abstract class Animation<Frame> {
         return this._frameList;
     }
 
+    get progression(): number {
+        return (this.currentFrameIndex ?? 0) / this.numberOfFrame;
+    }
+
     start(): void {
         this.currentFrameIndex = -1;
     }

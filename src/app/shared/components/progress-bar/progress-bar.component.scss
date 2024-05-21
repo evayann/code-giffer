@@ -1,0 +1,51 @@
+@use "sass:math";
+
+@function map($value, $min, $max) {
+    @return max(min(($value - $min) / ($max - $min), 1), 0);
+}
+
+.loader {
+    $nbBlock: 6;
+    $length: $nbBlock - 1;
+    --prct-size: calc(var(--percent) * #{$length});
+
+    width: 120px;
+    height: 20px;
+
+    border-radius: var(--border-radius-3);
+
+    background:
+        linear-gradient(var(--color) 50%, #0000 0),
+        linear-gradient(#0000 50%, var(--color) 0),
+        linear-gradient(var(--color) 50%, #0000 0),
+        linear-gradient(#0000 50%, var(--color) 0),
+        linear-gradient(var(--color) 50%, #0000 0),
+        linear-gradient(#0000 50%, var(--color) 0) var(--background-color);
+    background-size: calc(100% / #{$nbBlock} + 1px) 200%;
+    background-repeat: no-repeat;
+    background-position:
+        #{math.percentage(math.div(0, $length))} calc((
+                        1 - map(var(--percent), 0, 1 / $nbBlock)
+                    ) * 100%),
+        #{math.percentage(math.div(1, $length))} calc(map(
+                        var(--percent),
+                        1 / $nbBlock,
+                        2 / $nbBlock
+                    ) * 100%),
+        #{math.percentage(math.div(2, $length))} calc((
+                        1 - map(var(--percent), 2 / $nbBlock, 3 / $nbBlock)
+                    ) * 100%),
+        #{math.percentage(math.div(3, $length))} calc(map(
+                        var(--percent),
+                        3 / $nbBlock,
+                        4 / $nbBlock
+                    ) * 100%),
+        #{math.percentage(math.div(4, $length))} calc((
+                        1 - map(var(--percent), 4 / $nbBlock, 5 / $nbBlock)
+                    ) * 100%),
+        #{math.percentage(math.div(5, $length))} calc(map(
+                        var(--percent),
+                        5 / $nbBlock,
+                        1
+                    ) * 100%);
+}

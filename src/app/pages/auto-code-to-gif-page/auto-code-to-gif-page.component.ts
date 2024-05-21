@@ -13,10 +13,10 @@ import { HighlightLoader } from 'ngx-highlightjs';
 import { Subscription } from 'rxjs';
 import { MenuFormGroup } from '../../core/menu/menu-form-group';
 import { MenuComponent } from '../../core/menu/menu.component';
+import { CodeEditorThemeService } from '../../shared/services/code-editor-theme.service';
 import { PlaceholderCodeService } from '../../shared/services/placeholder-code.service';
 import { UrlService } from '../../shared/services/url.service';
 import { AutoCodeEditorComponent } from './auto-code-editor/auto-code-editor.component';
-import { CodeEditorThemeService } from '../../shared/services/code-editor-theme.service';
 
 @Component({
     selector: 'app-auto-code-to-gif-page',

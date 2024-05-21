@@ -16,11 +16,12 @@ import { CodeTheme } from '../code-theme';
 import { WindowConfiguration } from '../window/window-configuration';
 import { CodeFrame, CodeAnimation } from '../animation/code-animation';
 import { WindowComponent } from '../window/window.component';
+import { ProgressBarComponent } from '../../../shared/components/progress-bar/progress-bar.component';
 
 @Component({
     selector: 'app-code-recorder',
     standalone: true,
-    imports: [CommonModule, WindowComponent],
+    imports: [CommonModule, WindowComponent, ProgressBarComponent],
     templateUrl: './code-recorder.component.html',
     styleUrl: './code-recorder.component.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +50,7 @@ export class CodeRecorderComponent implements AfterViewInit {
     protected code = '';
     protected codeConfiguration!: WindowConfiguration;
     private _codeAnimation!: CodeAnimation;
+    protected progression$ = new Subject<number>();
     private codeChangeFromAnimation$ = new Subject<void>();
 
     constructor(private changeDetectorReference: ChangeDetectorRef) {}
@@ -83,6 +85,8 @@ export class CodeRecorderComponent implements AfterViewInit {
                     this.codeChangeFromAnimation$.next();
                     return;
                 }
+
+                this.progression$.next(this._codeAnimation.progression);
 
                 this.code = frame.code;
                 this.changeDetectorReference.detectChanges();

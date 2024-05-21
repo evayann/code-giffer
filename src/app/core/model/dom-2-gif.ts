@@ -18,7 +18,7 @@ export type Dom2GifGenerationProperties<Frame> = {
     onStart?: () => void;
     onFinish?: () => void;
     loadFrame: (frame: Frame) => void;
-}
+};
 
 export class Dom2Gif<Frame> {
     private gif: Gif;
@@ -31,7 +31,9 @@ export class Dom2Gif<Frame> {
 
     private nextFrameLoadedSubscription: Subscription;
 
-    static generate<Frame>(codeGifGeneration: Dom2GifGenerationProperties<Frame>): void {
+    static generate<Frame>(
+        codeGifGeneration: Dom2GifGenerationProperties<Frame>,
+    ): void {
         const codeGif = new Dom2Gif(codeGifGeneration);
         codeGif.saveAnimation();
     }
@@ -47,9 +49,12 @@ export class Dom2Gif<Frame> {
         this.gif = new Gif({
             width: dom2gifProperties.width,
             height: dom2gifProperties.height,
-            numberOfFrames: dom2gifProperties.animation.numberOfFrame
+            numberOfFrames: dom2gifProperties.animation.numberOfFrame,
         });
-        this.nextFrameLoadedSubscription = dom2gifProperties.frameLoaded.subscribe(() => this.saveFrame(dom2gifProperties.frameOptions));
+        this.nextFrameLoadedSubscription =
+            dom2gifProperties.frameLoaded.subscribe(() =>
+                this.saveFrame(dom2gifProperties.frameOptions),
+            );
     }
 
     private saveAnimation(): void {
@@ -74,13 +79,14 @@ export class Dom2Gif<Frame> {
     }
 
     private saveFrame(frameOptions: FrameOptions): void {
-        const frameSubscription = from(domtoimage.toPixelData(this.dom))
-            .subscribe((pixelList) => {
-                this.gif.addFrame(new Frame(pixelList), frameOptions);
-                this.loadNextFrame();
+        const frameSubscription = from(
+            domtoimage.toPixelData(this.dom),
+        ).subscribe((pixelList) => {
+            this.gif.addFrame(new Frame(pixelList), frameOptions);
+            this.loadNextFrame();
 
-                frameSubscription.unsubscribe();
-            });
+            frameSubscription.unsubscribe();
+        });
     }
 
     private downloadGif(): void {

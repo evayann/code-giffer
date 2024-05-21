@@ -10,5 +10,12 @@
         (domHasChange)="domHasChange()"
     />
 
-    <p class="spinner">Render frames</p>
+    <div class="spinner">
+        <p>Loading ...</p>
+        <app-progress-bar
+            color="var(--primary)"
+            backgroundColor="var(--text-background)"
+            [percent]="(progression$ | async) ?? 0"
+        />
+    </div>
 </div>

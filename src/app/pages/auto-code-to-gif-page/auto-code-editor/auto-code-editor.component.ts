@@ -58,7 +58,6 @@ export class AutoCodeEditorComponent {
 
     protected startRecord(): void {
         this.codeAnimation = CodeAnimation.fromCode(this.title, this.code);
-        console.log(this.codeAnimation);
         this.isRecording = true;
     }
 
