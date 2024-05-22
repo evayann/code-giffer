@@ -23,6 +23,7 @@ export class AutoCodeEditorComponent {
     @Output() codeHasChange = new EventEmitter<string>();
     @Output() titleHasChange = new EventEmitter<string>();
     @Input({ required: true }) delayInMs!: number;
+    @Input({ required: true }) numberIteration!: number;
     @Input({ required: true }) theme!: any;
     @Input({ required: true }) languageSelected: Language | undefined;
     @Input() set initialCode(value: { title: string; code: string }) {

@@ -12,6 +12,7 @@ export type Dom2GifGenerationProperties<Frame> = {
     dom: HTMLElement;
     frameLoaded$: Observable<void>;
     scaleFactor?: number;
+    numberIteration?: number;
 
     frameOptions: FrameOptions;
 
@@ -50,6 +51,7 @@ export class Dom2Gif<Frame> {
             width: dom2gifProperties.width,
             height: dom2gifProperties.height,
             numberOfFrames: dom2gifProperties.animation.numberOfFrame,
+            numberIteration: dom2gifProperties.numberIteration,
         });
         this.nextFrameLoadedSubscription =
             dom2gifProperties.frameLoaded$.subscribe(() =>

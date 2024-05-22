@@ -5,6 +5,7 @@ type GifAnimation = {
     width: number;
     height: number;
     numberOfFrames: number;
+    numberIteration?: number;
 };
 
 export type FrameOptions = {
@@ -23,12 +24,17 @@ export class Gif {
         });
     }
 
-    constructor({ width, height, numberOfFrames }: GifAnimation) {
+    constructor({
+        width,
+        height,
+        numberOfFrames,
+        numberIteration: nbIteration,
+    }: GifAnimation) {
         this.width = width;
         this.height = height;
         this.buffer = new Uint8Array(width * height * numberOfFrames);
         this.writer = new GifWriter(this.buffer, width, height, {
-            loop: undefined,
+            loop: nbIteration,
         });
     }
 

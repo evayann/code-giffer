@@ -39,18 +39,29 @@ export class CodeAnimation extends Animation<CodeFrame> {
     static fromCode(title: string, code: string): CodeAnimation {
         const codeAnimation = new CodeAnimation();
 
-        let currentCode = '';
-        codeAnimation.addFrame({ title, code: currentCode, caretPosition: 0 });
+        codeAnimation.addFrame({ title, code: '', caretPosition: 0 });
 
-        for (let index = 0; index < code.length; index++) {
-            currentCode += code.charAt(index);
-            codeAnimation.addFrame({
-                title,
-                code: currentCode,
-                caretPosition: index + 1,
-            });
-        }
+        CodeAnimation.splitStringWithGrapheme(code).reduce(
+            (currentCode, character, index) => {
+                const code = currentCode + character;
+
+                codeAnimation.addFrame({
+                    title,
+                    code,
+                    caretPosition: index + 1,
+                });
+
+                return code;
+            },
+            '',
+        );
 
         return codeAnimation;
+    }
+
+    private static splitStringWithGrapheme(code: string): string[] {
+        const segmenter = new Intl.Segmenter('en', { granularity: 'grapheme' });
+        const segments = segmenter.segment(code);
+        return Array.from(segments, ({ segment }) => segment);
     }
 }

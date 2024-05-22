@@ -1,24 +1,20 @@
 import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
-    ElementRef,
     EventEmitter,
     Input,
     Output,
-    ViewChild,
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Dom2Gif } from '../../../core/model/dom-2-gif';
 import {
     CodeAnimation,
     CodeFrame,
 } from '../../../core/code/animation/code-animation';
+import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 import { CodeTheme } from '../../../core/code/code-theme';
 import { WindowConfiguration } from '../../../core/code/window/window-configuration';
 import { WindowComponent } from '../../../core/code/window/window.component';
-import { CodeRecorderComponent } from '../../../core/code/code-recorder/code-recorder.component';
 
 @Component({
     selector: 'app-code-editor',
@@ -39,6 +35,7 @@ export class CodeEditorComponent {
     }
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true }) languageSelected?: string;
+    @Input({ required: true }) numberIteration!: number;
     @Input() delayInMs = 100;
 
     @Output() codeHasChange = new EventEmitter<string>();

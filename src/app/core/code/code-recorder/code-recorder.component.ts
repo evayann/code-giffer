@@ -32,6 +32,7 @@ export class CodeRecorderComponent implements AfterViewInit {
 
     @Input() language?: string;
     @Input() delayInMs: number = 100;
+    @Input({ required: true }) numberIteration!: number;
     @Input({ required: true }) theme!: CodeTheme;
     @Input({ required: true })
     set codeAnimation(codeAnimation: CodeAnimation) {
@@ -90,6 +91,7 @@ export class CodeRecorderComponent implements AfterViewInit {
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
             frameLoaded$: this.codeChangeFromAnimation$.asObservable(),
+            numberIteration: this.numberIteration || undefined,
 
             frameOptions: {
                 delayInMs: this.delayInMs,

@@ -14,10 +14,6 @@ export class NavigationComponent {
     @Input({ required: true }) currentUrl?: string;
     protected routeList = ['auto', 'frame-per-frame'];
 
-    protected isCurrentUrl(url: string): boolean {
-        return this.currentUrl?.includes(url) ?? false;
-    }
-
     protected currentRouteIndexInList(): number {
         const currentRouteIndex = this.routeList.findIndex((route) =>
             (this.currentUrl ?? '').includes(route),

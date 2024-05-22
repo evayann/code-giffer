@@ -38,6 +38,10 @@ export class MenuFormGroup extends FormGroup<{
         };
     }
 
+    get numberIteration(): number {
+        return this.getMenuValue('loopIteration');
+    }
+
     get language(): Language | undefined {
         const selectedLanguage = this.getMenuValue('language');
         return selectedLanguage === 'auto' ? undefined : selectedLanguage;

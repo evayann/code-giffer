@@ -12,7 +12,7 @@
                 class="route"
                 [routerLink]="[route]"
                 [queryParamsHandling]="'merge'"
-                [ngClass]="{ disabled: isCurrentUrl(route) }"
+                [routerLinkActive]="'disabled'"
             >
                 {{ route }}
             </a>
