@@ -1,23 +1,37 @@
-import { AfterViewInit, Directive, ElementRef, EventEmitter, OnDestroy, Output } from '@angular/core';
+import {
+    AfterViewInit,
+    Directive,
+    ElementRef,
+    EventEmitter,
+    OnDestroy,
+    Output,
+} from '@angular/core';
 
 @Directive({
-  selector: '[hasChange]',
-  standalone: true,
+    selector: '[hasChange]',
+    standalone: true,
 })
 export class HasChangeDirective implements AfterViewInit, OnDestroy {
-  @Output() hasChange = new EventEmitter<void>();
+    @Output() hasChange = new EventEmitter<void>();
 
-  private observer!: MutationObserver;
+    private observer!: MutationObserver;
 
-  constructor(private elementReference: ElementRef) { }
+    constructor(private elementReference: ElementRef) {}
 
-  ngAfterViewInit(): void {
-    this.observer = new MutationObserver(() => this.hasChange.emit());
-    const configuration: MutationObserverInit = { childList: true, subtree: true };
-    this.observer.observe(this.elementReference.nativeElement, configuration);
-  }
+    ngAfterViewInit(): void {
+        this.observer = new MutationObserver(() => this.hasChange.emit());
+        const configuration: MutationObserverInit = {
+            childList: true,
+            subtree: true,
+            characterData: true,
+        };
+        this.observer.observe(
+            this.elementReference.nativeElement,
+            configuration,
+        );
+    }
 
-  ngOnDestroy(): void {
-    this.observer.disconnect();
-  }
+    ngOnDestroy(): void {
+        this.observer.disconnect();
+    }
 }

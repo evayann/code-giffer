@@ -8,6 +8,7 @@ import {
 } from '@angular/core';
 import { CodeTheme } from '../../code-theme';
 import { CommonModule } from '@angular/common';
+import { HasChangeDirective } from '../../../../shared/directives/has-change.directive';
 
 @Component({
     selector: 'app-title-bar',
@@ -19,8 +20,12 @@ import { CommonModule } from '@angular/common';
 })
 export class TitleBarComponent {
     @Input({ required: true }) theme!: CodeTheme;
-    @Input({ required: true }) title!: string;
+    @Input({ required: true }) barTitle!: string;
     @Input() editable = true;
 
     @Output() titleChange = new EventEmitter<string>();
+
+    protected onInputChange(title: string): void {
+        this.titleChange.emit(title);
+    }
 }

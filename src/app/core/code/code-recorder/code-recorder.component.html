@@ -1,21 +1,23 @@
+{{ title }}
 <div class="stack-child code-editor">
     <app-window
         #codeContainer
         class="no-animation"
-        [title]="title"
+        [barTitle]="title"
         [language]="language"
         [code]="code"
         [theme]="theme"
         [windowConfiguration]="codeConfiguration"
-        (domHasChange)="domHasChange()"
+        (domTitleHasChange)="titleHasChange()"
+        (domCodeHasChange)="codeHasChange()"
     />
 
     <div class="spinner">
-        <p>Loading ...</p>
+        <p>Loading ({{ currentIndex + 1 }} / {{ nbFrame }})</p>
         <app-progress-bar
             color="var(--primary)"
             backgroundColor="var(--text-background)"
-            [percent]="(progression$ | async) ?? 0"
+            [percent]="progression"
         />
     </div>
 </div>

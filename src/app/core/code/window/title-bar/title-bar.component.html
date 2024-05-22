@@ -9,7 +9,7 @@
     [attr.contenteditable]="editable"
     class="window-title no-animation"
     [ngStyle]="{ color: theme.titleColor }"
-    (input)="titleChange.emit(snippetTitle.innerText)"
+    (input)="onInputChange(snippetTitle.innerText)"
 >
-    {{ title }}
+    {{ barTitle }}
 </h2>

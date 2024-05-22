@@ -4,9 +4,10 @@
 >
     <app-title-bar
         [theme]="_theme"
-        [title]="title"
+        [barTitle]="barTitle"
         [editable]="windowConfiguration.isEditable"
         (titleChange)="updateTitle($event)"
+        (hasChange)="titleTagHasChange()"
     />
     @if (windowConfiguration.isEditable) {
         <div class="stack-child code-container">

@@ -30,7 +30,6 @@ export class CodeRecorderComponent implements AfterViewInit {
     @ViewChild('codeContainer', { read: ElementRef })
     codeContainer!: ElementRef<HTMLDivElement>;
 
-    @Input() title!: string;
     @Input() language?: string;
     @Input() delayInMs: number = 100;
     @Input({ required: true }) theme!: CodeTheme;
@@ -47,11 +46,19 @@ export class CodeRecorderComponent implements AfterViewInit {
 
     @Output() onRecordFinish = new EventEmitter<null>();
 
+    protected title = '';
     protected code = '';
     protected codeConfiguration!: WindowConfiguration;
+    protected progression = 0;
+    protected currentIndex = 0;
+
     private _codeAnimation!: CodeAnimation;
-    protected progression$ = new Subject<number>();
+    private isUpdate!: { code: boolean; title: boolean };
     private codeChangeFromAnimation$ = new Subject<void>();
+
+    get nbFrame(): number {
+        return this._codeAnimation.frameList.length;
+    }
 
     constructor(private changeDetectorReference: ChangeDetectorRef) {}
 
@@ -59,10 +66,18 @@ export class CodeRecorderComponent implements AfterViewInit {
         this.saveCodeAnimation();
     }
 
-    protected domHasChange(): void {
+    protected codeHasChange(): void {
         if (!this._codeAnimation.hasStart) return;
 
-        this.codeChangeFromAnimation$.next();
+        this.isUpdate.code = true;
+        this.frameIsLoad();
+    }
+
+    protected titleHasChange(): void {
+        if (!this._codeAnimation.hasStart) return;
+
+        this.isUpdate.title = true;
+        this.frameIsLoad();
     }
 
     protected saveCodeAnimation(): void {
@@ -74,19 +89,26 @@ export class CodeRecorderComponent implements AfterViewInit {
             height: this.codeContainer.nativeElement.clientHeight,
             dom: this.codeContainer.nativeElement,
             scaleFactor: 2,
-            frameLoaded: this.codeChangeFromAnimation$.asObservable(),
+            frameLoaded$: this.codeChangeFromAnimation$.asObservable(),
 
             frameOptions: {
                 delayInMs: this.delayInMs,
             },
 
             loadFrame: (frame: CodeFrame) => {
+                this.progression = this._codeAnimation.progression;
+                this.currentIndex = this._codeAnimation.currentIndex;
+                this.changeDetectorReference.detectChanges();
+
                 if (this.isAlreadyLoad(frame)) {
                     this.codeChangeFromAnimation$.next();
                     return;
                 }
 
-                this.progression$.next(this._codeAnimation.progression);
+                this.isUpdate = {
+                    title: frame.title === this.title,
+                    code: frame.code === this.code,
+                };
 
                 this.title = frame.title;
                 this.code = frame.code;
@@ -102,5 +124,10 @@ export class CodeRecorderComponent implements AfterViewInit {
 
     private isAlreadyLoad(frame: CodeFrame): boolean {
         return this.code === frame.code && this.title === frame.title;
+    }
+
+    private frameIsLoad(): void {
+        if (!this.isUpdate.code || !this.isUpdate.title) return;
+        this.codeChangeFromAnimation$.next();
     }
 }

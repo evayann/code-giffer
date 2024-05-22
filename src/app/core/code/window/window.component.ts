@@ -43,10 +43,11 @@ export class WindowComponent implements AfterViewInit {
         this.padding = theme.padding;
         this.background = theme.background;
     }
-    @Input() title = WindowComponent.defaultTitle;
+    @Input() barTitle = WindowComponent.defaultTitle;
 
     @Output() languageDetected = new EventEmitter<string>();
-    @Output() domHasChange = new EventEmitter<void>();
+    @Output() domCodeHasChange = new EventEmitter<void>();
+    @Output() domTitleHasChange = new EventEmitter<void>();
     @Output() titleChange = new EventEmitter<string>();
     @Output() codeHasChange = new EventEmitter<{
         value: string;
@@ -74,13 +75,17 @@ export class WindowComponent implements AfterViewInit {
 
     protected updateTitle(title: string): void {
         if (title === '') {
-            this.title = title = WindowComponent.defaultTitle;
+            this.barTitle = title = WindowComponent.defaultTitle;
         }
         this.titleChange.emit(title);
     }
 
     protected codeTagHasChange(): void {
-        this.domHasChange.next();
+        this.domCodeHasChange.next();
+    }
+
+    protected titleTagHasChange(): void {
+        this.domTitleHasChange.next();
     }
 
     protected onKeyDown(
